@@ -9,7 +9,18 @@
 		<meta name="author" content="PawPrints Design">
 		
 		<link href="//fonts.googleapis.com/css?family=Open+Sans:400,600|Raleway:400,700" rel="stylesheet">
-		<link href="/css/main.css" rel="stylesheet">
+		<link href="<?php bloginfo('stylesheet_url');?>" rel="stylesheet">
+		
+		
+		<?php
+		//JavaScript
+		wp_enqueue_script('jquery');
+		wp_enqueue_script('bootstrap-js');
+		wp_enqueue_script('fuelux-js');
+		wp_enqueue_script('datepicker-js');
+		?>
+		
+		<?php wp_head(); ?>
        
 
 		<!--[if gte IE 9]>
@@ -38,7 +49,7 @@
 				</div>
 			</div>
 		</div>
-		<nav class="navbar" role="navigation">
+		<nav class="navbar navbar-inverse" role="navigation">
 			<div class="navbar-inner">
 				<div class="container">
 				<!-- Brand and toggle get grouped for better mobile display -->

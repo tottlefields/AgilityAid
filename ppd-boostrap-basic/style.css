@@ -12,3 +12,31 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 This simple theme was built using the example Bootstrap theme "Basic marketing site" found on the Bootstrap web site http://twitter.github.com/bootstrap/examples/hero.html
 */
+@import url('//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css');
+@import url('//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+@import url('//www.fuelcdn.com/fuelux/3.13.0/css/fuelux.min.css');
+@import url('//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.min.css');
+
+body,
+input,
+button,
+select,
+textarea {
+  font-family: "Open Sans", Verdana, Tahoma, serif;
+  font-size: 16px;
+  line-height: 1.42857143;
+  color: #333333;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 700;
+}
+a{
+	color: #8127C7;
+}
