@@ -53,7 +53,7 @@
 						</div>
 					</div>
 					<div class="col-lg-5 col-md-4 col-xs-12">
-						<a href="<?php echo site_url('/'); ?>"><img src="<?php echo get_template_directory_uri() . '/img/logo.png'; ?>" alt="" class="top-logo" /></a>
+						<a href="<?php echo site_url('/'); ?>"><img src="<?php echo get_stylesheet_directory_uri() . '/img/logo.png'; ?>" alt="" class="top-logo" /></a>
 					</div>
 				</div>
 			</div>
