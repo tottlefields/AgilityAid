@@ -7,6 +7,7 @@
 		<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' />
 		<meta name="description" content="">
 		<meta name="author" content="PawPrints Design">
+		<link rel="shortcut icon" type="image/png" href="<?php echo get_stylesheet_directory_uri() . '/img/favicon.ico'; ?>"/>
 		
 		<link href="//fonts.googleapis.com/css?family=Open+Sans:400,600|Raleway:400,700" rel="stylesheet">
 		<link href="<?php bloginfo('stylesheet_url');?>" rel="stylesheet">
