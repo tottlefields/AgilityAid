@@ -40,3 +40,63 @@ h6 {
 a{
 	color: #8127C7;
 }
+a:focus, a:hover {
+    color: #8127C7;
+    text-decoration: underline;
+}
+
+.account-bar {
+	-webkit-border-bottom-right-radius: 10px;
+	-webkit-border-bottom-left-radius: 10px;
+	-moz-border-radius-bottomright: 10px;
+	-moz-border-radius-bottomleft: 10px;
+	border-bottom-right-radius: 10px;
+	border-bottom-left-radius: 10px;
+	background-color: #AAB;	
+	color: #FFF;
+	padding: 8px 20px;
+	position: relative;
+}
+
+.account-bar a {
+	float: left;
+	padding: 0 8px 2px 8px;
+	border-left: 1px solid #FFF;
+    border-right: 1px solid #FFF;
+	margin-top: 1px;
+}
+
+.account-bar a:hover {
+	text-decoration: none;
+}
+
+.account-bar a:first-child {
+	border-left: none;	
+}
+
+.account-bar a:last-of-type {
+	border-right: none;	
+}
+
+.account-bar input {
+	float: right;
+	height: 12px;
+	width: 140px;
+	margin: 0;
+	font-size: 11px;
+}
+
+.account-bar span.contact {
+    position: absolute;
+    right: 15px;
+    font-weight: bold;
+    top: 5px;
+}
+
+i.fa.fa-envelope-o {
+    margin-right: 5px;
+    border: 2px solid;
+    border-radius: 22px;
+    padding: 3px 5px;
+    font-size: 15px;
+}
