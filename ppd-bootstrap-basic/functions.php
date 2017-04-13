@@ -1,6 +1,9 @@
 <?php
 session_start();
 
+//Include our widgets!
+require_once('widgets/basket.php');
+
 /**
  * Register widget area.
  *
