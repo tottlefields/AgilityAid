@@ -32,6 +32,15 @@ function create_posttype() {
 	);
 
 	register_post_type('shows', $args);
+
+ 	register_taxonomy('dog-breeds', array('shows'),
+ 		array(
+ 			'hierarchical' => false,
+ 			'label' => 'Breeds',
+ 			'singular_label' => 'Breed',
+ 			'rewrite' => true
+ 		)
+ 	);
 }
 // Hooking up our function to theme setup
 add_action( 'init', 'create_posttype' );
