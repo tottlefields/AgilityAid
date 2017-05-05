@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title><?php wp_title(''); ?></title>
+		<title><?php bloginfo('name'); ?> &raquo; <?php is_front_page() ? bloginfo('description') : wp_title(''); ?></title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' />
 		<meta name="description" content="">
@@ -49,7 +49,7 @@
                             <a href="<?php echo wp_login_url(); ?>">Log In</a>
                             <?php wp_register('', ''); ?>
                             <?php } ?>
-                            <span class="contact"><a href="/contact-us/"><i class="fa fa-envelope-o"></i>Contact Us</a></span>
+                            &nbsp;<span class="contact"><a href="/contact-us/"><i class="fa fa-envelope-o"></i>Contact Us</a>&nbsp;<a href="https://www.facebook.com/agilityaid/" target="_blank"><i class="fa fa-facebook"></i></a></span>
 							<div class="clearfix"></div>                        
 						</div>
 					</div>
@@ -89,4 +89,4 @@
 			</div>
 		</nav>
 		
-		<div class="container">
+		<div class="container"

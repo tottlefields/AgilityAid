@@ -37,13 +37,13 @@ h6 {
     font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 700;
 }
-a{
+/*a{
 	color: #8127C7;
 }
 a:focus, a:hover {
     color: #8127C7;
     text-decoration: underline;
-}
+}*/
 
 .account-bar {
 	-webkit-border-bottom-right-radius: 10px;
@@ -93,10 +93,11 @@ a:focus, a:hover {
     top: 5px;
 }
 
-i.fa.fa-envelope-o {
+i.fa.fa-envelope-o,i.fa.fa-facebook {
     margin-right: 5px;
     border: 2px solid;
     border-radius: 22px;
     padding: 3px 5px;
     font-size: 15px;
 }
+i.fa.fa-file-pdf-o { color: darkred; }

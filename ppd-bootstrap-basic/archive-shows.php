@@ -5,7 +5,14 @@
     <div class="container">
         <div class="row">
             <div class="col-md-9" id="main-content">
-				<h1 class="title">Upcoming Shows</h1>
+				<h1 class="title">Live Shows</h1>
+				<div class="well">				
+					<h4 style="margin-top:0">Colour key to shows:</h4>
+<div class="row">
+					<div class="col-sm-4"><i class="fa fa-square text-success" aria-hidden="true"></i>&nbsp;Open</div>
+					<div class="col-sm-4"><i class="fa fa-square text-warning" aria-hidden="true"></i>&nbsp;Closes within 7 days</div>
+					<div class="col-sm-4"><i class="fa fa-square text-danger" aria-hidden="true"></i>&nbsp;CLOSED</div>
+				</div></div>
 				<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 
                 <?php
@@ -19,7 +26,12 @@
                 		$close_date = get_field('close_date', false, false);
                 		$schedule_file = get_field('pdf_upload_schedule');
                 		$entryform_file = get_field('pdf_upload_entryform');
+                		$ringcards_file = get_field('ring_cards_pdf');
+                		$ringplan_file = get_field('ring_plan');
+                		$helpers_file = get_field('helpers_list');
+                		$info_file = get_field('show_info');
                 		$venue = get_field('venue', false, false);
+                		$online_link = get_field('online_show_entry_link', false, false);
                 		
                 		$start_date = new DateTime($start_date);
                 		$end_date = new DateTime($end_date);
@@ -32,11 +44,21 @@
                 			$show_dates .= $start_date->format(' Y');
                 		}
                 		
-                		//green () for open shows; orange (warning) for closing in 7 days; red (danger) for closed
+                		$enter_show_link = '<!-- || <i class="fa fa-sign-in" aria-hidden="true"></i>&nbsp;<a href="">Enter Show</a> -->';
+                		if (isset($online_link) && $online_link != ''){
+                			if (preg_match("/ishowservices/i", $online_link)) {                				
+                				$enter_show_link = '|| <img src="'.get_stylesheet_directory_uri() . '/img/iss-logo.png" style="height:16px" />&nbsp;<a href="'.$online_link.'" target="_blank">Enter Show</a>';
+                			}
+                			elseif (preg_match("/agilityshows\.online/i", $online_link)) {
+                				$enter_show_link = '|| <img src="'.get_stylesheet_directory_uri() . '/img/aso-logo.png" style="height:16px" />&nbsp;<a href="'.$online_link.'" target="_blank">Enter Show</a>';
+                			}
+                		}
+                		
+                		//green (success) for open shows; orange (warning) for closing in 7 days; red (danger) for closed
                 		$panel_class = 'success';
                 		$closes_text = '&nbsp;';
-                		$enter_show = ' ||  <i class="fa fa-file-pdf-o" aria-hidden="true"></i>&nbsp;<a href="'.$entryform_file['url'].'">Entry Form</a>
-                				|| <i class="fa fa-sign-in" aria-hidden="true"></i>&nbsp;<a href="">Enter Show</a>';
+                		$enter_show = ' ||  <i class="fa fa-file-pdf-o" aria-hidden="true"></i>&nbsp;<a href="'.$entryform_file['url'].'" target="_blank">Entry Form</a>
+                				'.$enter_show_link;
                 		if ($close_date < date('Ymd')){
                 			$panel_class = 'danger';
                 			$closes_text = 'CLOSED';
@@ -44,7 +66,7 @@
                 		}
                 		elseif ($close_date <= date('Ymd', strtotime("+7 day"))){
                 			$panel_class = 'warning';
-                			$closes_text = 'Closes: '.$closes->format('d jS M');
+                			$closes_text = 'Closes: '.$closes->format('D jS M');
                 		}
                 		
                         echo '
@@ -69,9 +91,22 @@
 	                        		</div>
 					        		<div class="row">
 						        		<div class="col-md-12">
-		                        			<i class="fa fa-map-o" aria-hidden="true"></i>&nbsp;<a href="'.get_the_permalink().'">View Show</a> || 
-							        		<i class="fa fa-file-pdf-o" aria-hidden="true"></i>&nbsp;<a href="'.$schedule_file['url'].'">Schedule</a>
-							        		'.$enter_show.'
+		                        			<!-- <i class="fa fa-map-o" aria-hidden="true"></i>&nbsp;<a href="'.get_the_permalink().'">View Show</a> || -->
+							        		<i class="fa fa-file-pdf-o" aria-hidden="true"></i>&nbsp;<a href="'.$schedule_file['url'].'" target="_blank">Schedule</a>
+							        		'.$enter_show;
+							        		if (isset($ringcards_file['url']) && $ringcards_file['url'] != ''){
+							        			echo '|| <i class="fa fa-file-pdf-o" aria-hidden="true"></i>&nbsp;<a href="'.$ringcards_file['url'].'" target="_blank">Ring Cards</a> ';
+							        		}
+							        		if (isset($ringplan_file['url']) && $ringplan_file['url'] != ''){
+							        			echo '|| <i class="fa fa-file-pdf-o" aria-hidden="true"></i>&nbsp;<a href="'.$ringplan_file['url'].'" target="_blank">Ring Plan</a>';
+							        		}
+							        		if (isset($helpers_file['url']) && $helpers_file['url'] != ''){
+							        			echo '|| <i class="fa fa-file-pdf-o" aria-hidden="true"></i>&nbsp;<a href="'.$helpers_file['url'].'" target="_blank">Helpers List</a>';
+							        		}
+							        		if (isset($info_file['url']) && $info_file['url'] != ''){
+							        			echo '|| <i class="fa fa-file-pdf-o" aria-hidden="true"></i>&nbsp;<a href="'.$info_file['url'].'" target="_blank">Show Information</a>';
+							        		}
+							        		echo '
 							        	</div>
 	                        		</div>
 					      		</div>
@@ -82,12 +117,6 @@
                     endwhile;
                 endif;
                 ?>
-				</div>
-				<div class="row">
-					<h4>Colour key to shows:</h4>
-					<div class="col-sm-4"><i class="fa fa-square text-success" aria-hidden="true"></i>&nbsp;Open</div>
-					<div class="col-sm-4"><i class="fa fa-square text-warning" aria-hidden="true"></i>&nbsp;Closes within 7 days</div>
-					<div class="col-sm-4"><i class="fa fa-square text-danger" aria-hidden="true"></i>&nbsp;CLOSED</div>
 				</div>
             </div>
             <div class="col-md-3" id="sidebar">

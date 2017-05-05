@@ -1,6 +1,12 @@
-			<footer>
-				<p>&copy; PawPrints Design <?php echo date('Y') ?></p>
-			</footer>
+ <?php
+ # if (current_user_can('administrator')){
+ #  global $wpdb;
+ #  echo "<pre>";
+ #  print_r($wpdb->queries);
+ #  echo "</pre>";
+ #}//Lists all the queries executed on your page
+?>
+			<footer></footer>
 		
 		</div> <!-- /container -->
 		
