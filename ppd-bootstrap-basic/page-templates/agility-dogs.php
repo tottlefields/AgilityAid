@@ -19,24 +19,42 @@ if(isset($_POST['submit'])) {
 	unset($formData['submit']);
 	unset($formData['dogID']);
 	$formData['birth_date'] = dateToSQL($formData['birth_date']);
-	
-	//Dog meta data.
-	foreach (array('kc_grade', 'kc_height', 'bs_height', 'bs_level') as $meta_key){
-		$sql = $wpdb->prepare(
-				'INSERT INTO wpao_agility_dogsmeta (dog_id, meta_key, meta_value) 
-				VALUES (%d, "%s", "%s") ON DUPLICATE KEY UPDATE meta_value = "%s"', 
-				$_POST['dogID'], $meta_key, $formData[$meta_key], $formData[$meta_key]);
-		$wpdb->query($sql);
-		unset($formData[$meta_key]);
-	}
-	
+
+
 	if ($_POST['dogID'] > 0){
+		//Dog meta data.
+		foreach (array('kc_grade', 'kc_height', 'bs_height', 'bs_level') as $meta_key){
+			if (isset($formData[$meta_key])){
+				$sql = $wpdb->prepare(
+						'INSERT INTO wpao_agility_dogsmeta (dog_id, meta_key, meta_value) 
+						VALUES (%d, "%s", "%s") ON DUPLICATE KEY UPDATE meta_value = "%s"', 
+						$_POST['dogID'], $meta_key, $formData[$meta_key], $formData[$meta_key]);
+				$wpdb->query($sql);
+				unset($formData[$meta_key]);
+			}
+		}
 		$result = $wpdb->update('wpao_agility_dogs', $formData, array('id' => $_POST['dogID']));
 	}
 	else{
+		$metaData = array();
+		foreach (array('kc_grade', 'kc_height', 'bs_height', 'bs_level') as $meta_key){
+			if (isset($formData[$meta_key])){
+				$metaData[$meta_key] = $formData[$meta_key];
+				unset($formData[$meta_key]);				
+			}
+		}
+		
 		$userId = $current_user->ID;
 		$formData['user_id'] = $userId;
-		$wpdb->insert('wpao_agility_dogs', $formData);
+		$dogID = $wpdb->insert('wpao_agility_dogs', $formData);
+		
+		foreach ($metaData as $key => $value){
+				$sql = $wpdb->prepare(
+						'INSERT INTO wpao_agility_dogsmeta (dog_id, meta_key, meta_value) 
+						VALUES (%d, "%s", "%s") ON DUPLICATE KEY UPDATE meta_value = "%s"', 
+						$dogID, $meta_key, $formData[$meta_key], $formData[$meta_key]);
+				$wpdb->query($sql);			
+		}		
 	}
 	
 	wp_redirect('/account/dogs/?updated=1');
@@ -266,10 +284,10 @@ get_header();
 			
 			$('#dog_color').paletteColorPicker({
 					colors: [
-						{'Green':'#006412'},{'Lime Green':'#32CD32'},{'Yellow':'#FBF305'},{'Orange':'#FF6403'},{'Red':'#DD0907'},
+						{'Green':'#006412'},{'LimeGreen':'#32CD32'},{'Yellow':'#FBF305'},{'Orange':'#FF6403'},{'Red':'#DD0907'},
 						{'Burgundy':'#800020'},{'Magenta':'#F22084'},{'Pink':'#FFC0CB'},
-						{'Lilac':'#e5c8ef'},{'Purple':'#552479'},{'Blue':'#0000D3'},{'Cyan':'#02ABEA'},{'Sky Blue':'#A6CAF0'},
-						{'Light Grey':'#C0C0C0'},{'Dark Grey':'#808080'},{'Black':'#000000'},{'Brown':'#562C05'},{'Beige':'#90713A'}
+						{'Lilac':'#e5c8ef'},{'Purple':'#552479'},{'Blue':'#0000D3'},{'Cyan':'#02ABEA'},{'SkyBlue':'#A6CAF0'},
+						{'LightGrey':'#C0C0C0'},{'DarkGrey':'#808080'},{'Black':'#000000'},{'Brown':'#562C05'},{'Beige':'#90713A'}
 					],
 					clear_btn: null,
 					position: 'downside', // default -> 'upside'
