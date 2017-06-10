@@ -31,6 +31,20 @@ register_nav_menu(
 	'Main Menu'
 );
 
+
+register_sidebar(
+		array(
+				'name'          => 'Entry Sidebar',
+				'id'            => 'entry-sidebar',
+				'description'   => '',
+				'class'         => '',
+				'before_widget' => '<div id="%1$s" class="widget %2$s gradient">',
+				'after_widget'  => '</div>',
+				'before_title'  => '<h4 class="widgettitle">',
+				'after_title'   => '</h4>'
+		)
+);
+
 function mytheme_enqueue_scripts() {
 	wp_deregister_script('jquery');
 	wp_register_script('jquery', ("//code.jquery.com/jquery-2.2.4.min.js"), false, '2.2.4', false);
