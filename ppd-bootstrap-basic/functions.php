@@ -3,6 +3,7 @@ session_start();
 
 //Include our widgets!
 require_once('widgets/basket.php');
+require_once('widgets/agility_constants.php');
 
 /**
  * Register widget area.
@@ -104,6 +105,18 @@ function dateToSQL($date){
 function SQLToDate($date){
 	if ($date == ""){ return ""; }
 	return date_format(DateTime::createFromFormat('Y-m-d', $date), 'd/m/Y');
+}
+
+function debug_array($array){
+	echo '<pre>';
+	print_r($array);
+	echo '</pre>';
+}
+
+function debug_string($string){
+	echo '<pre>';
+	echo ($string);
+	echo '</pre>';	
 }
 
 
