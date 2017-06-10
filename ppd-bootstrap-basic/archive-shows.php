@@ -30,6 +30,8 @@
                 		$ringplan_file = get_field('ring_plan');
                 		$helpers_file = get_field('helpers_list');
                 		$info_file = get_field('show_info');
+                		$results_file = get_field('pdf_upload_results');
+                		$champ_results_file = get_field('champ_results');
                 		$venue = get_field('venue', false, false);
                 		$online_link = get_field('online_show_entry_link', false, false);
                 		
@@ -105,6 +107,12 @@
 							        		}
 							        		if (isset($info_file['url']) && $info_file['url'] != ''){
 							        			echo '|| <i class="fa fa-file-pdf-o" aria-hidden="true"></i>&nbsp;<a href="'.$info_file['url'].'" target="_blank">Show Information</a>';
+							        		}
+							        		if (isset($results_file['url']) && $results_file['url'] != ''){
+							        			echo '|| <i class="fa fa-file-pdf-o" aria-hidden="true"></i>&nbsp;<a href="'.$results_file['url'].'" target="_blank">Show Results</a>';
+							        		}
+							        		if (isset($champ_results_file['url']) && $champ_results_file['url'] != ''){
+							        			echo '|| <i class="fa fa-file-pdf-o" aria-hidden="true"></i>&nbsp;<a href="'.$champ_results_file['url'].'" target="_blank">Championships Results</a>';
 							        		}
 							        		echo '
 							        	</div>

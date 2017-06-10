@@ -6,7 +6,8 @@
  #  echo "</pre>";
  #}//Lists all the queries executed on your page
 ?>
-			<footer></footer>
+			<footer>
+			</footer>
 		
 		</div> <!-- /container -->
 		
