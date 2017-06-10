@@ -46,7 +46,8 @@ if(isset($_POST['submit'])) {
 		
 		$userId = $current_user->ID;
 		$formData['user_id'] = $userId;
-		$dogID = $wpdb->insert('wpao_agility_dogs', $formData);
+		$wpdb->insert('wpao_agility_dogs', $formData);
+		$dogID = $wpdb->insert_id;
 		
 		foreach ($metaData as $key => $value){
 				$sql = $wpdb->prepare(
