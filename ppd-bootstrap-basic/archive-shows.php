@@ -1,18 +1,25 @@
 <?php /* Template Name: Shows Archive */ ?>
 <?php get_header(); ?>
 
+<?php $title = 'Live Shows'; 
+$color_key = '
+				<div class="well">				
+						<h4 style="margin-top:0">Colour key to shows:</h4>
+						<div class="row">
+						<div class="col-sm-4"><i class="fa fa-square text-success" aria-hidden="true"></i>&nbsp;Open</div>
+						<div class="col-sm-4"><i class="fa fa-square text-warning" aria-hidden="true"></i>&nbsp;Closes within 7 days</div>
+						<div class="col-sm-4"><i class="fa fa-square text-danger" aria-hidden="true"></i>&nbsp;CLOSED</div>
+					</div>
+				</div>';
+if (get_query_var('year') > 0){ $title = get_query_var('year').' Shows'; $color_key = '';}
+?>
+
 <div id="content" class="standard">
     <div class="container">
         <div class="row">
             <div class="col-md-9" id="main-content">
-				<h1 class="title">Live Shows</h1>
-				<div class="well">				
-					<h4 style="margin-top:0">Colour key to shows:</h4>
-<div class="row">
-					<div class="col-sm-4"><i class="fa fa-square text-success" aria-hidden="true"></i>&nbsp;Open</div>
-					<div class="col-sm-4"><i class="fa fa-square text-warning" aria-hidden="true"></i>&nbsp;Closes within 7 days</div>
-					<div class="col-sm-4"><i class="fa fa-square text-danger" aria-hidden="true"></i>&nbsp;CLOSED</div>
-				</div></div>
+				<h1 class="title"><?php echo $title; ?></h1>
+				<?php echo $color_key; ?>
 				<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 
                 <?php
