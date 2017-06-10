@@ -36,8 +36,8 @@ function create_posttype() {
  	register_taxonomy('dog-breeds', array('shows'),
  		array(
  			'hierarchical' => false,
- 			'label' => 'Breeds',
- 			'singular_label' => 'Breed',
+ 			'label' => 'Dog Breeds',
+ 			'singular_label' => 'Dog Breed',
  			'rewrite' => true
  		)
  	);
