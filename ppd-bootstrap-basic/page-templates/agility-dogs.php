@@ -20,6 +20,16 @@ if(isset($_POST['submit'])) {
 	unset($formData['dogID']);
 	$formData['birth_date'] = dateToSQL($formData['birth_date']);
 	
+	//Dog meta data.
+	foreach (array('kc_grade', 'kc_height', 'bs_height', 'bs_level') as $meta_key){
+		$sql = $wpdb->prepare(
+				'INSERT INTO wpao_agility_dogsmeta (dog_id, meta_key, meta_value) 
+				VALUES (%d, "%s", "%s") ON DUPLICATE KEY UPDATE meta_value = "%s"', 
+				$_POST['dogID'], $meta_key, $formData[$meta_key], $formData[$meta_key]);
+		$wpdb->query($sql);
+		unset($formData[$meta_key]);
+	}
+	
 	if ($_POST['dogID'] > 0){
 		$result = $wpdb->update('wpao_agility_dogs', $formData, array('id' => $_POST['dogID']));
 	}
@@ -33,7 +43,6 @@ if(isset($_POST['submit'])) {
 	exit;
 }
 
-//wp_enqueue_script('colorpicker-js');
 wp_enqueue_style('colorpicker-css', get_stylesheet_directory_uri().'/css/palette-color-picker.css');
 
 get_header();
@@ -115,12 +124,84 @@ get_header();
                         		<input type="hidden" class="form-control" id="dog_color" name="dog_color" value="<?php echo $animal['dog_color']; ?>">
                         	</div>
                         </div>
+
+<?php 
+						$dogMeta = array();
+                        $dogMetaQ = $wpdb->get_results("select meta_key,meta_value from wpao_agility_dogsmeta where dog_id= '".$wpdb->_real_escape($_GET['dogID'])."'", 'ARRAY_A');
+                        foreach ($dogMetaQ as $meta){
+                        	$dogMeta[$meta['meta_key']] = $meta['meta_value'];
+                        }
+//}
+?>
+                        
+                    	<h3><i class="fa fa-trophy" aria-hidden="true"></i>&nbsp;Competition Details</h3>
+						<div class="panel with-nav-tabs panel-default">
+							<div class="panel-heading">
+		                    	<ul class="nav nav-tabs nav-justified">
+									<li class="active"><a data-toggle="tab" href="#tab-kc">Kennel Club</a></li>
+									<li><a data-toggle="tab" href="#tab-bs">Beachside</a></li>
+									<!-- li><a href="#">Menu 2</a></li>
+									<li><a href="#">Menu 3</a></li> -->
+								</ul>
+							</div>
+							<div class="panel-body">
+								<div class="tab-content">
+									<div id="tab-kc" class="tab-pane fade in active">
+				                    	<div class="form-group">
+				                        	<label for="kc_height" class="control-label col-sm-2">Height</label>
+				                        	<div class="col-sm-4">				                        	
+												<select name="kc_height" class="form-control">
+													<option value="">Select Height...</option>
+													<?php echo get_options_for_heights('kc', $dogMeta['kc_height']); ?>
+												</select>
+				                            </div>				                            
+				                        	<label for="kc_grade" class="control-label col-sm-2">KC Grade</label>
+				                        	<div class="col-sm-4">				                        	
+												<select name="kc_grade" class="form-control">
+													<option value="">Select Grade...</option>
+													<?php echo get_options_for_levels('kc', $dogMeta['kc_grade']); ?>
+												</select>
+				                        	</div>
+				                        </div>
+										<?php 
+										if (isset($dogMeta['kc_grade']) && $dogMeta['kc_grade'] == 7){ ?>
+											<h4>Grade 7 Wins</h4>
+										<?php 
+										}									
+										?>
+									</div>
+									<div id="tab-bs" class="tab-pane fade">
+				                    	<div class="form-group">
+				                        	<label for="bs_height" class="control-label col-sm-2">Height</label>
+				                        	<div class="col-sm-4">				                        	
+												<select name="bs_height" class="form-control">
+													<option value="">Select Height...</option>
+													<?php echo get_options_for_heights('bs', $dogMeta['bs_height']); ?>
+												</select>
+				                            </div>				                            
+				                        	<label for="bs_level" class="control-label col-sm-2">Level</label>
+				                        	<div class="col-sm-4">				                        	
+												<select name="bs_level" class="form-control">
+													<option value="">Select Level...</option>
+													<?php echo get_options_for_levels('bs', $dogMeta['bs_level']); ?>
+												</select>
+				                        	</div>
+				                        </div>
+									</div>
+									<!-- <div id="menu2" class="tab-pane fade">
+										<h4>Menu 2</h4>
+										<p>Some content in menu 2.</p>
+									</div> -->
+								</div>
+							</div>
+						</div>
                         
                         <div class="form-group">
                         	<div class="controls">
                             	<input type="submit" name="submit" value="Update Details" class="btn btn-success pull-right" />
                             </div>
-                        </div>                      
+                        </div>    
+                                         
                         
                     </form>
                     <?php
