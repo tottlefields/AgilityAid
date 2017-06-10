@@ -57,16 +57,58 @@ add_action('wp_enqueue_scripts', 'mytheme_enqueue_scripts');
 add_action('init', 'startCustomSession', 1);
 add_action('wp_logout', 'endCustomSession');
 
+function rewrite_shows_url() {
+	add_rewrite_rule( '^shows/([0-9]+)/?','index.php?post_type=shows&year=$matches[1]', 'top' );
+}
+function register_custom_query_vars( $vars ) {
+	array_push( $vars, 'year' );
+	return $vars;
+}
+
+add_action( 'init', 'rewrite_shows_url');
+add_filter( 'query_vars', 'register_custom_query_vars', 1 );
+
 function custom_query_vars( $query ) {
     if ( is_admin() || ! $query->is_main_query() )
         return;
 
     if ( is_post_type_archive( 'shows' ) ) {
-        // Display all posts for a custom post type called 'shows'
-        $query->set( 'posts_per_page', -1 );
-#        $query->set( 'orderby', 'meta_value');
-#        $query->set( 'order', 'ASC');
-        return;
+	    // Display all posts for a custom post type called 'shows'
+    	if (get_query_var('year') > 0){
+    		$year = get_query_var('year');
+	        $query->set( 'posts_per_page', -1 );
+	        $query->set(
+				'meta_query', array(
+	        				array(
+	        						'key'		=> 'end_date',
+	        						'compare'	=> '>=',
+	        						'value'		=> $year.'0101',
+	        				),
+	        				array(
+	        						'key'		=> 'end_date',
+	        						'compare'	=> '<=',
+	        						'value'		=> $year.'1231',
+	        				),
+	        		)
+	        );
+	        return;
+    	}
+    	else{
+			$today = date('Ymd');
+	        $query->set( 'posts_per_page', -1 );
+	        $query->set(
+				'meta_query', array(
+	        				array(
+	        						'key'		=> 'end_date',
+	        						'compare'	=> '>=',
+	        						'value'		=> $today,
+	        				),
+	        		)
+	        );
+	#        $query->set( 'orderby', 'meta_value');
+	#        $query->set( 'order', 'ASC');
+	        return;
+    	}
     }
      return;
 }
