@@ -102,6 +102,7 @@ i.fa.fa-envelope-o,i.fa.fa-facebook {
 }
 i.fa.fa-file-pdf-o { color: darkred; }
 
+.palette-color-picker-bubble { z-index:100 }
 
 .breadcrumb > li + li:before {
     content: "\00BB";
