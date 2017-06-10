@@ -103,6 +103,12 @@ i.fa.fa-envelope-o,i.fa.fa-facebook {
 i.fa.fa-file-pdf-o { color: darkred; }
 
 
+.breadcrumb > li + li:before {
+    color: #ccc;
+    content: "/ ";
+    padding: 0 5px;
+}
+
 
 .panel.with-nav-tabs .panel-heading{
     padding: 5px 5px 0 5px;
