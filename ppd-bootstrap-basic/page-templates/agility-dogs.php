@@ -52,7 +52,7 @@ if(isset($_POST['submit'])) {
 				$sql = $wpdb->prepare(
 						'INSERT INTO wpao_agility_dogsmeta (dog_id, meta_key, meta_value) 
 						VALUES (%d, "%s", "%s") ON DUPLICATE KEY UPDATE meta_value = "%s"', 
-						$dogID, $meta_key, $formData[$meta_key], $formData[$meta_key]);
+						$dogID, $key, $value, $value);
 				$wpdb->query($sql);			
 		}		
 	}
