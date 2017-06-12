@@ -61,3 +61,21 @@ function get_options_for_levels($type, $selected){
 	}
 	return $options;
 }
+
+function get_dogs_for_user($userId){
+	global $wpdb;
+	$dogs = array();
+	$dogData = $wpdb->get_results("SELECT * FROM wpao_agility_dogs WHERE user_id = '".$wpdb->_real_escape($userId)."' ORDER BY `pet_name`", 'ARRAY_A');
+	if(!empty($dogData)) {
+		foreach($dogData as $dog) {
+			$dogMeta = array();
+			$dogMetaQ = $wpdb->get_results("select meta_key,meta_value from wpao_agility_dogsmeta where dog_id= '".$dog['id']."'", 'ARRAY_A');
+			foreach ($dogMetaQ as $meta){
+				$dogMeta[$meta['meta_key']] = $meta['meta_value'];
+			}
+			$dog['meta_data'] = $dogMeta;
+			array_push($dogs, $dog);
+		}
+	}	
+	return $dogs;
+}
