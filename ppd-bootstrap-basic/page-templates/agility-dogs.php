@@ -23,7 +23,7 @@ if(isset($_POST['submit'])) {
 
 	if ($_POST['dogID'] > 0){
 		//Dog meta data.
-		foreach (array('kc_grade', 'kc_height', 'bs_height', 'bs_level') as $meta_key){
+		foreach (array('kc_level', 'kc_height', 'bs_height', 'bs_level') as $meta_key){
 			if (isset($formData[$meta_key])){
 				$sql = $wpdb->prepare(
 						'INSERT INTO wpao_agility_dogsmeta (dog_id, meta_key, meta_value) 
@@ -37,7 +37,7 @@ if(isset($_POST['submit'])) {
 	}
 	else{
 		$metaData = array();
-		foreach (array('kc_grade', 'kc_height', 'bs_height', 'bs_level') as $meta_key){
+		foreach (array('kc_level', 'kc_height', 'bs_height', 'bs_level') as $meta_key){
 			if (isset($formData[$meta_key])){
 				$metaData[$meta_key] = $formData[$meta_key];
 				unset($formData[$meta_key]);				
@@ -174,16 +174,16 @@ get_header();
 													<?php echo get_options_for_heights('kc', $dogMeta['kc_height']); ?>
 												</select>
 				                            </div>				                            
-				                        	<label for="kc_grade" class="control-label col-sm-2">KC Grade</label>
+				                        	<label for="kc_level" class="control-label col-sm-2">KC Grade</label>
 				                        	<div class="col-sm-4">				                        	
-												<select name="kc_grade" class="form-control">
+												<select name="kc_level" class="form-control">
 													<option value="">Select Grade...</option>
-													<?php echo get_options_for_levels('kc', $dogMeta['kc_grade']); ?>
+													<?php echo get_options_for_levels('kc', $dogMeta['kc_level']); ?>
 												</select>
 				                        	</div>
 				                        </div>
 										<?php 
-										if (isset($dogMeta['kc_grade']) && $dogMeta['kc_grade'] == 7){ ?>
+										if (isset($dogMeta['kc_level']) && $dogMeta['kc_level'] == 7){ ?>
 											<h4>Grade 7 Wins</h4>
 										<?php 
 										}									
