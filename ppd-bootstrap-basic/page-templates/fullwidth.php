@@ -1,4 +1,4 @@
-<?php /* Template Name: Sidebar Template */ ?>
+<?php /* Template Name: Full Width Template */ ?>
 <?php get_header(); ?>
 
 <div id="content" class="standard">
