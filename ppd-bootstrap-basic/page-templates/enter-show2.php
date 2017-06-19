@@ -11,6 +11,8 @@ global $current_user, $wpdb;
 get_currentuserinfo();
 
 $userId = $current_user->ID;
+$user_meta = get_user_meta( $userId );
+$handler = $user_meta['first_name'][0].' '.$user_meta['last_name'][0];
 
 $show_id = $_POST['show'] ? $_POST['show'] : $_GET['show'];
 
@@ -36,6 +38,7 @@ if(!empty($data['show_id']) && isset($_POST['step-2-submitted'])) {
 	foreach ($_POST['form-data'][$data['show_id']] as $dog => $classes){
 		foreach ($classes as $classNo => $class){
 			if (isset($class['status']) && $class['status'] == 'on'){
+				$class['handler'] = $handler;
 				$showData[$data['show_id']][$dog][$classNo] = $class;
 			}
 		}
@@ -80,7 +83,7 @@ setCustomSessionData($data);
 					<li class="active">Helpers</li>
 					<li class="active">Payment</li>
 				</ul>
-				<?php debug_array($data); ?>
+				<?php //debug_array($data); ?>
 				<form action="" method="post" class="form-horizontal" id="entryForm">
 					<input type="hidden" id="show" name="show" value="<?php echo $data['show_id']; ?>" />					
                 	<input type="hidden" name="step-2-submitted" value="1" />

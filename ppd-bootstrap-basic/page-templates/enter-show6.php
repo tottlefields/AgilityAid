@@ -20,6 +20,25 @@ $data = getCustomSessionData();
 $show = get_post( $data['show_id'] );
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
+	$showData = $data;
+	$all_classes = $data['classes'];
+	$classes_entered = array();
+	
+	unset($showData['classes']);
+	$showData['total_cost'] = $_POST['total_cost'];
+	$showData['dog_count'] = count(array_keys($showData[$data['show_id']]));
+	$class_count = 0;
+	foreach ($showData[$data['show_id']] as $dog_id => $classes){
+		$class_count += count($classes);
+		$dogData = get_dog_by_id($showData['dogs'], $dog_id);
+		$dogName = ($showData['show_type'] == 'kc') ? $dogData['kc_name'] : $dogData['pet_name'];
+		foreach ($classes as $classNo => $classData){
+			$class = get_class_by_no($all_classes[$classData['date']], $classNo);
+			array_push($classes_entered, array('dog_name' => $dogName, 'handler' => $classData['handler'], 'class_title' => $class['classNo'].'. '.$class['className']));
+		}
+	}
+	$showData['class_count'] = $class_count;
+	//setCustomSessionData($showData);
 	
 	//We construct our order and insert it
 	$entryPostData = array(
@@ -33,19 +52,48 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
 	
 	// Insert the post into the database
 	$insertId = wp_insert_post($entryPostData);
-	debug_string($insertId);
 	
 	$entryMetaData = array();
 
-	$entryMetaData['show_id'] = $data['show_id'];
+	$entryMetaData['show_id'] = $showData['show_id'];
+	$entryMetaData['address'] = $user_meta['address'][0];
+	$entryMetaData['town'] = $user_meta['town'][0];
+	$entryMetaData['postcode'] = $user_meta['postcode'][0];
+	$entryMetaData['dog_count'] = $showData['dog_count'];
+	$entryMetaData['class_count'] = $showData['class_count'];
+	$entryMetaData['total_cost'] = $showData['total_cost'];
+	$entryMetaData['classes'] = serialize($showData[$showData['show_id']]);
+	$entryMetaData['show_data'] = serialize($showData);
 
-	foreach($postMetaData as $key => $value) {
+	foreach($entryMetaData as $key => $value) {
 		$key .= '-pm';
 		update_post_meta($insertId, $key, $value);
 	}
 	
+	$close_date = new DateTime(get_post_meta( $showData['show_id'] , 'close_date' , true ));
 	
-	exit;
+	$message = 'Dear '.$user_meta['first_name'][0].',<br />
+<p>Thank you for entering <strong>'.$show->post_title.'</strong> via the <a href="'.get_bloginfo('url').'">AgilityAid website</a>.</p>
+<p>Your total show entry fees are <strong>&pound;'.sprintf("%.2f", $showData['total_cost']).'</strong>. These fees are made up of class entry fees as per the show schedule and camping fees (where applicable). Please make sure all payments are made prior to the closing date ('.$close_date->format('jS M Y').'). You can either pay online using the bank details below, or log into your account to pay via PayPal. Failure to pay will render your entry null and void.</p>
+		
+	Sort Code : 20-41-15<br />
+	Account No. : 40542342<br />
+	Your Reference : '.$current_user->user_login.'<br />
+
+<p>The classes that you elected to enter are shown below. If there is a problem, or an error with this entry, please contact us at your earliest convenience</p>
+<table style="padding-bottom:10px;width:760px;border-collapse:collapse;" align="center">';
+	foreach ($classes_entered as $class){
+		$message .= '<tr><td style="border:1px solid #999999;padding-right:10px; padding-left:10px;">'.$class['dog_name'].'</td>
+		<td style="border:1px solid #999999;padding-right:10px; padding-left:10px;">'.$class['handler'].'</td>
+		<td style="border:1px solid #999999;padding-right:10px; padding-left:10px;">'.$class['class_title'].'</td></tr>';
+	}
+	$message .= '</table>';
+	
+	$TO = $current_user->user_email.','.get_bloginfo('admin_email');
+//	$TO = $current_user->user_email;
+	$TITLE = '[AgilityAid] '.$show->post_title.' Show Entry';
+	$HEADERS = array('Content-Type: text/html; charset=UTF-8');
+	$sent = wp_mail( $TO, $TITLE, $message, $HEADERS );
 }
 
 
@@ -97,6 +145,15 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
                         <?php
                     }   
                 }
+                elseif ($sent > 0){
+                	?>
+					<div class="alert alert-success">
+						<p>Many thanks for your entry. You should receive an email confirmation of your entry shortly.</p>
+						<p>Payment can be made via online bank transfer (details in your email) or by logging into your account and paying by PayPal (this is subject to extra fees).</p>
+						<p>Please <a href="/account/my-entries/">click here</a> to view your entry or <a href="/enter-show/">here to enter another show</a>.</p>
+					</div>
+					<?php
+                }else {
                 ?>
                 <p>Below is a summary of your entry for the <strong><?php echo $show->post_title; ?></strong> show.</p>
                 
@@ -113,17 +170,28 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
                 foreach ($data[$data['show_id']] as $dog_id => $classes){
                 	$dog = get_dog_by_id($data['dogs'], $dog_id);
                 	$class_list = array();
+                	$handlers = array();
                 	$cost_per_dog = 0;
                 	foreach ($classes as $classNo => $class){
-                		array_push($class_list, $classNo);
+                		$handler = $class['handler'];
+                		if(!isset($class_list[$handler])){
+                			$class_list[$handler] = array();
+                		}
+                		array_push($class_list[$handler], $classNo);
                 		$cost_per_dog += $class['price'];
                 	}
                 	$total_cost += $cost_per_dog;
-                	$handler = $user_meta['first_name'][0].' '.$user_meta['last_name'][0];
                 	echo '<tr>
 						<td><span style="color:'.$dog['dog_color'].';font-weight:bold;">'.$dog['pet_name'].'</span></td>
-						<td>'.$handler.'</td>
-						<td>'.implode(",", $class_list).'</td>
+						<td>'.implode("<br />", array_keys($class_list)).'</td>
+						<td>';
+	                	foreach( $class_list as $handler => $classes ) {
+	                		echo implode(",", $classes);
+	                		if( next( $class_list ) ) {
+	                			echo '<br />';
+	                		}
+	                	}
+						echo '</td>
 						<td>&pound;'.sprintf("%.2f", $cost_per_dog).'</td>';
                 }
                 
@@ -140,12 +208,15 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
                     <div class="control-group">
                         <div class="controls">
                         	<span class="pull-right">
+								<input type="hidden" id="total_cost" name="total_cost" value="<?php echo $total_cost; ?>" />	
 	                            <input type="submit" value="Cancel" name="submit" id="cancelEntry" class="btn btn-danger" />
 	                            <input type="submit" value="Finish" name="submit" class="btn btn-success" />
                             </span>
                        </div>
                    </div>
 				</form>
+				<?php }
+				?>
 				
 				
 				

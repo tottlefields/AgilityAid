@@ -164,6 +164,13 @@ function get_dog_by_id($dogs, $id){
 	return;
 }
 
+function get_class_by_no($classes, $classNo){
+	foreach ($classes as $class){
+		if ($class['classNo'] == $classNo) { return $class; }
+	}
+	return;
+}
+
 function dateToSQL($date){
 	if ($date == ""){ return ""; }
 	return date_format(DateTime::createFromFormat('d/m/Y', $date), 'Y-m-d');

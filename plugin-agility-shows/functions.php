@@ -59,7 +59,7 @@ function create_posttype() {
  			'supports' => array('title', 'author'),
  			'exclude_from_search' => true,
  			'has_archive' => false,
- 			'menu_icon' => 'dashicons-location-alt',
+ 			'menu_icon' => 'dashicons-awards',
  			'show_in_nav_menus' => false
  	);
  	
@@ -72,6 +72,47 @@ add_filter( 'manage_shows_posts_columns', 'set_custom_edit_shows_columns' );
 add_action( 'manage_shows_posts_custom_column' , 'custom_shows_column', 10, 2 );
 add_filter( 'manage_edit-shows_sortable_columns', 'custom_shows_sort');
 add_filter( 'request', 'date_column_orderby' );
+
+add_filter( 'manage_entries_posts_columns', 'set_custom_edit_entry_columns' );
+add_action( 'manage_entries_posts_custom_column' , 'custom_entry_column', 10, 2 );
+
+function set_custom_edit_entry_columns($columns) {
+	$columns['no_classes'] = __( 'Classes');
+	$columns['no_dogs'] = __( 'Dogs');
+	$columns['total_cost'] = __( 'Cost');
+	$columns['paid'] = __( 'Paid');
+
+	return $columns;
+}
+
+function custom_entry_column( $column, $post_id ) {
+	switch ( $column ) {
+
+		case 'no_classes' :
+			echo get_post_meta( $post_id , 'class_count-pm' , true );
+			break;
+
+		case 'no_dogs' :
+			echo get_post_meta( $post_id , 'dog_count-pm' , true );
+			break;
+
+		case 'total_cost' :
+			echo '&pound;'.sprintf("%.2f", get_post_meta( $post_id , 'total_cost-pm' , true ));
+			break;
+
+		case 'paid' :
+			$paid = get_post_meta( $post_id , 'paid-pm' , true );
+			if(isset($paid) && $paid != ''){
+				$date = new DateTime($paid);
+				echo $date->format('jS M Y');
+			}
+			else{
+				echo 'No';
+			}
+			break;
+
+	}
+}
 
 function set_custom_edit_shows_columns($columns) {
 	$columns['start_date'] = __( 'Show Date');
