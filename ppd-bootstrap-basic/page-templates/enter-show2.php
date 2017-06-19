@@ -44,7 +44,7 @@ if(!empty($data['show_id']) && isset($_POST['step-2-submitted'])) {
 	setCustomSessionData($showData);
 
 	session_write_close();
-	wp_redirect(site_url('/enter-show/team-pairs-classes/'));
+	wp_redirect(site_url('/enter-show/teams-pairs-classes/'));
 	exit;
 }
 
