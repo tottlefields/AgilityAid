@@ -14,7 +14,7 @@ if(isset($_GET['cancel'])){
 global $current_user, $wpdb;
 get_currentuserinfo();
 $userId = $current_user->ID;
-$userMeta = get_user_meta( $userId );
+$user_meta = get_user_meta( $userId );
 
 $data = getCustomSessionData();
 $show = get_post( $data['show_id'] );
@@ -119,7 +119,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
                 		$cost_per_dog += $class['price'];
                 	}
                 	$total_cost += $cost_per_dog;
-                	$handler = $userMeta['first_name'][0].' '.$userMeta['last_name'][0];
+                	$handler = $user_meta['first_name'][0].' '.$user_meta['last_name'][0];
                 	echo '<tr>
 						<td><span style="color:'.$dog['dog_color'].';font-weight:bold;">'.$dog['pet_name'].'</span></td>
 						<td>'.$handler.'</td>
