@@ -65,6 +65,10 @@ function mytheme_enqueue_scripts() {
 	//jQuery Color Picker
 	wp_register_script('colorpicker-js', get_stylesheet_directory_uri().'/js/palette-color-picker.min.js', array('jquery',), '1.03', true);
 	wp_enqueue_script('colorpicker-js');
+	
+	//BootBox
+	wp_register_script('bootbox-js', '//cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js', array('jquery', 'bootstrap-js'), '4.4.0', true);
+	wp_enqueue_script('bootbox-js');
 }
 
 add_action('wp_enqueue_scripts', 'mytheme_enqueue_scripts');
@@ -151,6 +155,13 @@ function getCustomSessionData() {
 
 function setCustomSessionData($data) {
 	$_SESSION['data'] = serialize($data);
+}
+
+function get_dog_by_id($dogs, $id){
+	foreach ($dogs as $dog){
+		if ($dog['id'] == $id) { return $dog; }
+	}
+	return;
 }
 
 function dateToSQL($date){

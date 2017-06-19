@@ -27,7 +27,6 @@ class Basket_Widget extends WP_Widget {
 		echo $before_title.'Basket'.$after_title;
 
 		$data = getCustomSessionData();
-		$vatArray = vatCountries();
 		$current_user = wp_get_current_user();
 		$all_meta_for_user = get_user_meta( $current_user->ID );
 

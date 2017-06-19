@@ -6,6 +6,8 @@
  #  echo "</pre>";
  #}//Lists all the queries executed on your page
 ?>
+
+	<hr />
 			<footer>
 			</footer>
 		

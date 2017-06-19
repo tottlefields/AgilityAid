@@ -41,6 +41,29 @@ function create_posttype() {
  			'rewrite' => true
  		)
  	);
+ 	
+
+ 	$args = array(
+ 			'label' => __('Show Entries'),
+ 			'labels' => array(
+ 					'add_new_item' => 'Add Entry',
+ 					'edit_item' => 'Edit Entry',
+ 					'view_item' => 'View Entries'
+ 			),
+ 			'singular_label' => __('Show Entry'),
+ 			'public' => false,
+ 			'show_ui' => true,
+ 			'capability_type' => 'post',
+ 			'hierarchical' => false,
+ 			'rewrite' => true,
+ 			'supports' => array('title', 'author'),
+ 			'exclude_from_search' => true,
+ 			'has_archive' => false,
+ 			'menu_icon' => 'dashicons-location-alt',
+ 			'show_in_nav_menus' => false
+ 	);
+ 	
+ 	register_post_type('entries', $args);
 }
 // Hooking up our function to theme setup
 add_action( 'init', 'create_posttype' );

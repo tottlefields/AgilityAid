@@ -62,6 +62,9 @@ if (get_query_var('year') > 0){ $title = get_query_var('year').' Shows'; $color_
                 				$enter_show_link = '|| <img src="'.get_stylesheet_directory_uri() . '/img/aso-logo.png" style="height:16px" />&nbsp;<a href="'.$online_link.'" target="_blank">Enter Show</a>';
                 			}
                 		}
+                		elseif ($online_link == ''){
+                			$enter_show_link = '|| <img src="'.get_stylesheet_directory_uri() . '/img/aa-logo.png" style="height:16px" />&nbsp;<a href="/enter-show/individual-classes/?show='.$post_id.'">Enter Online</a>';                				
+                		}
                 		
                 		//green (success) for open shows; orange (warning) for closing in 7 days; red (danger) for closed
                 		$panel_class = 'success';

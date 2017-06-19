@@ -95,6 +95,4 @@ If you enter a show by post and choose to download your ring cards please ensure
         </div>
       </div>
 
-      <hr>
-
 <?php get_footer(); ?>

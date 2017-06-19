@@ -19,6 +19,7 @@
 		wp_enqueue_script('bootstrap-js');
 		wp_enqueue_script('fuelux-js');
 		wp_enqueue_script('datepicker-js');
+		wp_enqueue_script('bootbox-js');
 		?>
 		
 		<?php wp_head(); ?>

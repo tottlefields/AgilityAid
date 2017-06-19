@@ -4,6 +4,24 @@ if(!is_user_logged_in()) {
 	wp_redirect(site_url('/login/'));
 	exit;
 }
+
+$data = getCustomSessionData();
+
+global $current_user, $wpdb;
+get_currentuserinfo();
+
+$userId = $current_user->ID;
+
+$dogData = get_dogs_for_user($userId);
+if(count($dogData) == 0){
+	//No dogs registered for this user...
+	wp_redirect(site_url('/account/dogs/'));
+	exit;
+}
+$data['dogs'] = $dogData;
+
+setCustomSessionData($data);
+
 ?>
 <?php get_header(); ?>
 
@@ -17,6 +35,7 @@ if(!is_user_logged_in()) {
 					<li class="active">Individual Classes</li>
 					<li class="active">Team/Pairs Classes</li>
 					<li class="active">Camping</li>
+					<li class="active">Helpers</li>
 					<li class="active">Payment</li>
 				</ul>
 				<?php 
