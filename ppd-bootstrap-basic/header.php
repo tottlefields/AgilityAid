@@ -47,7 +47,7 @@
 							<a href="/account/"><span class="hidden-xs">My </span>Account</a>
 							<a href="<?php echo wp_logout_url(); ?>">Log Out</a>
                             <?php } else { ?>
-                            <!-- <a href="<?php echo wp_login_url(); ?>">Log In</a>-->
+                            <a href="<?php echo wp_login_url(); ?>">Log In</a>
                             <?php wp_register('', ''); ?>
                             <?php } ?>
                             &nbsp;<span class="contact"><a href="/contact-us/"><i class="fa fa-envelope-o"></i>Contact Us</a>&nbsp;<a href="https://www.facebook.com/agilityaid/" target="_blank"><i class="fa fa-facebook"></i></a></span>
