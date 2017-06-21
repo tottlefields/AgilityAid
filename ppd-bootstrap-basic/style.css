@@ -118,6 +118,9 @@ i.fa.fa-file-pdf-o { color: darkred; }
 .panel.with-nav-tabs .nav-justified{
 	margin-bottom: -1px;
 }
+
+.um_input { width: 100% !important; }
+
 /********************************************************************/
 /*** PANEL DEFAULT ***/
 .with-nav-tabs.panel-default .nav-tabs > li > a,
