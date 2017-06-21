@@ -227,7 +227,7 @@ get_header();
 					
 				} else {
 					?>
-                    <h1 class="title">My Dogs <span style="position:float; float:right;"><a class="btn btn-primary" href="/account/dogs/?edit=1&dogID=0">Add New</a></span></h1>
+                    <h1 class="title">My Dogs <span class="pull-right"><a href="/account/" class="btn btn-info">My Account</a>&nbsp;<a class="btn btn-primary" href="/account/dogs/?edit=1&dogID=0">Add New Dog</a></span></h1>
                     <?php
 					
 					if(isset($_GET['updated'])) {
