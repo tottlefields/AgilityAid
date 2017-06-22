@@ -55,15 +55,20 @@ if(!empty($data['show_id']) && isset($_POST['step-2-submitted'])) {
 		if ($classData == 'nfc'){
 			$showData[$data['show_id']][$dog] = 'nfc';
 		}
-		if(isset($classData['height'])){
-			$dog_height = $classData['height'];
-			$showData[$data['show_id']][$dog]['height'] = $classData['height'];
-		}
-		if (isset($classData['classes'])){
-			foreach ($classData['classes'] as $classNo => $class){
-				if (isset($class['status']) && $class['status'] == 'on'){
-					$class['height'] = $dog_height;
-					$showData[$data['show_id']][$dog]['classes'][$classNo] = $class;
+		else{
+			if(isset($classData['height'])){
+				$dog_height = $classData['height'];
+				//$showData[$data['show_id']][$dog]['height'] = $classData['height'];
+			}
+			if (isset($classData['classes'])){
+				foreach ($classData['classes'] as $classNo => $class){
+					if (isset($class['status']) && $class['status'] == 'on'){
+						$class['height'] = $dog_height;
+						$showData[$data['show_id']][$dog]['classes'][$classNo] = $class;
+					}
+				}
+				if(!isset($showData[$data['show_id']][$dog]['classes']) || count($showData[$data['show_id']][$dog]['classes']) == 0){
+					$showData[$data['show_id']][$dog] = 'nfc';				
 				}
 			}
 		}
