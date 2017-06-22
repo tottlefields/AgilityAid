@@ -23,21 +23,32 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
 	$showData = $data;
 	$all_classes = $data['classes'];
 	$classes_entered = array();
+	$nfc_dogs = array();
 	
 	unset($showData['classes']);
 	$showData['total_cost'] = $_POST['total_cost'];
 	$showData['dog_count'] = count(array_keys($showData[$data['show_id']]));
 	$class_count = 0;
-	foreach ($showData[$data['show_id']] as $dog_id => $classes){
-		$class_count += count($classes);
+	foreach ($showData[$data['show_id']] as $dog_id => $classData){
 		$dogData = get_dog_by_id($showData['dogs'], $dog_id);
 		$dogName = ($showData['show_type'] == 'kc') ? $dogData['kc_name'] : $dogData['pet_name'];
-		foreach ($classes as $classNo => $classData){
-			$class = get_class_by_no($all_classes[$classData['date']], $classNo);
-			array_push($classes_entered, array('dog_name' => $dogName, 'handler' => $classData['handler'], 'class_title' => $class['classNo'].'. '.$class['className']));
+		if ($classData == 'nfc'){
+			array_push($nfc_dogs, $dogName);
+		}else{
+			$class_count += count($classData['classes']);
+			foreach ($classData['classes'] as $classNo => $classEntry){
+				$class = get_class_by_no($all_classes[$classEntry['date']], $classNo);
+				array_push($classes_entered, array(
+						'dog_name' => $dogName, 
+						'height' => $classData['height'], 
+						'handler' => $classEntry['handler'], 
+						'class_title' => $class['classNo'].'. '.$class['className'])
+				);
+			}
 		}
 	}
 	$showData['class_count'] = $class_count;
+	$showData['nfc_count'] = count($nfc_dogs);
 	//setCustomSessionData($showData);
 	
 	//We construct our order and insert it
@@ -61,8 +72,9 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
 	$entryMetaData['postcode'] = $user_meta['postcode'][0];
 	$entryMetaData['dog_count'] = $showData['dog_count'];
 	$entryMetaData['class_count'] = $showData['class_count'];
+	$entryMetaData['nfc_count'] = $showData['nfc_count'];
 	$entryMetaData['total_cost'] = $showData['total_cost'];
-	$entryMetaData['classes'] = serialize($showData[$showData['show_id']]);
+	$entryMetaData['entry_data'] = serialize($showData[$showData['show_id']]);
 	$entryMetaData['show_data'] = serialize($showData);
 
 	foreach($entryMetaData as $key => $value) {
@@ -84,13 +96,19 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
 <table style="padding-bottom:10px;width:760px;border-collapse:collapse;" align="center">';
 	foreach ($classes_entered as $class){
 		$message .= '<tr><td style="border:1px solid #999999;padding-right:10px; padding-left:10px;">'.$class['dog_name'].'</td>
+		<td style="border:1px solid #999999;padding-right:10px; padding-left:10px;">'.$class['height'].'</td>
 		<td style="border:1px solid #999999;padding-right:10px; padding-left:10px;">'.$class['handler'].'</td>
 		<td style="border:1px solid #999999;padding-right:10px; padding-left:10px;">'.$class['class_title'].'</td></tr>';
 	}
+	foreach ($nfc_dogs as $dog){
+		$message .= '<tr><td style="border:1px solid #999999;padding-right:10px; padding-left:10px;">'.$dog.'</td>
+		<td colspan="3" style="border:1px solid #999999;padding-right:10px; padding-left:10px;"><em>Not for Competition</em></td></tr>';
+		
+	}
 	$message .= '</table>';
 	
-	$TO = $current_user->user_email.','.get_bloginfo('admin_email');
-//	$TO = $current_user->user_email;
+//	$TO = $current_user->user_email.','.get_bloginfo('admin_email');
+	$TO = $current_user->user_email;
 	$TITLE = '[AgilityAid] '.$show->post_title.' Show Entry';
 	$HEADERS = array('Content-Type: text/html; charset=UTF-8');
 	$sent = wp_mail( $TO, $TITLE, $message, $HEADERS );
@@ -160,6 +178,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
                 <table class="table table-responsive">
                 	<thead><tr>
                         <th>Dog's Name</th>
+                        <th>Height</th>
                         <th>Handler</th>
                         <th>Classes</th>
                         <th>Cost</th>
@@ -167,39 +186,49 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
                 
                 <?php 
                 $total_cost = 0;
-                foreach ($data[$data['show_id']] as $dog_id => $classes){
+                foreach ($data[$data['show_id']] as $dog_id => $classData){
                 	$dog = get_dog_by_id($data['dogs'], $dog_id);
                 	$class_list = array();
                 	$handlers = array();
                 	$cost_per_dog = 0;
-                	foreach ($classes as $classNo => $class){
-                		$handler = $class['handler'];
-                		if(!isset($class_list[$handler])){
-                			$class_list[$handler] = array();
-                		}
-                		array_push($class_list[$handler], $classNo);
-                		$cost_per_dog += $class['price'];
-                	}
-                	$total_cost += $cost_per_dog;
+                	if ($classData == 'nfc'){
                 	echo '<tr>
 						<td><span style="color:'.$dog['dog_color'].';font-weight:bold;">'.$dog['pet_name'].'</span></td>
+						<td colspan="3" align="center"><em>Not for Competition</em></td>
+						<td>&nbsp;</td>';
+                	}
+                	else{
+	                	foreach ($classData['classes'] as $classNo => $class){
+	                		$handler = $class['handler'];
+	                		if(!isset($class_list[$handler])){
+	                			$class_list[$handler] = array();
+	                		}
+	                		array_push($class_list[$handler], $classNo);
+	                		$cost_per_dog += $class['price'];
+	                	}
+                		$total_cost += $cost_per_dog;
+                	echo '<tr>
+						<td><span style="color:'.$dog['dog_color'].';font-weight:bold;">'.$dog['pet_name'].'</span></td>
+						<td>'.$classData['height'].'</td>
 						<td>'.implode("<br />", array_keys($class_list)).'</td>
 						<td>';
 	                	foreach( $class_list as $handler => $classes ) {
-	                		echo implode(",", $classes);
-	                		if( next( $class_list ) ) {
+	                		sort($classes);
+	                		if( has_next( $class_list ) ) {
 	                			echo '<br />';
 	                		}
+	                		echo implode(",", $classes);
 	                	}
 						echo '</td>
 						<td>&pound;'.sprintf("%.2f", $cost_per_dog).'</td>';
+                	}
                 }
                 
                 ?>
                 </tbody>
                 <tfoot>
                 	<tr>
-                		<th colspan="3"><span class="pull-right">Total</span></th>
+                		<th colspan="4"><span class="pull-right">Total</span></th>
                 		<th><?php echo '&pound;'.sprintf("%.2f", $total_cost); ?></th>
                 </tfoot>
                 </table>

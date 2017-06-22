@@ -285,10 +285,10 @@ get_header();
 			
 			$('#dog_color').paletteColorPicker({
 					colors: [
-						{'Green':'#006412'},{'LimeGreen':'#32CD32'},{'Yellow':'#FBF305'},{'Orange':'#FF6403'},{'Red':'#DD0907'},
-						{'Burgundy':'#800020'},{'Magenta':'#F22084'},{'Pink':'#FFC0CB'},
-						{'Lilac':'#e5c8ef'},{'Purple':'#552479'},{'Blue':'#0000D3'},{'Cyan':'#02ABEA'},{'SkyBlue':'#A6CAF0'},
-						{'LightGrey':'#C0C0C0'},{'DarkGrey':'#808080'},{'Black':'#000000'},{'Brown':'#562C05'},{'Beige':'#90713A'}
+						{'Green':'#008000'},{'LimeGreen':'#32CD32'},{'Yellow':'#FFFF00'},{'Orange':'#FFA500'},{'Red':'#FF0000'},
+						{'Maroon':'#800000'},{'Magenta':'#FF00FF'},{'Pink':'#FFC0CB'},
+						{'Thistle':'#D8BFD8'},{'RebeccaPurple':'#663399'},{'Blue':'#0000FF'},{'DarkTurquoise':'#00CED1'},{'SkyBlue':'#87CEEB'},
+						{'LightGrey':'#D3D3D3'},{'DarkGrey':'#A9A9A9'},{'Black':'#000000'},{'SaddleBrown':'#8B4513'},{'Peru':'#CD853F'}
 					],
 					clear_btn: null,
 					position: 'downside', // default -> 'upside'

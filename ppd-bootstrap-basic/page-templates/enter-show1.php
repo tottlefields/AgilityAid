@@ -5,7 +5,7 @@ if(!is_user_logged_in()) {
 	exit;
 }
 
-$data = getCustomSessionData();
+startCustomSession();
 
 global $current_user, $wpdb;
 get_currentuserinfo();

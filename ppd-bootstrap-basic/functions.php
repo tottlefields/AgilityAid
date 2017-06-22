@@ -225,4 +225,19 @@ function outputBasketHeaderData(){
 	
 	echo '<strong>' . $items . ($items == 1 ? ' Item' : ' Items') . ' (&pound;' . number_format($cost, 2) . ')</strong>';
 }
+
+//function has_next(array $a){
+//	return next($a) !== false ?: each($a) !== false;
+//}
+function has_next($array) {
+	if (is_array($array)) {
+		if (next($array) === false) {
+			return false;
+		} else {
+			return true;
+		}
+	} else {
+		return false;
+	}
+}
 ?>
