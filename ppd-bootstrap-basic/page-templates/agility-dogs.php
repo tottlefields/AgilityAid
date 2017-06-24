@@ -5,13 +5,13 @@ Template Name: Agility Dogs
 
 global $current_user, $wpdb;
 get_currentuserinfo();
-				
-$userId = $current_user->ID;
 
 if(!is_user_logged_in()) {
 	wp_redirect(site_url('/login/'));
 	exit;
 }
+				
+$userId = $current_user->ID;
 
 if(isset($_POST['submit'])) {
 	

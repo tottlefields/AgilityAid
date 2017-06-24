@@ -18,8 +18,8 @@
                 ?>
             </div>
             <div class="col-md-6">
-		<a href="/account/" class="btn btn-info pull-right">My Account</a><h1>&nbsp;</h1>
-		<h4>Extra Handlers</h4>
+				<a href="/account/" class="btn btn-info pull-right">My Account</a><h1>&nbsp;</h1>
+				<h4>Extra Handlers</h4>
             </div>
         </div>
     </div>
