@@ -67,10 +67,11 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
 						'handler' => $classEntry['handler'], 
 						'class_title' => $class['classNo'].'. '.$class['className'])
 				);
-				$showData[$data['show_id']]['classes'][$classNo]['class_title'] = $class['className'];
+				$showData[$data['show_id']][$dog_id]['classes'][$classNo]['class_title'] = $class['className'];
 			}
 		}
 	}
+	
 	$showData['class_count'] = $class_count;
 	$showData['nfc_count'] = count($nfc_dogs);
 	//setCustomSessionData($showData);

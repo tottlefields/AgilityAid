@@ -20,7 +20,7 @@ $handlers = array();
 if(isset($user_meta['handlers'][0])){
 	$handlers = unserialize($user_meta['handlers'][0]);
 }
-array_push($handlers, 'Mark Peck');
+//array_push($handlers, 'Mark Peck');
 $handler = $user_meta['first_name'][0].' '.$user_meta['last_name'][0];
 array_push($handlers, $handler);
 asort($handlers);
