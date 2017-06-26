@@ -59,6 +59,7 @@ if(!empty($data['show_id']) && isset($_POST['step-2-submitted'])) {
 		$showData['entry_id'] = $_POST['form-data']['entry_id'];
 	}
 	
+	//TODO : Bug when enter dog as NFC then Edit entry, can't add classes.
 	foreach ($_POST['form-data'][$data['show_id']] as $dog => $classData){
 		$dog_height = '';
 		if ($classData === 'nfc'){
