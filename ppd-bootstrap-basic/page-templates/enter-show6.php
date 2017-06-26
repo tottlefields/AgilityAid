@@ -5,19 +5,42 @@ if(!is_user_logged_in()) {
 	exit;
 }
 
-if(isset($_GET['cancel'])){
-	setCustomSessionData(array());
-	wp_redirect(site_url('/enter-show/'));
-	exit;
-}
-
 global $current_user, $wpdb;
 get_currentuserinfo();
 $userId = $current_user->ID;
+
 $user_meta = get_user_meta( $userId );
+$user_ref = get_user_meta($userId, 'user_ref', true);
 
 $data = getCustomSessionData();
 $show = get_post( $data['show_id'] );
+$schedule_file = get_field('pdf_upload_schedule');
+
+if(isset($_GET['cancel']) || isset($_GET['delete'])){
+	setCustomSessionData(array());
+	$args = array (
+		'post_type'	=> 'entries',
+		'post_status'	=> array('publish'),
+		'numberposts'	=> 10,
+		'author'		=> $userId,
+		'meta_query' 	=> array(
+			array(
+				'key'		=> 'show_id-pm',
+				'compare'	=> '=',
+				'value'		=> $data['show_id'],
+			),
+		)
+	);
+		
+	// get posts
+	$posts = get_posts($args);
+	global $post;
+	foreach( $posts as $post ) {
+		wp_delete_post(get_the_ID());
+	}
+	wp_redirect(site_url('/enter-show/'));
+	exit;
+}
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
 	$showData = $data;
@@ -44,6 +67,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
 						'handler' => $classEntry['handler'], 
 						'class_title' => $class['classNo'].'. '.$class['className'])
 				);
+				$showData[$data['show_id']]['classes'][$classNo]['class_title'] = $class['className'];
 			}
 		}
 	}
@@ -51,21 +75,30 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
 	$showData['nfc_count'] = count($nfc_dogs);
 	//setCustomSessionData($showData);
 	
-	//We construct our order and insert it
-	$entryPostData = array(
-			'post_title'    => $show->post_name.'_'.$current_user->user_login,
-			'post_content'  => '',
-			'post_status'   => 'publish',
-			'post_author'   => $userId,
-			'post_category' => array(),
-			'post_type' => 'entries'
-	);
+	if(isset($showData['entry_id']) && $showData['entry_id']>0){
+		$insertId = $showData['entry_id'];
+	}
+	else{
+		$showData['entry_ts'] = time();
 	
-	// Insert the post into the database
-	$insertId = wp_insert_post($entryPostData);
+		//We construct our order and insert it
+		$entryPostData = array(
+				'post_title'    => $show->post_name.'_'.$user_ref,
+				'post_content'  => '',
+				'post_status'   => 'publish',
+				'post_author'   => $userId,
+				'post_category' => array(),
+				'post_type' => 'entries'
+		);
+		
+		// Insert the post into the database
+		$insertId = wp_insert_post($entryPostData);
+		$showData['entry_id'] = $insertId;
+	}
 	
 	$entryMetaData = array();
 
+	$entryMetaData['entry_ts'] = $showData['entry_ts'];
 	$entryMetaData['show_id'] = $showData['show_id'];
 	$entryMetaData['address'] = $user_meta['address'][0];
 	$entryMetaData['town'] = $user_meta['town'][0];
@@ -90,7 +123,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
 		
 	Sort Code : 20-41-15<br />
 	Account No. : 40542342<br />
-	Your Reference : '.$current_user->user_login.'<br />
+	Your Reference : <strong>'.$user_ref.'</strong><br />
 
 <p>The classes that you elected to enter are shown below. If there is a problem, or an error with this entry, please contact us at your earliest convenience</p>
 <table style="padding-bottom:10px;width:760px;border-collapse:collapse;" align="center">';
@@ -168,7 +201,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
 					<div class="alert alert-success">
 						<p>Many thanks for your entry. You should receive an email confirmation of your entry shortly.</p>
 						<p>Payment can be made via online bank transfer (details in your email) or by logging into your account and paying by PayPal (this is subject to extra fees).</p>
-						<p>Please <a href="/account/my-entries/">click here</a> to view your entry or <a href="/enter-show/">here to enter another show</a>.</p>
+						<p>Please <a href="/account/my-entries/?view=<?php echo $data['show_id']; ?>" class="alert-link">click here</a> to view your entry or <a href="/enter-show/" class="alert-link">here to enter another show</a>.</p>
 					</div>
 					<?php
                 }else {
@@ -232,7 +265,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
                 		<th><?php echo '&pound;'.sprintf("%.2f", $total_cost); ?></th>
                 </tfoot>
                 </table>
-                <div class="alert alert-info">By clicking Finish below you are agreeing to abide by all the show rules and regulations as detailed in the schedule.</div>
+                <div class="alert alert-info">By clicking Finish below you are agreeing to abide by all the show rules and regulations as detailed in the <a href="<?php  echo $schedule_file['url']; ?>" target="_blank" class="alert-link">Schedule</a>.</div>
 				<form action="" method="post" class="form-horizontal" id="entryForm">
                     <div class="control-group">
                         <div class="controls">

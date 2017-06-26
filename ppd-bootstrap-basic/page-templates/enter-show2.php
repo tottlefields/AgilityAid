@@ -12,6 +12,10 @@ get_currentuserinfo();
 
 $userId = $current_user->ID;
 $user_meta = get_user_meta( $userId );
+if(!isset($user_meta['user_ref'])){
+	$ref = sprintf('%04d', $userId);
+	update_user_meta($userId, 'user_ref', 'AA'.$ref);
+}
 $handlers = array();
 if(isset($user_meta['handlers'][0])){
 	$handlers = unserialize($user_meta['handlers'][0]);
@@ -22,6 +26,7 @@ array_push($handlers, $handler);
 asort($handlers);
 
 $show_id = $_POST['show'] ? $_POST['show'] : $_GET['show'];
+$entry_id = 0;
 
 if(!empty($show_id)) {
 	$data['show_id'] = $show_id;
@@ -49,6 +54,10 @@ setCustomSessionData($data);
 
 if(!empty($data['show_id']) && isset($_POST['step-2-submitted'])) {
 	$showData = $data;
+	
+	if(isset($_POST['form-data']['entry_id']) && $_POST['form-data']['entry_id'] > 0){
+		$showData['entry_id'] = $_POST['form-data']['entry_id'];
+	}
 	
 	foreach ($_POST['form-data'][$data['show_id']] as $dog => $classData){
 		$dog_height = '';
@@ -87,6 +96,65 @@ if(!empty($data['show_id']) && isset($_POST['step-2-submitted'])) {
 	exit;
 }
 
+
+//check if this user has already entered this show and ask re editing/cancelling
+if(isset($_GET['edit']) && $_GET['edit'] === 'yes'){
+	//confirmed editing of the show entry...
+	$args = array (
+		'post_type'	=> 'entries',
+		'post_status'	=> array('publish'),
+		'order'		=> 'ASC',
+		'numberposts'	=> 10,
+		'author'		=> $userId,
+		'meta_query' 	=> array(
+			array(
+				'key'		=> 'show_id-pm',
+				'compare'	=> '=',
+				'value'		=> $show_id,
+			),
+		)
+	);
+
+	// get posts
+	$posts = get_posts($args);
+	global $post;
+	foreach( $posts as $post ) {
+		$data = get_field('show_data-pm', false, false);
+		$entry_id = get_the_ID();
+		continue;
+	}
+}
+else{
+	$args = array (
+		'post_type'	=> 'entries',
+		'post_status'	=> array('publish'),
+		'order'		=> 'ASC',
+		'numberposts'	=> 10,
+		'author'		=> $userId,
+		'meta_query' 	=> array(
+			array(
+				'key'		=> 'show_id-pm',
+				'compare'	=> '=',
+				'value'		=> $show_id,
+			),
+		)
+	);
+	
+	// get posts
+	$posts = get_posts($args);
+	if(count($posts) > 0){
+		$error = '<br />
+		<div class="alert alert-warning">
+			You appear to have already entered this show, please click below indicating how you wish to proceed:-
+			<hr />
+			<div class="btn-group btn-group-justified btn-group-lg" role="group">
+				<a href="/enter-show/confirmation/?delete='.$show_id.'" class="btn btn-danger">Delete entry and start again.</a>
+				<a href="/enter-show/individual-classes/?show='.$show_id.'&edit=yes" class="btn btn-success">Edit current entry.</a>
+			</div>
+		</div>';
+	}
+}
+
 $show = get_post( $show_id );
 $show_meta = get_post_meta($show_id);
 $show_type = $show_meta['affiliation'][0];
@@ -97,7 +165,6 @@ if (!empty($classes)){ $data['classes'] = $classes; }
 
 setCustomSessionData($data);
 
-
 ?>
 <?php get_header(); ?>
 
@@ -105,6 +172,8 @@ setCustomSessionData($data);
     <div class="container">
         <div class="row">
             <div class="col-md-9" id="main-content">
+				<?php //debug_array($data); ?>
+				<?php if ($error == "") {?>
 				<h1>Select Dog/Classes</h1>
 				<ul class="breadcrumb">
 					<li class="active">Select Show</li>
@@ -114,10 +183,10 @@ setCustomSessionData($data);
 					<li class="active">Helpers</li>
 					<li class="active">Payment</li>
 				</ul>
-				<?php //debug_array($data); ?>
 				<form action="" method="post" class="form-horizontal" id="entryForm">
 					<input type="hidden" id="show" name="show" value="<?php echo $data['show_id']; ?>" />					
                 	<input type="hidden" name="step-2-submitted" value="1" />
+                	<input type="hidden" name="form-data[entry_id]" value="<?php echo $entry_id; ?>" />
 					<div class="form-group">
 						<label for="select_dog" class="control-label col-sm-2">Select Dog</label>
 						<div class="col-sm-5">
@@ -219,11 +288,16 @@ setCustomSessionData($data);
                         <div class="controls">
                         	<span class="pull-right">
 	                            <a href="javascript:selectNextDog()" id="next_dog" class="btn btn-default">Next Dog &raquo;</a>&nbsp;
-	                            <input type="submit" value="Next Step &raquo;" name="submit" class="btn btn-success" disabled="disabled" />
+	                            <input type="submit" value="Next Step &raquo;" name="submit" class="btn btn-success" />
                             </span>
                        </div>
                    </div>
 				</form>
+				<?php }
+				else{ 
+					echo '<h1>Previous Entry Found</h1>';
+					echo $error;
+				}?>
             </div>
             <div class="col-md-3" id="sidebar">
             	<?php dynamic_sidebar('Entry Sidebar'); ?>
@@ -245,16 +319,19 @@ $(function() {
 		if ($(this).val() === $('#select_dog').children(':enabled:last').val()){
 			console.log("last dog selected!");
 			$("#next_dog").attr("disabled", "disabled");
-			$("input[type=submit]").removeAttr("disabled");
+			//$("input[type=submit]").removeAttr("disabled");
 		}
 		else{
-			$("input[type=submit]").attr("disabled", "disabled");
+			//$("input[type=submit]").attr("disabled", "disabled");
 			$("#next_dog").removeAttr("disabled");
 		}
 	});
 });
 
-function selectNextDog(){
+function selectNextDog(e){
+	if ($("#next_dog").is(":disabled")){
+		return false;
+	}
 	var nextDog = $('#select_dog :selected').nextAll(':not(:disabled)').first().val();
 	$('#select_dog').val(nextDog).change();;
 }

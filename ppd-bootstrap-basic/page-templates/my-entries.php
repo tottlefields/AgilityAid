@@ -19,77 +19,141 @@ $userId = $current_user->ID;
     <div class="container">
         <div class="row">
             <div class="col-md-9" id="main-content">
-            	<h1 class="title">My Entries <span class="pull-right"><a href="/account/" class="btn btn-info">My Account</a>
-            	&nbsp;<a class="btn btn-primary" href="/enter-show/">Enter Show</a></span></h1>
-				<?php 
-				$allEntries = $wpdb->get_results("select * from wpao_posts where post_type ='entries' and post_author= '".$wpdb->_real_escape($userId)."'", 'ARRAY_A');
-					
-				if(!empty($allEntries)) {
-					$entryData = array();
-					foreach($allEntries as $e) {
-						$entry = get_post( $e['ID'] );
-						$entry_meta = get_post_meta($e['ID']);
-						$show_id = $entry_meta['show_id-pm'][0];
-						$show = get_post($show_id);
-						$show_meta = get_post_meta($show_id);
-						
-						$start_date = $show_meta['start_date'][0];
-						$end_date = $show_meta['end_date'][0];
-						$close_date = $show_meta['close_date'][0];
 
-						$start_date = new DateTime($start_date);
-						$end_date = new DateTime($end_date);
-						$closes = new DateTime($close_date);
-						$show_dates = $start_date->format('jS M');
-						if($start_date != $end_date){
-							$show_dates .= ' to '.$end_date->format('jS M Y');
-						}
-						else{
-							$show_dates .= $start_date->format(' Y');
-						}
-						
-						if(isset($entryData[$show_meta['start_date'][0]])){
-							
-						}
-						else{
-							$entryData[$show_meta['start_date'][0]] = array(
-									'show_id' => $show_id,
-									'dates' => $show_dates,
-									'show_title' => $show->post_title,
-									'closes' => $closes->format('jS M')
-							);
+               	<?php
+				
+				if(isset($_GET['view']) && $_GET['view']>0) {
+					$show = get_post( $_GET['view'] );
+					$title = $show->post_title;
+					?>					
+	            	<h1 class="title">ENTRY: <?php echo $title; ?> <span class="pull-right"><a class="btn btn-info" href="/account/my-entries/">My Entries</a>
+	            	&nbsp;<a href="/enter-show/individual-classes/?show=<?php echo $_GET['view'] ?>&edit=yes" class="btn btn-primary">Edit Entry</a></span></h1>
+					<?php 
+
+					$dogData = get_dogs_for_user($userId);
+					
+					$args = array (
+						'post_type'	=> 'entries',
+						'post_status'	=> array('publish'),
+						'order'		=> 'ASC',
+						'numberposts'	=> -1,
+						'author'		=> $userId,
+						'meta_query' 	=> array(
+							array(
+								'key'		=> 'show_id-pm',
+								'compare'	=> '=',
+								'value'		=> $_GET['view'],
+							),
+						)
+					);
+					
+					// get posts
+					$posts = get_posts($args);
+					global $post;
+					
+					echo '<table style="margin-bottom:0px;"  class="table table-striped table-hover table-responsive">';
+					foreach( $posts as $post ) {	
+						setup_postdata( $post );
+						$entry_data = get_field('entry_data-pm', false, false);
+						foreach ($entry_data as $dog_id => $dogEntry){
+							$dog = get_dog_by_id($dogData, $dog_id);
+							$height = ($dogEntry == 'nfc') ? 'NFC' : $dogEntry['height'];
+							echo '<tr><th colspan="3"><h3><span style="color:'.$dog['dog_color'].'">'.$dog['pet_name'].'</span><span class="pull-right"><small>'.$height.'</small></span></h3></th></tr>';
+							if($dogEntry == 'nfc'){ continue; }
+							foreach ($dogEntry['classes'] as $classNo => $classDetails){
+								echo '<tr>
+									<td>'.DateTime::createFromFormat('Y-m-j', $classDetails['date'])->format('l').'</td>
+									<td>'.$classNo.'. '.$classDetails['class_title'].'</td>
+									<td>'.$classDetails['handler'].'</td>
+								</tr>';
+							}
 						}
 					}
-					sort($entryData);
+					echo '</table>';
+				}
+				else{
 					?>
-						<table class="table table-bordered table-striped table-rounded">
-							<tr>
-								<th>Date(s)</th>
-								<th>Show</th>
-								<th>Closes</th>
-								<th></th>
-							</tr>
-					<?php
-					foreach ($entryData as $entry){
-						?>
-						<tr>
-							<td><?php echo $entry['dates']; ?></td>
-							<td><?php echo $entry['show_title']; ?></td>
-							<td><?php echo $entry['closes']; ?></td>
-							<td width="195">
-								<a class="btn btn-default btn-sm" href="">View Entry</a>
-								<a class="btn btn-default btn-sm" href="/enter-show/individual-classes/?show=<?php echo $entry['show_id']; ?>">Edit Entry</a>
-							</td>
-						</tr>
-						<?php	
-						} ?>
-						</table>
-						<?php 
+	            	<h1 class="title">My Entries <span class="pull-right"><a href="/account/" class="btn btn-info">My Account</a>
+	            	&nbsp;<a class="btn btn-primary" href="/enter-show/">Enter Show</a></span></h1>
+					<?php 
+					$args = array (
+							'post_type'		=> 'entries',
+							'post_status'	=> array('publish'),
+							'numberposts'	=> -1,
+							'author'		=> $userId
+					);
+					
+					// get posts
+					$posts = get_posts($args);
+					global $post;
+					$shows = array();
+			
+					// loop
+					if( $posts ) {	
+						foreach( $posts as $post ) {	
+							setup_postdata( $post );
+							$show_id = get_field('show_id-pm', false, false);
+							array_push($shows, $show_id);	
+						}
+						wp_reset_postdata();
+						
+						$show_args = array(
+							'post_type'		=> 'shows',
+							'post_status'	=> array('publish'),
+							'meta_key'	=> 'start_date',
+							'orderby'	=> 'meta_value',
+							'order'		=> 'ASC',
+							'numberposts'	=> -1,
+							'include'		=> $shows
+						);
+						// get posts
+						$show_posts = get_posts($show_args);
+						if( $show_posts ) {	
+							?>						
+							<table class="table table-bordered table-striped table-rounded">
+								<tr>
+									<th>Date(s)</th>
+									<th>Show</th>
+									<th>Closes</th>
+									<th></th>
+								</tr>
+							<?php 
+							
+							foreach( $show_posts as $post ) {	
+								setup_postdata( $post );
+	
+								$start_date = new DateTime(get_field('start_date', false, false));
+								$end_date 	= new DateTime(get_field('end_date', false, false));
+								$close_date = new DateTime(get_field('close_date', false, false));
+								$show_dates = $start_date->format('jS M');
+								if($start_date != $end_date){
+									$show_dates .= ' to '.$end_date->format('jS M Y');
+								}
+								else{
+									$show_dates .= $start_date->format(' Y');
+								}
+								?>
+								<tr>
+									<td><?php echo $show_dates; ?></td>
+									<td><?php echo get_the_title(); ?></td>
+									<td><?php echo $close_date->format('jS M'); ?></td>
+									<td width="195px">
+										<a class="btn btn-default btn-sm" href="/account/my-entries/?view=<?php echo the_ID(); ?>">View Entry</a>
+										<a class="btn btn-default btn-sm" href="/enter-show/individual-classes/?show=<?php echo the_ID(); ?>">Edit Entry</a>
+									</td>
+								</tr>
+								<?php
+							}
+							echo '</table>';
+							wp_reset_postdata();
+						}
+					
 					} else {
-						?>
-						<div class="alert">You currently have no shows entered on our system. To enter a show, please go to the <a href="/enter-show">Enter Show</a> page..</div>
-						<?php	
+						// no entries found
+						echo '
+						<div class="alert">You currently have no shows entered on our system. To enter a show, please go to the <a href="/enter-show">Enter Show</a> page.</div>';
 					}
+				}
 				?>
             </div>
             <div class="col-md-3" id="sidebar">
