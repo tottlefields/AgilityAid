@@ -4,7 +4,7 @@ $KC_HEIGHTS = array('Small' => 'Small (&le;35cm)','Medium' => 'Medium (35cm-43cm
 $BS_HEIGHTS = array('Toy' => 'Toy (&le;32cm)', 'Small' => 'Small (26cm-39cm)', 'Medium' => 'Medium (37cm-48cm)', 'Standard' => 'Standard (&gt;44cm)', 'Large' => 'Large (&gt;44cm)');
 
 $KC_GRADES = array('NFC', '1', '2', '3', '4', '5', '6', '7');
-$BS_LEVELS = array('Beginners', 'Elementary', 'Starters', 'Novice', 'Graduate', 'Senior', 'Veterans', 'Allsorts');
+$BS_LEVELS = array('NFC', 'Beginners', 'Elementary', 'Starters', 'Novice', 'Graduate', 'Senior', 'Veterans', 'Allsorts');
 
 function get_all_agility_heights($type){
 	global $KC_HEIGHTS,$BS_HEIGHTS;
