@@ -27,7 +27,7 @@ $userId = $current_user->ID;
 					$title = $show->post_title;
 					?>					
 	            	<h1 class="title">ENTRY: <?php echo $title; ?> <span class="pull-right"><a class="btn btn-info" href="/account/my-entries/">My Entries</a>
-	            	&nbsp;<a href="/enter-show/individual-classes/?show=<?php echo $_GET['view'] ?>&edit=yes" class="btn btn-primary">Edit Entry</a></span></h1>
+	            	&nbsp;<a href="/enter-show/individual-classes/?edit=yes&show=<?php echo $_GET['view']; ?>" class="btn btn-primary">Edit Entry</a></span></h1>
 					<?php 
 
 					$dogData = get_dogs_for_user($userId);
