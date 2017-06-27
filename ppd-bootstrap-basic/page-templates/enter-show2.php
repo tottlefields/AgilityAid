@@ -71,9 +71,13 @@ if(!empty($data['show_id']) && isset($_POST['step-2-submitted'])) {
 				$dog_height = $classData['height'];
 			}
 			if (isset($classData['classes'])){
+				$showData[$data['show_id']][$dog] = 'nfc';
 				foreach ($classData['classes'] as $classNo => $class){
 					if (isset($class['status']) && $class['status'] == 'on'){
 						$class['height'] = $dog_height;
+						if ($showData[$data['show_id']][$dog] == 'nfc'){
+							$showData[$data['show_id']][$dog] = array();
+						}
 						$showData[$data['show_id']][$dog]['classes'][$classNo] = $class;
 						$showData[$data['show_id']][$dog]['height'] = $dog_height;
 					}
