@@ -220,7 +220,7 @@ setCustomSessionData($data);
 				     	$level = $dog['meta_data'][$show_type.'_level'];
 						$height = $dog['meta_data'][$show_type.'_height'];
 				     echo '<div class="dogClasses" id="classes_for_'.$dog['id'].'" style="border:1px solid '.$dog['dog_color'].'; display:none; margin-bottom:10px;">';
-				     if ($height == '' || $level == ''){ 
+				     if ($height == '' || $level == '' || $level == 'nfc'){ 
 				     	echo '<p>There are no classes available for this dog to enter. Please edit your dog and set a height and/or level for them.</p>
 						<input type="hidden" name="form-data['.$show_id.']['.$dog['id'].']" value="nfc" />';
 				     }
