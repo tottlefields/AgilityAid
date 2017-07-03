@@ -127,20 +127,20 @@ get_header();
                         	<div class="col-sm-3">
                         		<input type="text" class="form-control datepicker-me" id="birth_date" name="birth_date" placeholder="Date of Birth" value="<?php echo strip_tags(SQLToDate($animal['birth_date'])); ?>" />
                         	</div>
-                        	<div class="col-sm-1">
+                        	<div class="col-sm-3">
                         		<label class="checkbox-inline"><input type="checkbox" id="birth_date_unknown" <?php if($animal['birth_date'] == 'unknown') { echo 'checked="checked"'; } ?>> Unknown</label>
                         	</div>
-                        	<label for="sex" class="control-label col-sm-2">Sex</label>
-                        	<div class="col-sm-4">
-                        		<label class="radio-inline"><input type="radio" name="sex" value="Dog" <?php if($animal['sex'] == 'Dog') { echo 'checked="checked"'; } ?>> Dog</label>
-                        		<label class="radio-inline"><input type="radio" name="sex" value="Bitch" <?php if($animal['sex'] == 'Bitch') { echo 'checked="checked"'; } ?>> Bitch</label>
+                        	<label for="color" class="control-label col-sm-3">Ring Plan Color</label>
+                        	<div class="col-sm-1">
+                        		<input type="hidden" class="form-control" id="dog_color" name="dog_color" value="<?php echo $animal['dog_color']; ?>">
                         	</div>
                         </div>
                         
                         <div class="form-group">
-                        	<label for="color" class="control-label col-sm-2">Ring Plan Color</label>
+                        	<label for="sex" class="control-label col-sm-2">Sex</label>
                         	<div class="col-sm-4">
-                        		<input type="hidden" class="form-control" id="dog_color" name="dog_color" value="<?php echo $animal['dog_color']; ?>">
+                        		<label class="radio-inline"><input type="radio" name="sex" value="Dog" <?php if($animal['sex'] == 'Dog') { echo 'checked="checked"'; } ?>> Dog</label>
+                        		<label class="radio-inline"><input type="radio" name="sex" value="Bitch" <?php if($animal['sex'] == 'Bitch') { echo 'checked="checked"'; } ?>> Bitch</label>
                         	</div>
                         </div>
 
