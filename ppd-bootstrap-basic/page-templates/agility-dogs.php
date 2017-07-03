@@ -98,7 +98,7 @@ get_header();
                             	<input type="text" class="form-control" id="pet_name" name="pet_name" placeholder="Pet Name" value="<?php echo strip_tags($animal['pet_name']); ?>" />
                             </div>
                             
-                        	<label for="kc_number" class="control-label col-sm-2">KC Number</label>
+                        	<label for="kc_number" class="control-label col-sm-2">KC/ATC Number</label>
                         	<div class="col-sm-4">
                         		<input type="text" class="form-control" id="kc_number" name="kc_number" placeholder="KC Registration Number" value="<?php echo strip_tags($animal['kc_number']); ?>">
                         	</div>
