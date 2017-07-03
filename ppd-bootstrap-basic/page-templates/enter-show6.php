@@ -120,7 +120,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
 	
 	$message = 'Dear '.$user_meta['first_name'][0].',<br />
 <p>Thank you for entering <strong>'.$show->post_title.'</strong> via the <a href="'.get_bloginfo('url').'">AgilityAid website</a>.</p>
-<p>Your total show entry fees are <strong>&pound;'.sprintf("%.2f", $showData['total_cost']).'</strong>. These fees are made up of class entry fees as per the show schedule and camping fees (where applicable). Please make sure all payments are made prior to the closing date ('.$close_date->format('jS M Y').'). You can either pay online using the bank details below, or log into your account to pay via PayPal. Failure to pay will render your entry null and void.</p>
+<p>Your total show entry fees are <strong>&pound;'.sprintf("%.2f", $showData['total_cost']).'</strong>. These fees are made up of class entry fees as per the show schedule, camping fees (where applicable) and a 50p show adminstration charge. Please make sure all payments are made prior to the closing date ('.$close_date->format('jS M Y').'). You can either pay online using the bank details below, or log into your account to pay via PayPal. Failure to pay will render your entry null and void.</p>
 		
 	Sort Code : 20-41-15<br />
 	Account No. : 40542342<br />
@@ -258,7 +258,14 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
                 	}
                 }
                 
+                $total_cost += 0.5;
+                
                 ?>
+                <tr style="background-color: lightgrey">
+                	<th>&nbsp;</th>
+                	<th colspan="3">Show adminstration charge</th>
+                	<th>&pound;0.50</th>
+                </tr>
                 </tbody>
                 <tfoot>
                 	<tr>
