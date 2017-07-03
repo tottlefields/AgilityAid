@@ -138,7 +138,7 @@ get_header();
                         </div>
                         
                         <div class="form-group">
-                        	<label for="color" class="control-label col-sm-2">Color</label>
+                        	<label for="color" class="control-label col-sm-2">Ring Plan Color</label>
                         	<div class="col-sm-4">
                         		<input type="hidden" class="form-control" id="dog_color" name="dog_color" value="<?php echo $animal['dog_color']; ?>">
                         	</div>
