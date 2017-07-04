@@ -76,6 +76,14 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
 	$showData['nfc_count'] = count($nfc_dogs);
 	//setCustomSessionData($showData);
 	
+	if(isset($_POST['ro_postal']) && $_POST['ro_postal'] == 'on'){
+		$showData['total_cost'] += 1;
+		$showData['ro_postal'] = 'yes';
+	}
+	else{
+		$showData['ro_postal'] = 'no';		
+	}
+	
 	if(isset($showData['entry_id']) && $showData['entry_id']>0){
 		$insertId = $showData['entry_id'];
 	}
@@ -108,6 +116,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
 	$entryMetaData['class_count'] = $showData['class_count'];
 	$entryMetaData['nfc_count'] = $showData['nfc_count'];
 	$entryMetaData['total_cost'] = $showData['total_cost'];
+	$entryMetaData['ro_postal'] = $showData['ro_postal'];
 	$entryMetaData['entry_data'] = serialize($showData[$showData['show_id']]);
 	$entryMetaData['show_data'] = serialize($showData);
 
@@ -120,7 +129,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
 	
 	$message = 'Dear '.$user_meta['first_name'][0].',<br />
 <p>Thank you for entering <strong>'.$show->post_title.'</strong> via the <a href="'.get_bloginfo('url').'">AgilityAid website</a>.</p>
-<p>Your total show entry fees are <strong>&pound;'.sprintf("%.2f", $showData['total_cost']).'</strong>. These fees are made up of class entry fees as per the show schedule, camping fees (where applicable) and a 50p show adminstration charge. Please make sure all payments are made prior to the closing date ('.$close_date->format('jS M Y').'). You can either pay online using the bank details below, or log into your account to pay via PayPal. Failure to pay will render your entry null and void.</p>
+<p>Your total show entry fees are <strong>&pound;'.sprintf("%.2f", $showData['total_cost']).'</strong>. These fees are made up of class entry fees as per the show schedule, camping fees (where applicable), a &pound;1 postal charge (unless running ordersare to be downloaded) and a 50p show adminstration charge. Please make sure all payments are made prior to the closing date ('.$close_date->format('jS M Y').'). You can either pay online using the bank details below, or log into your account to pay via PayPal. Failure to pay will render your entry null and void.</p>
 		
 	Sort Code : 20-41-15<br />
 	Account No. : 40542342<br />
@@ -269,13 +278,22 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
                 </tbody>
                 <tfoot>
                 	<tr>
-                		<th colspan="4"><span class="pull-right">Total</span></th>
+                		<th colspan="3">
+                		</th>
+                		<th><span class="pull-right">Total</span></th>
                 		<th><?php echo '&pound;'.sprintf("%.2f", $total_cost); ?></th>
                 </tfoot>
                 </table>
-                <div class="alert alert-info">By clicking Finish below you are agreeing to abide by all the show rules and regulations as detailed in the <a href="<?php  echo $schedule_file['url']; ?>" target="_blank" class="alert-link">Schedule</a>.</div>
-				<form action="" method="post" class="form-horizontal" id="entryForm">
+                
+				<form action="" method="post" id="entryForm">
                     <div class="control-group">
+                <div class="checkbox alert alert-warning">
+                	<label><input type="checkbox" id="ro_postal" name="ro_postal"<?php if ($data['ro_postal'] != 'no'){ echo ' checked="checked"';} ?>> <strong>Running Orders</strong><br />
+                	If you wish to download your running orders please untick this box.<br />
+                	By default running orders will be posted out and &pound;1 will be added to your entry fees.</label>
+                </div>
+                <div class="alert alert-info">By clicking Finish below you are agreeing to abide by all the show rules and regulations as detailed in the <a href="<?php  echo $schedule_file['url']; ?>" target="_blank" class="alert-link">Schedule</a>.</div>
+                
                         <div class="controls">
                         	<span class="pull-right">
 								<input type="hidden" id="total_cost" name="total_cost" value="<?php echo $total_cost; ?>" />	

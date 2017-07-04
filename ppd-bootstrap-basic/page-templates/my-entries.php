@@ -18,7 +18,7 @@ $userId = $current_user->ID;
 <div id="content" class="standard">
     <div class="container">
         <div class="row">
-            <div class="col-md-9" id="main-content">
+            <div class="col-md-12" id="main-content">
 
                	<?php
 				
@@ -89,10 +89,21 @@ $userId = $current_user->ID;
 					$shows = array();
 			
 					// loop
-					if( $posts ) {	
+					if( $posts ) {
+						$total_money = 0;
+						$outstanding = 0;
 						foreach( $posts as $post ) {	
 							setup_postdata( $post );
 							$show_id = get_field('show_id-pm', false, false);
+							$total_cost = get_field('total_cost-pm');
+							$total_money += $total_cost;
+							$outstanding += $total_cost;
+							$paid_details = get_field('paid-pm');
+							if (isset($paid_details) && $paid_details != ''){
+								foreach ($paid_details as $payment){
+									$outstanding -= $payment['amount'];
+								}
+							}
 							array_push($shows, $show_id);	
 						}
 						wp_reset_postdata();
@@ -112,10 +123,12 @@ $userId = $current_user->ID;
 							?>						
 							<table class="table table-bordered table-striped table-rounded">
 								<tr>
-									<th>Date(s)</th>
-									<th>Show</th>
-									<th>Closes</th>
-									<th></th>
+									<th class="text-center">Date(s)</th>
+									<th class="text-center">Show</th>
+									<th class="text-center">Closes</th>
+									<th class="text-center">Total</th>
+									<th class="text-center">Outstanding</th>
+									<th class="text-center"></th>
 								</tr>
 							<?php 
 							
@@ -134,17 +147,43 @@ $userId = $current_user->ID;
 								}
 								?>
 								<tr>
-									<td><?php echo $show_dates; ?></td>
-									<td><?php echo get_the_title(); ?></td>
-									<td><?php echo $close_date->format('jS M'); ?></td>
-									<td width="195px">
+									<td class="text-center"><?php echo $show_dates; ?></td>
+									<td class="text-center"><?php echo get_the_title(); ?></td>
+									<td class="text-center"><?php echo $close_date->format('jS M'); ?></td>
+									<td class="text-center">&pound;<?php echo sprintf("%.2f", $total_money); ?></td>
+									<td class="text-center">
+									<?php if ($outstanding > 0){ 
+										$paypal_money = $outstanding+($outstanding*0.035)+0.3;
+										?>
+										&pound;<?php echo sprintf("%.2f", $outstanding); ?>
+										<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+	                                        <input type="hidden" name="cmd" value="_xclick">
+                                       	 	<input type="hidden" name="business" value="agilityaid@outlook.com">
+	                                        <input type="hidden" name="amount" value="<?php echo $paypal_money ?>">
+                                        	<input type="hidden" name="item_name" value="<?php echo get_the_title(); ?> Entry Fees">
+	                                        <INPUT TYPE="hidden" NAME="currency_code" value="GBP">
+	                                        <INPUT TYPE="hidden" NAME="return" value="<?php echo get_site_url(); ?>/process-paypal/?result=done&entry=<?php echo the_ID(); ?>&amount=<?php echo $total_money; ?>&user=<?php echo $userId; ?>">
+	                                        <input type="hidden" name="first_name" value="<?php echo $current_user->user_firstname; ?>">
+	                                        <input type="hidden" name="last_name" value="<?php echo $current_user->user_firstname; ?>">
+	                                        <input type="hidden" name="email" value="<?php echo $current_user->user_email; ?>">
+	                                        <input type="image" name="submit" border="0"
+	                                        src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_LG.gif"
+	                                        alt="PayPal - The safer, easier way to pay online">
+	                                	</form>
+	                                <?php }
+	                                else{ ?>
+	                                <span class="label label-success">PAID</span>
+	                                <?php } ?>
+                                	</td>
+									<td class="text-center" width="195px">
 										<a class="btn btn-default btn-sm" href="/account/my-entries/?view=<?php echo the_ID(); ?>">View Entry</a>
 										<a class="btn btn-default btn-sm" href="/enter-show/individual-classes/?show=<?php echo the_ID(); ?>">Edit Entry</a>
 									</td>
 								</tr>
 								<?php
 							}
-							echo '</table>';
+							echo '</table>
+							<div class="alert alert-warning">When paying by PayPal, please note that there is a handling fee of 3.5% + 30p added to your transaction.</div>';
 							wp_reset_postdata();
 						}
 					
@@ -155,9 +194,6 @@ $userId = $current_user->ID;
 					}
 				}
 				?>
-            </div>
-            <div class="col-md-3" id="sidebar">
-            <?php get_sidebar(); ?>
             </div>
         </div>
     </div>
