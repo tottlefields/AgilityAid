@@ -29,5 +29,5 @@ while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
 	}
 	array_push($classes[$data[1]], $tmp_array);	
 }
-echo "INSERT INTO wpao_postmeta VALUES (NULL, ".$show_id.", 'classes', '".serialize($classes)."');";
+echo "REPLACE INTO wpao_postmeta VALUES (NULL, ".$show_id.", 'classes', '".serialize($classes)."');";
 ?>
