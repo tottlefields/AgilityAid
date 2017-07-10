@@ -11,6 +11,7 @@ if(!is_user_logged_in()) {
 }
 
 $userId = $current_user->ID;
+$user_ref = get_user_meta($userId, 'user_ref', true);
 
 ?>
 <?php get_header(); ?>
@@ -183,7 +184,13 @@ $userId = $current_user->ID;
 								<?php
 							}
 							echo '</table>
-							<div class="alert alert-warning">When paying by PayPal, please note that there is a handling fee of 3.5% + 30p added to your transaction.</div>';
+							<div class="alert alert-info"><i class="fa fa-bank" aria-hidden="true"></i>&nbsp;Payments can be made directly to the AgilityAid bank account with the following details:-<br />
+<div style="margin-left:30px;">			
+	Sort Code : 20-41-15<br />
+	Account No. : 40542342<br />
+	Your Reference : <strong>'.$user_ref.'</strong><br /></div>
+		</div>
+							<div class="alert alert-warning"><i class="fa fa-paypal" aria-hidden="true"></i>&nbsp;When paying by PayPal, please note that there is a handling fee of 3.5% + 30p added to your transaction.</div>';
 							wp_reset_postdata();
 						}
 					
