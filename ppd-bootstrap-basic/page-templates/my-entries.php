@@ -12,6 +12,11 @@ if(!is_user_logged_in()) {
 
 $userId = $current_user->ID;
 $user_ref = get_user_meta($userId, 'user_ref', true);
+if(!isset($user_meta['user_ref'])){
+	$ref = sprintf('%04d', $userId);
+	update_user_meta($userId, 'user_ref', 'AA'.$ref);
+	$user_meta['user_ref'] = 'AA'.$ref;
+}
 
 ?>
 <?php get_header(); ?>

@@ -15,6 +15,7 @@ $user_meta = get_user_meta( $userId );
 if(!isset($user_meta['user_ref'])){
 	$ref = sprintf('%04d', $userId);
 	update_user_meta($userId, 'user_ref', 'AA'.$ref);
+	$user_meta['user_ref'] = 'AA'.$ref;
 }
 $handlers = array();
 if(isset($user_meta['handlers'][0])){
