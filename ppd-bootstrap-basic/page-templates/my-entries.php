@@ -30,6 +30,7 @@ if(!isset($user_meta['user_ref'])){
 				
 				if(isset($_GET['view']) && $_GET['view']>0) {
 					$show = get_post( $_GET['view'] );
+					$show_meta = get_post_meta($_GET['view']);
 					$title = $show->post_title;
 					?>					
 	            	<h1 class="title">ENTRY: <?php echo $title; ?> <span class="pull-right"><a class="btn btn-info" href="/account/my-entries/">My Entries</a>
@@ -57,8 +58,8 @@ if(!isset($user_meta['user_ref'])){
 					$posts = get_posts($args);
 					global $post;
 					
-					echo '<table style="margin-bottom:0px;"  class="table table-striped table-hover table-responsive">';
-					foreach( $posts as $post ) {	
+					foreach( $posts as $post ) {
+						echo '<table class="table table-striped table-hover table-responsive">';	
 						setup_postdata( $post );
 						$entry_data = get_field('entry_data-pm', false, false);
 						foreach ($entry_data as $dog_id => $dogEntry){
@@ -74,8 +75,56 @@ if(!isset($user_meta['user_ref'])){
 								</tr>';
 							}
 						}
+						echo '</table>';
+						
+						echo '<div class="row">';
+						$camping = get_field('camping-pm', false, false);
+						if (isset($camping) && count($camping)>0){
+								echo '<div class="col-sm-12 col-md-6">
+								<div class="panel panel-default">
+							    	<div class="panel-heading"><h4 class="panel-title">Camping</h4></div>
+									<div class="panel-body">';
+								$camping_options = unserialize($show_meta['camping_options'][0]);
+								foreach ($camping_options as $option){
+									if ($camping[$option]['pitches'] > 0){
+										$pitches = ($camping[$option]['pitches'] == 1) ? ' Pitch' : 'Pitches';
+										echo '<p>You have requested to book <strong>'.$camping[$option]['pitches'].$pitches.'</strong> and will be camping with the <strong>'.$camping['camping_group'].'</strong> group.<br />';
+								
+										if ($option == 'camp_night'){
+											$nights = array();
+											foreach ($camping[$option]['nights'] as $night => $status){
+												$dateObj = DateTime::createFromFormat('U', $night);
+												array_push($nights, $dateObj->format('l'));
+											}
+											echo ' You have booked for the following night(s): <strong>'.implode(' / ', $nights).'</strong>.<br />';
+										}
+										echo ' The total amount owed for camping is <strong>&pound;'.sprintf('%.2f', $camping['total_amount']).'</strong>.</p>';
+									}
+								}
+								echo '
+									</div>
+								</div>							
+							</div>';
+						}
+						$helpers = get_field('helpers-pm', false, false);
+						if (isset($helpers) && count($camping)>0){
+								echo '<div class="col-sm-12 col-md-6">
+								<div class="panel panel-default">
+							    	<div class="panel-heading"><h4 class="panel-title">Helpers</h4></div>
+									<div class="panel-body">
+										<p>Many thanks for offers to help at this show. Your original request is shown below:-</br >
+										<ul>';
+										foreach ($helpers as $h => $offer){
+											echo '<li>'.$h.' - <strong>'.$offer['job'].'</strong> with <strong>'.$offer['group'].'</strong></li>';
+										}
+										echo '</ul>
+									</div>
+								</div>							
+							</div>';
+						}
+						echo '</div>';
 					}
-					echo '</table>';
+					
 				}
 				else{
 					?>

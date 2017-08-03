@@ -19,6 +19,7 @@ if(!isset($user_meta['user_ref'])){
 
 $data = getCustomSessionData();
 $show = get_post( $data['show_id'] );
+$show_meta = get_post_meta($data['show_id']);
 $schedule_file = get_field('pdf_upload_schedule');
 
 if(isset($_GET['cancel']) || isset($_GET['delete'])){
@@ -53,7 +54,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
 	$classes_entered = array();
 	$nfc_dogs = array();
 	
-	unset($showData['classes']);
+	unset($showData['classes']);	
 	$showData['total_cost'] = $_POST['total_cost'];
 	$showData['dog_count'] = count(array_keys($showData[$data['show_id']]));
 	$class_count = 0;
@@ -122,6 +123,8 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
 	$entryMetaData['nfc_count'] = $showData['nfc_count'];
 	$entryMetaData['total_cost'] = $showData['total_cost'];
 	$entryMetaData['ro_postal'] = $showData['ro_postal'];
+	$entryMetaData['helpers'] = serialize($showData['helpers']);
+	$entryMetaData['camping'] = serialize($showData['camping']);
 	$entryMetaData['entry_data'] = serialize($showData[$showData['show_id']]);
 	$entryMetaData['show_data'] = serialize($showData);
 
@@ -154,6 +157,38 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
 		
 	}
 	$message .= '</table>';
+
+	if (isset($showData['camping']) && isset($showData['camping']['total_pitches']) && $showData['camping']['total_pitches']>0){
+		$message .= '<h3>Camping</h3>';
+		
+		$camping_options = unserialize($show_meta['camping_options'][0]);
+		foreach ($camping_options as $option){
+			if ($showData['camping'][$option]['pitches'] > 0){
+				$pitches = ($showData['camping'][$option]['pitches'] == 1) ? ' Pitch' : 'Pitches';
+				$message .= '<p>You have requested to book <strong>'.$showData['camping'][$option]['pitches'].$pitches.'</strong> and will be camping with the <strong>'.$showData['camping']['camping_group'].'</strong> group.';
+				
+				if ($option == 'camp_night'){
+					$nights = array();
+					foreach ($showData['camping'][$option]['nights'] as $night => $status){
+						$dateObj = DateTime::createFromFormat('U', $night);
+						array_push($nights, $dateObj->format('l'));
+					}
+					$message .= ' You have booked for the following night(s): <strong>'.implode(' / ', $nights).'</strong>.';
+				}
+				$message .= ' The total amount owed for camping is <strong>&pound;'.sprintf('%.2f', $showData['camping']['total_amount']).'</strong>.</p>';			
+			}
+		}
+		update_post_meta($data['show_id'], 'camping_booked', $show_meta['camping_booked'][0]+$showData['camping']['total_pitches']);
+	}
+	
+	if (count($showData['helpers']) > 0){
+		$message .= '<h3>Helpers</h3>';
+		$message .= '<p>Many thanks for your offers of help at this show...<br /><ul>';
+		foreach ($showData['helpers'] as $h => $offer){
+			$message .= '<li>'.$h.' - <strong>'.$offer['job'].'</strong> with <strong>'.$offer['group'].'</strong></li>';
+		}
+		$message .= '</ul>';
+	}
 	
 //	$TO = $current_user->user_email.','.get_bloginfo('admin_email');
 	$TO = $current_user->user_email;
@@ -161,6 +196,9 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
 	$HEADERS = array('Content-Type: text/html; charset=UTF-8');
 	$sent = wp_mail( $TO, $TITLE, $message, $HEADERS );
 }
+
+
+$camping = $data['camping'];
 
 
 ?>
@@ -273,6 +311,17 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
                 }
                 
                 $total_cost += 0.5;
+                
+                if (isset($camping) && isset($camping['total_pitches']) && $camping['total_pitches']>0){
+                	$total_cost += $camping['total_amount'];
+                	$pitches = ($camping['total_pitches'] == 1) ? ' Pitch' : 'Pitches';
+                	echo '
+					<tr style="background-color: lightgrey">
+	                	<th>&nbsp;</th>
+	                	<th colspan="3">Camping ('.$camping['total_pitches'].$pitches.')</th>
+	                	<th>&pound;'.sprintf('%.2f', $camping['total_amount']).'</th>
+	                </tr>';
+                }
                 
                 ?>
                 <tr style="background-color: lightgrey">
