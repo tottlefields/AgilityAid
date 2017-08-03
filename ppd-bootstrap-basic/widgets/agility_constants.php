@@ -6,6 +6,19 @@ $BS_HEIGHTS = array('Toy' => 'Toy (&le;32cm)', 'Small' => 'Small (26cm-39cm)', '
 $KC_GRADES = array('NFC', '1', '2', '3', '4', '5', '6', '7');
 $BS_LEVELS = array('NFC', 'Beginners', 'Elementary', 'Starters', 'Novice', 'Graduate', 'Senior', 'Veterans', 'Allsorts');
 
+$JOBS = array('None', 'Any', 'Caller', 'Leads', 'Pads', 'Scrimer', 'Scorer');
+
+function get_options_for_jobs($selected){
+	global $JOBS;
+	$options = '';
+	foreach ($JOBS as $job){
+		$options .= '<option value="'.$job.'"';
+		if ($job == $selected){ $options .= ' selected="selected"';}
+		$options .= '>'.$job.'</option>';
+	}
+	return $options;
+}
+
 function get_all_agility_heights($type){
 	global $KC_HEIGHTS,$BS_HEIGHTS;
 	switch ($type) {
