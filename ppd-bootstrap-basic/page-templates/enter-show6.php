@@ -165,7 +165,9 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
 		foreach ($camping_options as $option){
 			if ($showData['camping'][$option]['pitches'] > 0){
 				$pitches = ($showData['camping'][$option]['pitches'] == 1) ? ' Pitch' : 'Pitches';
-				$message .= '<p>You have requested to book <strong>'.$showData['camping'][$option]['pitches'].$pitches.'</strong> and will be camping with the <strong>'.$showData['camping']['camping_group'].'</strong> group.';
+				$message .= '<p>You have requested to book <strong>'.$showData['camping'][$option]['pitches'].$pitches.'</strong>';
+				if (isset($showData['camping']['camping_group']) && $showData['camping']['camping_group'] != ''){ $message .= ' and will be camping with the <strong>'.$showData['camping']['camping_group'].'</strong> group'; }
+				$message .= '.<br />';
 				
 				if ($option == 'camp_night'){
 					$nights = array();

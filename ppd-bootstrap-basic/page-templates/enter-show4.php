@@ -111,12 +111,12 @@ $camping = (isset($data['camping'])) ? $data['camping'] : array();
 			                        		<input type="text" class="form-control" id="'.$option.'_pitches" name="'.$option.'_pitches" placeholder="" value="'.$camping[$option]['pitches'].'" />
 			                        	</div>
 			                        </div>
-			                        <div class="form-group">
+			                        <!--<div class="form-group">
 			                        	<label for="'.$option.'_group" class="col-sm-4 control-label">Camping Group</label>
 			                        	<div class="col-sm-8">
 			                        		<input type="text" class="form-control" id="'.$option.'_group" name="'.$option.'_group" placeholder="Group to camp with" value="'.$camp_group.'" />
 			                        	</div>
-			                        </div>';	
+			                        </div>-->';	
 	                		}
 	                		elseif ($option == 'camp_night'){
 	                			echo '<h4 class="panel-title">Option #'.$opt_count.'. Pitches per Night</h4>
@@ -142,12 +142,12 @@ $camping = (isset($data['camping'])) ? $data['camping'] : array();
 			                        	echo '
                 						</div>
 			                        </div>
-			                        <div class="form-group">
+			                        <!--<div class="form-group">
 			                        	<label for="'.$option.'_group" class="col-sm-4 control-label">Camping Group</label>
 			                        	<div class="col-sm-8">
 			                        		<input type="text" class="form-control" id="'.$option.'_group" name="'.$option.'_group" placeholder="Group to camp with" value="'.$camp_group.'" />
 			                        	</div>
-			                        </div>';		                			
+			                        </div>-->';		                			
 	                		}
 						     echo ' 		
 								</div>

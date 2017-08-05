@@ -41,6 +41,16 @@ else{
 	$show_id = $data['show_id'];
 }
 
+$show = get_post( $show_id );
+$show_meta = get_post_meta($show_id);
+$show_type = $show_meta['affiliation'][0];
+
+if ($show_type == 'kc' && !isset($data['kc_declaration_ok'])){
+	setCustomSessionData($data);
+	wp_redirect(site_url('/enter-show/kc-declaration/'));
+	exit;
+}
+
 if (empty($data['dogs'])){
 	$dogData = get_dogs_for_user($userId);
 	if(count($dogData) == 0){
@@ -162,15 +172,13 @@ else{
 	}
 }
 
-$show = get_post( $show_id );
-$show_meta = get_post_meta($show_id);
-$show_type = $show_meta['affiliation'][0];
 $classes = unserialize($show_meta['classes'][0]);
 
 if (!empty($show_type)){ $data['show_type'] = $show_type; }
 if (!empty($classes)){ $data['classes'] = $classes; }
 
 setCustomSessionData($data);
+
 
 ?>
 <?php get_header(); ?>

@@ -88,7 +88,9 @@ if(!isset($user_meta['user_ref'])){
 								foreach ($camping_options as $option){
 									if ($camping[$option]['pitches'] > 0){
 										$pitches = ($camping[$option]['pitches'] == 1) ? ' Pitch' : 'Pitches';
-										echo '<p>You have requested to book <strong>'.$camping[$option]['pitches'].$pitches.'</strong> and will be camping with the <strong>'.$camping['camping_group'].'</strong> group.<br />';
+										echo '<p>You have requested to book <strong>'.$camping[$option]['pitches'].$pitches.'</strong>';										
+										if (isset($camping['camping_group']) && $camping['camping_group'] != ''){ echo ' and will be camping with the <strong>'.$camping['camping_group'].'</strong> group'; }
+										echo '.<br />';
 								
 										if ($option == 'camp_night'){
 											$nights = array();
