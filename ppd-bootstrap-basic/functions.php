@@ -69,6 +69,10 @@ function mytheme_enqueue_scripts() {
 	//BootBox
 	wp_register_script('bootbox-js', '//cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js', array('jquery', 'bootstrap-js'), '4.4.0', true);
 	wp_enqueue_script('bootbox-js');
+	
+	//Bootstrap-toggle
+	wp_register_script('bstoggle-js', '//cdnjs.cloudflare.com/ajax/libs/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js', array('jquery', 'bootstrap-js'), '2.2.2', true);
+	wp_enqueue_script('bstoggle-js');
 }
 
 add_action('wp_enqueue_scripts', 'mytheme_enqueue_scripts');
