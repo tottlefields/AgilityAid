@@ -4,6 +4,7 @@ ini_set("auto_detect_line_endings", true);
 
 $header = array();
 $classes = array();
+$lho_options = array();
 $show_id = 0;
 
 $file = (isset($_GET['file'])) ? $_GET['file'] : str_replace('file=', '', $argv[1]);
@@ -24,6 +25,14 @@ if (($handle = fopen($file, "r")) !== FALSE) {
 		if (!isset($classes[$data[1]])){
 			$classes[$data[1]] = array();
 		}
+		if ($data[10]){
+			if (!isset($lho_options[$data[6]])){
+				$lho_options[$data[6]] = 1;
+			}
+			if (!isset($lho_options[$data[7]])){
+				$lho_options[$data[7]] = 1;
+			}
+		}
 		
 		$tmp_array = array();
 		for ($col = 2; $col < count($header); $col++) {
@@ -32,5 +41,6 @@ if (($handle = fopen($file, "r")) !== FALSE) {
 		array_push($classes[$data[1]], $tmp_array);	
 	}
 	echo "REPLACE INTO wpao_postmeta VALUES (NULL, ".$show_id.", 'classes', '".serialize($classes)."');\n";
+	echo "REPLACE INTO wpao_postmeta VALUES (NULL, ".$show_id.", 'lho_options', '".serialize($lho_options)."');\n";
 }
 ?>
