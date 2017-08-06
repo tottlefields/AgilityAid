@@ -178,7 +178,7 @@ if (!empty($show_type)){ $data['show_type'] = $show_type; }
 if (!empty($classes)){ $data['classes'] = $classes; }
 
 setCustomSessionData($data);
-
+$all_dogs_nfc = 1;
 
 ?>
 <?php get_header(); ?>
@@ -212,7 +212,7 @@ setCustomSessionData($data);
 									$height = $dog['meta_data'][$show_type.'_height'];
 									echo '<option value="'.$dog['id'].'"';
 									if ($height == '' || $level == ''){ echo ' disabled="disabled">'.$dog['pet_name'].' (NFC)</option>'; }
-									else{echo '>'.$dog['pet_name'].' ('.$height.' / '.$level.')</option>'; }
+									else{echo '>'.$dog['pet_name'].' ('.$height.' / '.$level.')</option>'; $all_dogs_nfc = 0; }
 									}
 								?>
 							</select>
@@ -229,6 +229,14 @@ setCustomSessionData($data);
 						</div>
 						
 				     </div>
+				     
+					<?php 
+					if ($all_dogs_nfc) {?>
+				    <div class="alert alert-danger">
+				    	<p>None of the dogs currently registered on your account have been setup to work with this show affiliation. Please go to the <a href="/account/dogs/">dog's details page</a> to fill in their height/level and then return to this page to continue entering this show.</p>
+				     </div>
+					<?php }?>
+				     
 				     <?php foreach ($data['dogs'] as $dog){
 				     	$level = $dog['meta_data'][$show_type.'_level'];
 						$height = $dog['meta_data'][$show_type.'_height'];
