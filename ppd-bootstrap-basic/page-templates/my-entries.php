@@ -68,9 +68,11 @@ if(!isset($user_meta['user_ref'])){
 							echo '<tr><th colspan="3"><h3><span style="color:'.$dog['dog_color'].'">'.$dog['pet_name'].'</span><span class="pull-right"><small>'.$height.'</small></span></h3></th></tr>';
 							if($dogEntry == 'nfc'){ continue; }
 							foreach ($dogEntry['classes'] as $classNo => $classDetails){
+								$class_title = $classNo.'. '.$classDetails['class_title'];
+								if(isset($classDetails['lho']) && $classDetails['lho']){ $class_title .= '&nbsp;(LHO)'; }
 								echo '<tr>
 									<td>'.DateTime::createFromFormat('Y-m-j', $classDetails['date'])->format('l').'</td>
-									<td>'.$classNo.'. '.$classDetails['class_title'].'</td>
+									<td>'.$class_title.'</td>
 									<td>'.$classDetails['handler'].'</td>
 								</tr>';
 							}
