@@ -78,8 +78,12 @@ if(!empty($data['show_id']) && isset($_POST['step-2-submitted'])) {
 			continue;
 		}
 		else{
+			$lho = 0;
 			if(isset($classData['height'])){
 				$dog_height = $classData['height'];
+			}
+			if (isset($classData['lho']) && $classData['lho'] == 'on'){
+				$lho = 1;
 			}
 			if (isset($classData['classes'])){
 				$showData[$data['show_id']][$dog] = 'nfc';
@@ -89,8 +93,13 @@ if(!empty($data['show_id']) && isset($_POST['step-2-submitted'])) {
 						if ($showData[$data['show_id']][$dog] == 'nfc'){
 							$showData[$data['show_id']][$dog] = array();
 						}
+						$classDetails = get_class_by_no($showData['classes'][$class['date']], $classNo);
+						if (count($data['lho_options']) > 0 && $classDetails['hasLHO']){
+							$class['lho'] = $lho;
+						}
 						$showData[$data['show_id']][$dog]['classes'][$classNo] = $class;
 						$showData[$data['show_id']][$dog]['height'] = $dog_height;
+						$showData[$data['show_id']][$dog]['lho'] = $classData['lho'];
 					}
 				}
 				if(!isset($showData[$data['show_id']][$dog]['classes']) || count($showData[$data['show_id']][$dog]['classes']) == 0){
@@ -173,9 +182,11 @@ else{
 }
 
 $classes = unserialize($show_meta['classes'][0]);
+$lho_options = (isset($show_meta['lho_options'])) ? unserialize($show_meta['lho_options'][0]) : array();
 
 if (!empty($show_type)){ $data['show_type'] = $show_type; }
 if (!empty($classes)){ $data['classes'] = $classes; }
+if (!empty($lho_options)){ $data['lho_options'] = $lho_options; }
 
 setCustomSessionData($data);
 $all_dogs_nfc = 1;
@@ -246,6 +257,12 @@ $all_dogs_nfc = 1;
 						<input type="hidden" name="form-data['.$show_id.']['.$dog['id'].']" value="nfc" />';
 				     }
 				     else{
+						if (count($lho_options) > 0 && isset($lho_options[$height]) && $lho_options[$height]){
+							echo '<div class="well">This show is able to offer lower height option (LHO) classs for you dog.<br />
+							Please select which height you wish to enter : <input id="toggle_lho" name="form-data['.$show_id.']['.$dog['id'].'][lho]"';
+							if ($data[$show_id][$dog['id']]['lho'] == 'on'){ echo ' checked="checked"'; }
+							echo ' type="checkbox" data-toggle="toggle" data-on="LH" data-off="FH" data-size="small"></div>';
+						}
 				     	echo '<table style="margin-bottom:0px;"  class="table table-striped table-hover table-responsive">';
 				     	foreach ($classes as $date => $class_list){
 				     		$dateObj = DateTime::createFromFormat('Y-m-j', $date);
@@ -290,7 +307,11 @@ $all_dogs_nfc = 1;
 									<input type="hidden" name="form-data['.$show_id.']['.$dog['id'].'][classes]['.$class['classNo'].'][level]" value="'.$level.'" />';
 				     			}
 				     			
-				     			echo '<tr><td>'.$class['classNo'].'. '.$class['className'].'
+				     			echo '<tr><td>'.$class['classNo'].'. '.$class['className'];
+				     			if ($class['hasLHO']){
+				     				echo '&nbsp;&nbsp;<i class="fa fa-filter" aria-hidden="true"></i>';
+				     			}
+				     			echo '
 									<input type="hidden" name="form-data['.$show_id.']['.$dog['id'].'][classes]['.$class['classNo'].'][date]" value="'.$date.'" /></td>
 								<td>'.$handlers_for_class.'</td>
 								<td>'.$levels.'</td>
@@ -306,6 +327,9 @@ $all_dogs_nfc = 1;
 				     echo '</div>';
 				     } ?>
 				     
+				     <?php if (count($lho_options) > 0){ ?>
+				    <div class="alert alert-info">Classes with <i class="fa fa-filter" aria-hidden="true"></i> denotes lower height option (LHO).</div>
+				    <?php } ?>
 				    <div class="alert alert-info">Any dog(s) not entered into a class over the duration of the show will automatically be entered Not for Competition (NFC).</div>
                     <div class="control-group">
                         <div class="controls">

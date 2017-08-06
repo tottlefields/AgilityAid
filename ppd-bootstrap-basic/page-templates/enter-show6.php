@@ -67,9 +67,11 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
 			$class_count += count($classData['classes']);
 			foreach ($classData['classes'] as $classNo => $classEntry){
 				$class = get_class_by_no($all_classes[$classEntry['date']], $classNo);
+        		$height_in_class = $classData['height'];
+        		if (isset($classData['lho']) && $classData['lho'] == 'on'){ $height_in_class .= '&nbsp;(LHO)'; }
 				array_push($classes_entered, array(
 						'dog_name' => $dogName, 
-						'height' => $classData['height'], 
+						'height' => $height_in_class, 
 						'handler' => $classEntry['handler'], 
 						'class_title' => $class['classNo'].'. '.$class['className'])
 				);
@@ -199,7 +201,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
 	$sent = wp_mail( $TO, $TITLE, $message, $HEADERS );
 }
 
-
+//debug_array($data);
 $camping = $data['camping'];
 
 
@@ -295,9 +297,11 @@ $camping = $data['camping'];
 	                		$cost_per_dog += $class['price'];
 	                	}
                 		$total_cost += $cost_per_dog;
+                		$dog_height = $classData['height'];
+                		if (isset($classData['lho']) && $classData['lho'] == 'on'){ $dog_height .= '&nbsp;(LHO)'; }
                 	echo '<tr>
 						<td><span style="color:'.$dog['dog_color'].';font-weight:bold;">'.$dog['pet_name'].'</span></td>
-						<td>'.$classData['height'].'</td>
+						<td>'.$dog_height.'</td>
 						<td>'.implode("<br />", array_keys($class_list)).'</td>
 						<td>';
 	                	foreach( $class_list as $handler => $classes ) {
