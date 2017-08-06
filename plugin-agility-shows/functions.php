@@ -51,7 +51,7 @@ function create_posttype() {
  					'view_item' => 'View Entries'
  			),
  			'singular_label' => __('Show Entry'),
- 			'public' => false,
+ 			'public' => true,
  			'show_ui' => true,
  			'capability_type' => 'post',
  			'hierarchical' => false,
@@ -159,6 +159,10 @@ function date_column_orderby( $vars ) {
 
 	return $vars;
 }
+
+
+require_once('agility-payments.php');
+require_once('agility-new-payment.php');
 
 
 /* Stop Adding Functions Below this Line */
