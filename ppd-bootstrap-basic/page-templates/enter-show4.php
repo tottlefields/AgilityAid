@@ -52,7 +52,7 @@ $camp_to   = $show_meta['camp_to'][0];
 $camping_options = unserialize($show_meta['camping_options'][0]);
 $pitch_limit = $show_meta['pitch_limit'][0];
 $camping_limit = $show_meta['camping_limit'][0];
-$camping_booked = $show_meta['camping_booked'][0];
+$camping_booked = (isset($show_meta['camping_booked']) && $show_meta['camping_booked'][0] > 0) ? $show_meta['camping_booked'][0] : 0;
 
 
 $fromDateObj = DateTime::createFromFormat('Ymd H:i', $camp_from.' 12:00');
