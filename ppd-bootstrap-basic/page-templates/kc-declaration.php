@@ -24,7 +24,7 @@ if (isset($_POST['kc_declaration_ok']) && $_POST['kc_declaration_ok'] == 'on'){
 				<h1>KC Declaration</h1>
 				<form action="" method="post" class="form-horizontal" id="entryForm">
 				
-					<p>Entry to this show is bound by Kennel Club Rules and regulations. Thereofre, before proceeding with your entry, please confirm that you agree with the following declaration. You will be unable to proceed with your entry until you have accepted.</p>
+					<p>Entry to this show is bound by Kennel Club Rules and regulations. Therefore, before proceeding with your entry, please confirm that you agree with the following declaration. You will be unable to proceed with your entry until you have accepted.</p>
 					
 					<div class="well">
 						<p>I/We agree to submit to and be bound by Kennel Club Limited Rules & Regulations in their present form or as they may be amended from time to time in relation to all canine matters with which the Kennel Club is concerned and that this entry is made upon the basis that all current single or joint registered owners of this dog(s) have authorised/consented to this entry. </p>
