@@ -159,8 +159,8 @@ get_header();
 		                    	<ul class="nav nav-tabs nav-justified">
 									<li class="active"><a data-toggle="tab" href="#tab-kc">Kennel Club</a></li>
 									<li><a data-toggle="tab" href="#tab-bs">Beachside</a></li>
-									<!-- li><a href="#">Menu 2</a></li>
-									<li><a href="#">Menu 3</a></li> -->
+									<li><a data-toggle="tab" href="#tab-ta">T&amp;A Ind</a></li>
+									<!-- <li><a href="#">Menu 3</a></li> -->
 								</ul>
 							</div>
 							<div class="panel-body">
@@ -203,6 +203,24 @@ get_header();
 												<select name="bs_level" class="form-control">
 													<option value="">Select Level...</option>
 													<?php echo get_options_for_levels('bs', $dogMeta['bs_level']); ?>
+												</select>
+				                        	</div>
+				                        </div>
+									</div>
+									<div id="tab-ta" class="tab-pane fade">
+				                    	<div class="form-group">
+				                        	<label for="ta_height" class="control-label col-sm-2">Height</label>
+				                        	<div class="col-sm-4">				                        	
+												<select name="ta_height" class="form-control">
+													<option value="">Select Height...</option>
+													<?php echo get_options_for_heights('ta', $dogMeta['ta_height']); ?>
+												</select>
+				                            </div>				                            
+				                        	<label for="ta_level" class="control-label col-sm-2">Level</label>
+				                        	<div class="col-sm-4">				                        	
+												<select name="ta_level" class="form-control">
+													<option value="">Select Level...</option>
+													<?php echo get_options_for_levels('ta', $dogMeta['ta_level']); ?>
 												</select>
 				                        	</div>
 				                        </div>
