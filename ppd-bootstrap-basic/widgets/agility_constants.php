@@ -2,9 +2,11 @@
 
 $KC_HEIGHTS = array('Small' => 'Small (&le;35cm)','Medium' => 'Medium (35cm-43cm)','Large' => 'Large (&gt;43cm)');
 $BS_HEIGHTS = array('Toy' => 'Toy (&le;32cm)', 'Small' => 'Small (26cm-39cm)', 'Medium' => 'Medium (37cm-48cm)', 'Standard' => 'Standard (&gt;44cm)', 'Large' => 'Large (&gt;44cm)');
+$TA_HEIGHTS = array('Micro' => 'Micro (&le;35.5cm)', 'Small' => 'Small (&le;43cm)', 'Medium' => 'Medium (35.5cm-51cm)', 'Standard' => 'Standard (&gt;43cm)', 'Large' => 'Large (&gt;43cm)');
 
 $KC_GRADES = array('NFC', '1', '2', '3', '4', '5', '6', '7');
 $BS_LEVELS = array('NFC', 'Beginners', 'Elementary', 'Starters', 'Novice', 'Graduate', 'Senior', 'Veterans', 'Allsorts');
+$TA_LEVELS = array('NFC', 'Elementary', 'Starters', 'Novice', 'Senior', 'Veteran', 'Anysize');
 
 $JOBS = array('None', 'Any', 'Caller', 'Leads', 'Pads', 'Scrimer', 'Scorer');
 
@@ -20,13 +22,16 @@ function get_options_for_jobs($selected){
 }
 
 function get_all_agility_heights($type){
-	global $KC_HEIGHTS,$BS_HEIGHTS;
+	global $KC_HEIGHTS,$BS_HEIGHTS, $TA_HEIGHTS;
 	switch ($type) {
 		case "kc":
 			return $KC_HEIGHTS;
 			break;
 		case "bs":
 			return $BS_HEIGHTS;
+			break;
+		case "ta":
+			return $TA_HEIGHTS;
 			break;
 //		case "cake":
 //			echo "i is cake";
@@ -40,13 +45,16 @@ function get_agility_height($type, $height){
 }
 
 function get_all_agility_levels($type){
-	global $KC_GRADES, $BS_LEVELS;
+	global $KC_GRADES, $BS_LEVELS, $TA_LEVELS;
 	switch ($type) {
 		case "kc":
 			return $KC_GRADES;
 			break;
 		case "bs":
 			return $BS_LEVELS;
+			break;
+		case "ta":
+			return $TA_LEVELS;
 			break;
 	}
 }
