@@ -105,7 +105,8 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
 				'post_status'   => 'publish',
 				'post_author'   => $userId,
 				'post_category' => array(),
-				'post_type' => 'entries'
+				'post_type' => 'entries',
+				'post_parent' => $showData['show_id']
 		);
 		
 		// Insert the post into the database
