@@ -149,9 +149,9 @@ if(!isset($user_meta['user_ref'])){
 			
 					// loop
 					if( $posts ) {
-						$total_money = 0;
-						$outstanding = 0;
 						foreach( $posts as $post ) {	
+							$total_money = 0;
+	                                                $outstanding = 0;
 							setup_postdata( $post );
 							$show_id = get_field('show_id-pm', false, false);
 							$total_cost = get_field('total_cost-pm');
