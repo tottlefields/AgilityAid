@@ -22,7 +22,8 @@ function pdf_ring_cards(ringCardDetails, showName, showDates, fileName) {
 		}
 		page++;
 	}
-	pdfMake.createPdf(ddRingCard).download(fileName);
+	pdfMake.createPdf(ddRingCard).open();
+	//pdfMake.createPdf(ddRingCard).download(fileName);
 
 }
 
