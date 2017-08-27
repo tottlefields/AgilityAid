@@ -73,6 +73,21 @@ function mytheme_enqueue_scripts() {
 	//Bootstrap-toggle
 	wp_register_script('bstoggle-js', '//cdnjs.cloudflare.com/ajax/libs/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js', array('jquery', 'bootstrap-js'), '2.2.2', true);
 	wp_enqueue_script('bstoggle-js');
+	
+	//PDF Make
+	wp_register_script('pdfmake-js', get_template_directory_uri().'/js/pdfmake.min.js', false, '0.1.31', true);
+	wp_register_script('pdfmake-fonts-js', get_template_directory_uri().'/js/vfs_fonts.js', array('pdfmake-js'), '0.1.31', true);
+	wp_enqueue_script('pdfmake-js');
+	wp_enqueue_script('pdfmake-fonts-js');
+	
+    // register template-specific scripts
+    wp_register_script('js-ring_cards', get_template_directory_uri().'/js/ring_cards.js', array('jquery', 'pdfmake-js'), '0.1', true); 
+    
+    // conditional load
+    if (is_page(array('my-entries'))){
+    	wp_enqueue_script('js-ring_cards');
+    	//wp_localize_script('js-orders', 'DennisAjax', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
+    }
 }
 
 add_action('wp_enqueue_scripts', 'mytheme_enqueue_scripts');
@@ -195,6 +210,49 @@ function debug_string($string){
 	echo '<pre>';
 	echo ($string);
 	echo '</pre>';	
+}
+
+
+function get_ring_card_info($show_id, $user_id){
+	global $wpdb;
+	$ring_cards = array();
+	
+	$sql = "select p.ID, rc.*, DATE_FORMAT(class_date, '%a %D') as class_day from wpao_posts p inner join wpao_ring_card_info rc on p.ID=rc.post_id 
+			where post_author=".$user_id." and post_parent=".$show_id;
+	$rows = $wpdb->get_results($sql);
+	if (count($rows) == 0){
+		return $ring_cards;
+	}
+	
+	foreach ($rows as $row){
+		if(!isset($ring_cards[$row->ring_no])){
+			$ring_cards[$row->ring_no] = array(
+					'dog_name' => $row->dog,
+					'handler' => $row->handler,
+					'dog_level' => $row->level,
+					'dog_height' => $row->height,
+					'misc2' => $row->misc2,
+					'misc1' => $row->misc1,
+					'classes' => array()
+			);
+		}
+		if(!isset($ring_cards[$row->ring_no]['classes'][$row->class_day])){
+			$ring_cards[$row->ring_no]['classes'][$row->class_day] = array();
+		}
+		$class = array(
+				'class_no'		=> $row->class_no,
+				'class_title'	=> $row->class_title,
+				'class_day'		=> date_format(DateTime::createFromFormat('Y-m-d', $row->class_date), 'j'),
+				'running_order'	=> $row->running_order,
+				'which_ring'	=> $row->which_ring,
+				'onfirst'		=> $row->onfirst,
+				'total_entry'	=> $row->total_entry,
+				'equalto'		=> $row->equalto,
+				'part_grade'	=> $row->part_grade				
+		);
+		array_push($ring_cards[$row->ring_no]['classes'][$row->class_day], $class);
+	}
+	return $ring_cards;
 }
 
 

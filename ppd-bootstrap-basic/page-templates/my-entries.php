@@ -12,10 +12,10 @@ if(!is_user_logged_in()) {
 
 $userId = $current_user->ID;
 $user_ref = get_user_meta($userId, 'user_ref', true);
-if(!isset($user_meta['user_ref'])){
+if(!isset($user_ref)){
 	$ref = sprintf('%04d', $userId);
 	update_user_meta($userId, 'user_ref', 'AA'.$ref);
-	$user_meta['user_ref'] = 'AA'.$ref;
+	$user_ref = 'AA'.$ref;
 }
 
 ?>
@@ -32,9 +32,14 @@ if(!isset($user_meta['user_ref'])){
 					$show = get_post( $_GET['view'] );
 					$show_meta = get_post_meta($_GET['view']);
 					$title = $show->post_title;
+                	$close_date = $show_meta['close_date'][0];
+                	$today = date('Ymd');
 					?>					
 	            	<h1 class="title">ENTRY: <?php echo $title; ?> <span class="pull-right"><a class="btn btn-info" href="/account/my-entries/">My Entries</a>
-	            	&nbsp;<a href="/enter-show/individual-classes/?edit=yes&show=<?php echo $_GET['view']; ?>" class="btn btn-primary">Edit Entry</a></span></h1>
+	            	<?php if ($close_date >= $today){ ?>
+	            	&nbsp;<a href="/enter-show/individual-classes/?edit=yes&show=<?php echo $_GET['view']; ?>" class="btn btn-primary">Edit Entry</a>
+					<?php }?>
+					</span></h1>
 					<?php 
 
 					$dogData = get_dogs_for_user($userId);
@@ -149,9 +154,9 @@ if(!isset($user_meta['user_ref'])){
 			
 					// loop
 					if( $posts ) {
-						foreach( $posts as $post ) {	
+						foreach( $posts as $post ) {
 							$total_money = 0;
-	                                                $outstanding = 0;
+							$outstanding = 0;
 							setup_postdata( $post );
 							$show_id = get_field('show_id-pm', false, false);
 							$total_cost = get_field('total_cost-pm');
@@ -187,16 +192,21 @@ if(!isset($user_meta['user_ref'])){
 									<th class="text-center">Closes</th>
 									<th class="text-center">Total</th>
 									<th class="text-center">Outstanding</th>
-									<th class="text-center"></th>
+									<th class="text-center" nowrap="nowrap"></th>
 								</tr>
 							<?php 
 							
 							foreach( $show_posts as $post ) {	
 								setup_postdata( $post );
+								$show_id = get_the_ID();
+								$title= get_the_title();
+								
 	
 								$start_date = new DateTime(get_field('start_date', false, false));
 								$end_date 	= new DateTime(get_field('end_date', false, false));
 								$close_date = new DateTime(get_field('close_date', false, false));
+								$ringplan_file = get_field('ring_plan');
+
 								$show_dates = $start_date->format('jS M');
 								if($start_date != $end_date){
 									$show_dates .= ' to '.$end_date->format('jS M Y');
@@ -204,6 +214,34 @@ if(!isset($user_meta['user_ref'])){
 								else{
 									$show_dates .= $start_date->format(' Y');
 								}
+								
+								$buttons = '
+										<a class="btn btn-default btn-sm" href="/account/my-entries/?view='.$show_id.'">View Entry</a>';
+								$ring_cards = get_ring_card_info($show_id, $userId);
+								
+								if ($close_date->format('Ymd') >= date('Ymd')){
+									$buttons .= '
+										<a class="btn btn-default btn-sm" href="/enter-show/individual-classes/?show='.$show_id.'">Edit Entry</a>';
+								}
+								elseif (count($ring_cards) > 0){
+									$filename = $post->post_name."__".$current_user->user_firstname."-".$current_user->user_lastname.".pdf";
+									$buttons = '
+										<a class="btn btn-default btn-sm" href=\'javascript:pdf_ring_cards('.json_encode($ring_cards).', "'.$title.'", "'.$show_dates.'", "'.$filename.'");\'><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Ring Cards</a>';
+								}
+								if (isset($ringplan_file)){
+									$buttons .= '
+	            						<a class="btn btn-default btn-sm" href="'.$ringplan_file['url'].'" target="_blank"><i class="fa fa-map-o" aria-hidden="true"></i> Ring Plan</a>';
+								}
+									
+								
+								$show_dates = $start_date->format('jS M');
+								if($start_date != $end_date){
+									$show_dates .= ' to '.$end_date->format('jS M Y');
+								}
+								else{
+									$show_dates .= $start_date->format(' Y');
+								}
+								
 								?>
 								<tr>
 									<td class="text-center"><?php echo $show_dates; ?></td>
@@ -223,7 +261,7 @@ if(!isset($user_meta['user_ref'])){
 	                                        <INPUT TYPE="hidden" NAME="currency_code" value="GBP">
 	                                        <INPUT TYPE="hidden" NAME="return" value="<?php echo get_site_url(); ?>/process-paypal/?result=done&entry=<?php echo the_ID(); ?>&amount=<?php echo $total_money; ?>&user=<?php echo $userId; ?>">
 	                                        <input type="hidden" name="first_name" value="<?php echo $current_user->user_firstname; ?>">
-	                                        <input type="hidden" name="last_name" value="<?php echo $current_user->user_firstname; ?>">
+	                                        <input type="hidden" name="last_name" value="<?php echo $current_user->user_lastname; ?>">
 	                                        <input type="hidden" name="email" value="<?php echo $current_user->user_email; ?>">
 	                                        <input type="image" name="submit" border="0"
 	                                        src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_LG.gif"
@@ -234,9 +272,8 @@ if(!isset($user_meta['user_ref'])){
 	                                <span class="label label-success">PAID</span>
 	                                <?php } ?>
                                 	</td>
-									<td class="text-center" width="195px">
-										<a class="btn btn-default btn-sm" href="/account/my-entries/?view=<?php echo the_ID(); ?>">View Entry</a>
-										<a class="btn btn-default btn-sm" href="/enter-show/individual-classes/?show=<?php echo the_ID(); ?>">Edit Entry</a>
+									<td class="text-center" nowrap>
+										<?php echo $buttons; ?>
 									</td>
 								</tr>
 								<?php
