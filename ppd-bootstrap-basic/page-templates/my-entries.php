@@ -228,7 +228,7 @@ if(!isset($user_ref)){
 									$buttons = '
 										<a class="btn btn-default btn-sm" href=\'javascript:pdf_ring_cards('.json_encode($ring_cards).', "'.$title.'", "'.$show_dates.'", "'.$filename.'");\'><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Ring Cards</a>';
 								}
-								if (isset($ringplan_file)){
+								if (isset($ringplan_file) && is_array($ringplan_file)){
 									$buttons .= '
 	            						<a class="btn btn-default btn-sm" href="'.$ringplan_file['url'].'" target="_blank"><i class="fa fa-map-o" aria-hidden="true"></i> Ring Plan</a>';
 								}
