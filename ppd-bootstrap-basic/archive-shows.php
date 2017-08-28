@@ -1,4 +1,9 @@
 <?php /* Template Name: Shows Archive */ ?>
+<?php 
+global $current_user;
+get_currentuserinfo();
+$userId = (is_user_logged_in()) ? $current_user->ID : 0;
+?>
 <?php get_header(); ?>
 
 <?php $title = 'Live Shows'; 
@@ -63,7 +68,7 @@ if (get_query_var('year') > 0){ $title = get_query_var('year').' Shows'; $color_
                 			}
                 		}
                 		elseif ($online_link == ''){
-                			$enter_show_link = '|| <img src="'.get_stylesheet_directory_uri() . '/img/aa-logo.png" style="height:16px" />&nbsp;<a href="/enter-show/individual-classes/?show='.$post_id.'">Enter Online</a>';                				
+                			$enter_show_link = '|| <img src="'.get_stylesheet_directory_uri() . '/img/logo.png" style="height:16px" />&nbsp;<a href="/enter-show/individual-classes/?show='.$post_id.'">Enter Online</a>';                				
                 		}
                 		
                 		//green (success) for open shows; orange (warning) for closing in 7 days; red (danger) for closed
@@ -79,6 +84,18 @@ if (get_query_var('year') > 0){ $title = get_query_var('year').' Shows'; $color_
                 		elseif ($close_date <= date('Ymd', strtotime("+7 day"))){
                 			$panel_class = 'warning';
                 			$closes_text = 'Closes: '.$closes->format('D jS M');
+                		}
+
+                		if ($userId > 0){
+	                		$ring_cards = get_ring_card_info($post_id, $userId);
+	                		if (count($ring_cards) > 0){
+								$filename = $post->post_name."__".$current_user->user_firstname."-".$current_user->user_lastname.".pdf";
+								$closes_text = 'RING CARDS available';
+								$ring_card_link = '|| <i class="fa fa-file-pdf-o" aria-hidden="true"></i>&nbsp;<a href=\'javascript:pdf_ring_cards('.json_encode($ring_cards, JSON_HEX_APOS).', "'.get_the_title().'", "'.$show_dates.'", "'.$filename.'");\'>Ring Cards</a> ';
+	                		}
+	                		else{
+	                			$ring_card_link = '';
+	                		}
                 		}
                 		
                         echo '
@@ -106,7 +123,10 @@ if (get_query_var('year') > 0){ $title = get_query_var('year').' Shows'; $color_
 		                        			<!-- <i class="fa fa-map-o" aria-hidden="true"></i>&nbsp;<a href="'.get_the_permalink().'">View Show</a> || -->
 							        		<i class="fa fa-file-pdf-o" aria-hidden="true"></i>&nbsp;<a href="'.$schedule_file['url'].'" target="_blank">Schedule</a>
 							        		'.$enter_show;
-							        		if (isset($ringcards_file['url']) && $ringcards_file['url'] != ''){
+							        		if(isset($ring_card_link) && $ring_card_link !=''){
+							        			echo $ring_card_link;
+							        		}
+							        		elseif (isset($ringcards_file['url']) && $ringcards_file['url'] != ''){
 							        			echo '|| <i class="fa fa-file-pdf-o" aria-hidden="true"></i>&nbsp;<a href="'.$ringcards_file['url'].'" target="_blank">Ring Cards</a> ';
 							        		}
 							        		if (isset($ringplan_file['url']) && $ringplan_file['url'] != ''){
