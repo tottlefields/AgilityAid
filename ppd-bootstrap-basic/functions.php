@@ -81,7 +81,7 @@ function mytheme_enqueue_scripts() {
 	wp_enqueue_script('pdfmake-fonts-js');
 	
     // register template-specific scripts
-    wp_register_script('js-ring_cards', get_template_directory_uri().'/js/ring_cards.js', array('jquery', 'pdfmake-js'), '0.1', true); 
+    wp_register_script('js-ring_cards', get_template_directory_uri().'/js/ring_cards.js', array('jquery', 'pdfmake-js'), '0.2', true); 
     
     // conditional load
     if (is_page(array('my-entries')) || is_post_type_archive('shows')){
