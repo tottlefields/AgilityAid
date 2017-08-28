@@ -151,6 +151,7 @@ if(!isset($user_ref)){
 					$posts = get_posts($args);
 					global $post;
 					$shows = array();
+					$money = array();
 			
 					// loop
 					if( $posts ) {
@@ -168,6 +169,14 @@ if(!isset($user_ref)){
 									$outstanding -= $payment['amount'];
 								}
 							}
+							if (!isset($money[$show_id])){
+								$money[$show_id] = array('total_money' => $total_money, 'outstanding' => $outstanding);
+							}
+							else{
+								$money[$show_id]['total_money'] += $total_money;
+								$money[$show_id]['outstanding'] += $outstanding;
+							}
+								
 							array_push($shows, $show_id);	
 						}
 						wp_reset_postdata();
@@ -199,8 +208,7 @@ if(!isset($user_ref)){
 							foreach( $show_posts as $post ) {	
 								setup_postdata( $post );
 								$show_id = get_the_ID();
-								$title= get_the_title();
-								
+								$title= get_the_title();								
 	
 								$start_date = new DateTime(get_field('start_date', false, false));
 								$end_date 	= new DateTime(get_field('end_date', false, false));
@@ -247,12 +255,12 @@ if(!isset($user_ref)){
 									<td class="text-center"><?php echo $show_dates; ?></td>
 									<td class="text-center"><?php echo get_the_title(); ?></td>
 									<td class="text-center"><?php echo $close_date->format('jS M'); ?></td>
-									<td class="text-center">&pound;<?php echo sprintf("%.2f", $total_money); ?></td>
+									<td class="text-center">&pound;<?php echo sprintf("%.2f", $money[$show_id]['total_money']); ?></td>
 									<td class="text-center">
-									<?php if ($outstanding > 0){ 
-										$paypal_money = $outstanding+($outstanding*0.035)+0.3;
+									<?php if ($money[$show_id]['outstanding'] > 0){ 
+										$paypal_money = $money[$show_id]['outstanding']+($money[$show_id]['outstanding']*0.035)+0.3;
 										?>
-										&pound;<?php echo sprintf("%.2f", $outstanding); ?>
+										&pound;<?php echo sprintf("%.2f", $money[$show_id]['outstanding']); ?>
 										<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
 	                                        <input type="hidden" name="cmd" value="_xclick">
                                        	 	<input type="hidden" name="business" value="agilityaid@outlook.com">
