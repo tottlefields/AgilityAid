@@ -97,6 +97,24 @@ if (get_query_var('year') > 0){ $title = get_query_var('year').' Shows'; $color_
 	                			$ring_card_link = '';
 	                		}
                 		}
+
+                		$results_file = get_field('day_1');
+                		$results_per_day = '';
+                		if(isset($results_file) && is_array($results_file)){
+                			$day1 = $start_date->format('D');
+                			$results_array = array();
+                			array_push($results_array, '<i class="fa fa-file-pdf-o" aria-hidden="true"></i>&nbsp;<a href="'.$results_file['url'].'" target="_blank">'.$day1.'</a>');
+                			$day_count = 1;
+                			for ($day = $start_date->format('U')+86400; $day <= $end_date->format('U'); $day += 86400){
+                				$day_count++;
+                				$results_file = get_field('day_'.$day_count);
+		                		if(isset($results_file) && is_array($results_file)){
+                					$this_day = date('D', $day);
+                					array_push($results_array, '<i class="fa fa-file-pdf-o" aria-hidden="true"></i>&nbsp;<a href="'.$results_file['url'].'" target="_blank">'.$this_day.'</a>');		                			
+		                		}
+                			}
+                			$results_per_day = implode(" || ", $results_array);
+                		}
                 		
                         echo '
                 		<div class="panel panel-'.$panel_class.'">
@@ -145,7 +163,11 @@ if (get_query_var('year') > 0){ $title = get_query_var('year').' Shows'; $color_
 							        			echo '|| <i class="fa fa-file-pdf-o" aria-hidden="true"></i>&nbsp;<a href="'.$champ_results_file['url'].'" target="_blank">Championships Results</a>';
 							        		}
 							        		echo '
-							        	</div>
+							        	</div>';
+							        		if ($results_per_day !== ""){
+							        			echo '<div class="col-md-12"><strong>Daily Results:</strong> '.$results_per_day.'</div>';
+							        		}
+							        	echo '
 	                        		</div>
 					      		</div>
 					    	</div>
