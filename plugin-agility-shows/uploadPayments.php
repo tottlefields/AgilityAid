@@ -6,6 +6,7 @@ $header = array();
 $payments = array();
 
 $file = (isset($_GET['file'])) ? $_GET['file'] : str_replace('file=', '', $argv[1]);
+if($file == '' && !empty($args)){ $file = $args[0]; } 
 
 if (($handle = fopen($file, "r")) !== FALSE) {
 	$row = 0;
@@ -18,15 +19,16 @@ if (($handle = fopen($file, "r")) !== FALSE) {
 		}
 		//Array([0] => postID    [1] => date    [2] => method	[3] => amount)
 		
-		$sql = "select * from wpao_postmeta where post_id =392 and meta_key='paid-pm'";
-		$row = $wpdb->get_row($sql);
-		if (!empty($row)){
-			print_r($row);
-			exit;
-		}
-		
 		if (!isset($payments[$data[0]])){
-			$payments[$data[0]] = array();
+			$sql = "select * from wpao_postmeta where post_id=".$data[0]." and meta_key='paid-pm'";
+        	        $res = $wpdb->get_row($sql);
+                	if (!empty($res)){
+                        	$existing_payment = unserialize($res->meta_value);
+				$payments[$data[0]] = $existing_payment;
+	                }
+			else {
+				$payments[$data[0]] = array();
+			}
 		}
 		
 		$tmp_array = array();
@@ -44,3 +46,5 @@ foreach ($payments as $post_id => $paymentArray){
 	echo "REPLACE INTO wpao_postmeta VALUES (NULL, ".$post_id.", 'paid-pm', '".serialize($paymentArray)."');\n";
 }
 ?>
+
+
