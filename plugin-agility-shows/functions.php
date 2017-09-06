@@ -103,10 +103,13 @@ function custom_entry_column( $column, $post_id ) {
 		case 'paid' :
 			$paid = get_post_meta( $post_id , 'paid-pm' , true );
 			if(isset($paid) && $paid != ''){
+				$payments = array();
 				foreach ($paid as $payment){
 					$date = new DateTime($payment['date']);
-					echo $date->format('jS M Y').' - &pound;'.sprintf("%.2f", $payment['amount']).' ('.$payment['method'].')';
+					array_push($payments, $date->format('jS M Y').' - &pound;'.sprintf("%.2f", $payment['amount']).' ('.$payment['method'].')');
+					//echo $date->format('jS M Y').' - &pound;'.sprintf("%.2f", $payment['amount']).' ('.$payment['method'].')';
 				}
+				echo implode("<br />", $payments);
 			}
 			else{
 				echo 'No';
