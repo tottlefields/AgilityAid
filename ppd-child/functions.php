@@ -24,7 +24,7 @@ function agilityaid_manage_users_custom_column($custom_column,$column_name,$user
         $custom_column = "<table>\n{$custom_column}\n</table>";
     }
     if ($column_name=='user_balance') {
-    	$custom_column = array();
+    	$custom_column = "";
     }
     return $custom_column;
 }
