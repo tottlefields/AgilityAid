@@ -6,7 +6,7 @@ $TA_HEIGHTS = array('Micro' => 'Micro (&le;35.5cm)', 'Small' => 'Small (&le;43cm
 
 $KC_GRADES = array('NFC', '1', '2', '3', '4', '5', '6', '7');
 $BS_LEVELS = array('NFC', 'Beginners', 'Elementary', 'Starters', 'Novice', 'Graduate', 'Senior', 'Veterans', 'Allsorts');
-$TA_LEVELS = array('NFC', 'Elementary', 'Starters', 'Novice', 'Senior', 'Veteran', 'Anysize');
+$TA_LEVELS = array('NFC', 'Elementary', 'Starters', 'Novice', 'Senior', 'Veterans', 'Anysize');
 
 $JOBS = array('None', 'Any', 'Caller', 'Leads', 'Pads', 'Scrimer', 'Scorer');
 
