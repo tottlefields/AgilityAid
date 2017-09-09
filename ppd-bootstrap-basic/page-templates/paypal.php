@@ -53,7 +53,13 @@ array_push($payments, $new_payment);
 
 update_post_meta($post_id, 'paid-pm', $payments);
 
+$new_payment['user_id'] = $userId;
+$new_payment['payment_date'] = $new_payment['date'];
+unset($new_payment['date']);
+$wpdb->insert( $wpdb->prefix.'agility_payments', $new_payment);
+
 wp_redirect(site_url('/account/my-entries/'));
+//wp_redirect(site_url('/account/my-payments/'));
 exit;
 
 ?>
