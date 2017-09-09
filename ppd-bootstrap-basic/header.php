@@ -43,7 +43,10 @@
 					<div class="col-lg-7 col-md-8 col-xs-12 pull-right no-print">
 						<div class="account-bar">
 							<!-- <a href="/basket/"><i class="fa fa-shopping-basket"></i>&nbsp;<span class="hidden-xs">Basket <?php outputBasketHeaderData(); ?></a>-->
-							<?php if(is_user_logged_in()) { ?>
+							<?php if(is_user_logged_in()) { 
+								global $current_user;
+							echo '<span class="welcome" style="border-left:0px;">Hi '.$current_user->user_firstname.'&nbsp;</span>'; ?>
+							
 							<a href="/account/"><span class="hidden-xs">My </span>Account</a>
 							<a href="<?php echo wp_logout_url(); ?>">Log Out</a>
                             <?php } else { ?>
