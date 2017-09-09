@@ -59,7 +59,7 @@ a:focus, a:hover {
 	position: relative;
 }
 
-.account-bar a {
+.account-bar a, .account-bar span.welcome {
 	float: left;
 	padding: 0 8px 2px 8px;
 	border-left: 1px solid #FFF;
