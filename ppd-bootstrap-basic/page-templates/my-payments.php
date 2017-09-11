@@ -42,8 +42,14 @@ $payments = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."agility_payments 
 					</thead>
 					<tbody>';
 					foreach ($payments as $payment){
-						if ($payment->method == 'INVOICE'){ $total_amount += $payment->amount; }
-						else { $total_amount -= $payment->amount; }
+						if ($payment->method == 'INVOICE'){
+							$total_amount += $payment->amount;
+							$method_string = '<span class="label label-danger">&pound;'.sprintf('%.2f', $payment->amount).'</span>';
+						}
+						else {
+							$total_amount -= $payment->amount;
+							$method_string = '<span class="label label-success">&pound;'.sprintf('%.2f', $payment->amount).'</span>';
+						}
 						
 						if ($total_amount < 0){
 							$a = $total_amount * -1;
@@ -56,7 +62,7 @@ $payments = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."agility_payments 
 							<td class="text-center">'.DateTime::createFromFormat('Y-m-j', $payment->payment_date)->format('d/m/Y').'</td>
 							<td class="text-center">'.$payment->method.'</a></td>
 							<td>'.$payment->description.'</td>
-							<td class="text-center">&pound;'.sprintf('%.2f', $payment->amount).'</td>
+							<td class="text-center">'.$method_string.'</td>
 							<td class="text-center">'.$amount_string.'</td>
 						</tr>';
 						
