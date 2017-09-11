@@ -22,18 +22,19 @@ $new_payment = array(
 );
 
 $args = array (
-		'post_type'	=> 'entries',
+		'post_type'		=> 'entries',
 		'post_status'	=> array('publish'),
 		'order'			=> 'ASC',
 		'numberposts'	=> -1,
 		'author'		=> $userId,
-		'meta_query' 	=> array(
+		'post_parent'	=> $_GET['entry']
+/*		'meta_query' 	=> array(
 				array(
 						'key'		=> 'show_id-pm',
 						'compare'	=> '=',
 						'value'		=> $_GET['entry'],
 				),
-		)
+		)*/
 );
 	
 // get posts
@@ -57,6 +58,7 @@ $new_payment['user_id'] = $userId;
 $new_payment['payment_date'] = $new_payment['date'];
 unset($new_payment['date']);
 $wpdb->insert( $wpdb->prefix.'agility_payments', $new_payment);
+$payment_id = $wpdb->insert_id;
 
 wp_redirect(site_url('/account/my-entries/'));
 //wp_redirect(site_url('/account/my-payments/'));
