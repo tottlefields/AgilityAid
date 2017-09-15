@@ -47,7 +47,7 @@ $payments = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."agility_payments 
 					</thead>
 					<tbody>';
 					foreach ($payments as $payment){
-						if ($payment->method == 'INVOICE'){
+						if ($payment->method == 'INVOICE' || $payment->method == 'REFUND'){
 							$total_amount += $payment->amount;
 							$method_string = '<span class="label label-danger">&pound;'.sprintf('%.2f', $payment->amount).'</span>';
 						}
