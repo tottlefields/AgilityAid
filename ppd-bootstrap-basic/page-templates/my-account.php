@@ -25,7 +25,7 @@ get_currentuserinfo();
                 <?php 
                 if (in_array( 'author', $current_user->roles ) || in_array( 'administrator', $current_user->roles )){ ?>
                 <div class="row-fluid">
-                	<div class="col-sm-6"><div class="well well-lg"><a href="/account/my-comps/"><i class="fa fa-trophy fa-4x" aria-hidden="true"></i>&nbsp;View Competition Data</a></div></div>
+                	<div class="col-sm-6"><div class="well well-lg"><a href="/account/your-shows/"><i class="fa fa-trophy fa-4x" aria-hidden="true"></i>&nbsp;View Competition Data</a></div></div>
                 <?php if ( in_array( 'administrator', $current_user->roles ) ) { ?>
 					<div class="col-sm-6"><div class="well well-lg"><a href="/admin/"><i class="fa fa-clipboard fa-4x" aria-hidden="true"></i>&nbsp;Adminstration Tasks</a></div></div>
 				</div>	
