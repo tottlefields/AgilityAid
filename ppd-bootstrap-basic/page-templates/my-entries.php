@@ -200,7 +200,7 @@ if(!isset($user_ref)){
 									<th class="text-center">Show</th>
 									<th class="text-center">Closes</th>
 									<th class="text-center">Total</th>
-									<th class="text-center">Outstanding</th>
+									<!-- th class="text-center">Outstanding</th> -->
 									<th class="text-center" nowrap="nowrap"></th>
 								</tr>
 							<?php 
@@ -256,7 +256,7 @@ if(!isset($user_ref)){
 									<td class="text-center"><?php echo get_the_title(); ?></td>
 									<td class="text-center"><?php echo $close_date->format('jS M'); ?></td>
 									<td class="text-center">&pound;<?php echo sprintf("%.2f", $money[$show_id]['total_money']); ?></td>
-									<td class="text-center">
+									<!-- <td class="text-center">
 									<?php if ($money[$show_id]['outstanding'] > 0){ 
 										$paypal_money = $money[$show_id]['outstanding']+($money[$show_id]['outstanding']*0.035)+0.3;
 										?>
@@ -279,7 +279,7 @@ if(!isset($user_ref)){
 	                                else{ ?>
 	                                <span class="label label-success">PAID</span>
 	                                <?php } ?>
-                                	</td>
+                                	</td> -->
 									<td class="text-center" nowrap>
 										<?php echo $buttons; ?>
 									</td>

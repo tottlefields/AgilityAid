@@ -29,13 +29,14 @@ if(isset($_GET['cancel']) || isset($_GET['delete'])){
 		'post_status'	=> array('publish'),
 		'numberposts'	=> 10,
 		'author'		=> $userId,
-		'meta_query' 	=> array(
+		'post_parent' 	=> $data['show_id']
+/*		'meta_query' 	=> array(
 			array(
 				'key'		=> 'show_id-pm',
 				'compare'	=> '=',
 				'value'		=> $data['show_id'],
 			),
-		)
+		)*/
 	);
 		
 	// get posts
