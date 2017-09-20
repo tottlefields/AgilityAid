@@ -40,7 +40,9 @@ if (($handle = fopen($file, "r")) !== FALSE) {
 		}
 		array_push($classes[$data[1]], $tmp_array);	
 	}
-	echo "REPLACE INTO wpao_postmeta VALUES (NULL, ".$show_id.", 'classes', '".serialize($classes)."');\n";
-	echo "REPLACE INTO wpao_postmeta VALUES (NULL, ".$show_id.", 'lho_options', '".serialize($lho_options)."');\n";
+	echo "DELETE FROM wpao_postmeta WHERE post_id=".$show_id." AND meta_key='classes';\n";
+	echo "DELETE FROM wpao_postmeta WHERE post_id=".$show_id." AND meta_key='lho_options';\n";
+	echo "INSERT INTO wpao_postmeta VALUES (NULL, ".$show_id.", 'classes', '".serialize($classes)."');\n";
+	echo "INSERT INTO wpao_postmeta VALUES (NULL, ".$show_id.", 'lho_options', '".serialize($lho_options)."');\n";
 }
 ?>

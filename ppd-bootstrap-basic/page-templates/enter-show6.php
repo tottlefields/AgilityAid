@@ -29,13 +29,14 @@ if(isset($_GET['cancel']) || isset($_GET['delete'])){
 		'post_status'	=> array('publish'),
 		'numberposts'	=> 10,
 		'author'		=> $userId,
-		'meta_query' 	=> array(
+		'post_parent' 	=> $data['show_id']
+/*		'meta_query' 	=> array(
 			array(
 				'key'		=> 'show_id-pm',
 				'compare'	=> '=',
 				'value'		=> $data['show_id'],
 			),
-		)
+		)*/
 	);
 		
 	// get posts
@@ -43,6 +44,7 @@ if(isset($_GET['cancel']) || isset($_GET['delete'])){
 	global $post;
 	foreach( $posts as $post ) {
 		wp_delete_post(get_the_ID());
+		$wpdb->delete( $wpdb->prefix.'agility_payments', array('user_id' => $userId, 'method' => 'INVOICE', 'post_ids' => get_the_ID()));
 	}
 	wp_redirect(site_url('/enter-show/'));
 	exit;
@@ -94,6 +96,10 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
 	
 	if(isset($showData['entry_id']) && $showData['entry_id']>0){
 		$insertId = $showData['entry_id'];
+		$wpdb->update($wpdb->prefix.'agility_payments', 
+				array('payment_date' => date('Y-m-d'), 'amount' => $showData['total_cost']), 
+				array( 'user_id' => $userId, 'method' => 'INVOICE', 'post_ids' => $insertId)
+		);
 	}
 	else{
 		$showData['entry_ts'] = time();
@@ -112,6 +118,16 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
 		// Insert the post into the database
 		$insertId = wp_insert_post($entryPostData);
 		$showData['entry_id'] = $insertId;
+		
+		$entryInvoice = array(
+				'user_id'		=> $userId,
+				'payment_date'	=> date('Y-m-d'),
+				'method'		=> 'INVOICE',
+				'amount'		=> $showData['total_cost'],
+				'description'	=> $show->post_title,
+				'post_ids'		=> $insertId
+		);
+		$wpdb->insert($wpdb->prefix.'agility_payments', $entryInvoice);
 	}
 	
 	$entryMetaData = array();

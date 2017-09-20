@@ -3,6 +3,7 @@ add_action('manage_users_columns','agilityaid_manage_users_columns');
 function agilityaid_manage_users_columns($column_headers) {
     unset($column_headers['posts']);
     $column_headers['custom_posts'] = 'Entries';
+    $column_headers['user_balance'] = 'Balance';
     return $column_headers;
 }
 
@@ -21,6 +22,9 @@ function agilityaid_manage_users_custom_column($custom_column,$column_name,$user
         if (empty($custom_column))
             $custom_column = "<th>[none]</th>";
         $custom_column = "<table>\n{$custom_column}\n</table>";
+    }
+    if ($column_name=='user_balance') {
+    	$custom_column = "";
     }
     return $custom_column;
 }
