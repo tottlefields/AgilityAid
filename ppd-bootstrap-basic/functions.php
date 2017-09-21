@@ -79,6 +79,10 @@ function mytheme_enqueue_scripts() {
 	wp_register_script('pdfmake-fonts-js', get_template_directory_uri().'/js/vfs_fonts.js', array('pdfmake-js'), '0.1.31', true);
 	wp_enqueue_script('pdfmake-js');
 	wp_enqueue_script('pdfmake-fonts-js');
+
+	// Main functions js file
+	wp_register_script ( 'js-functions', get_template_directory_uri () . '/js/functions.js', array ('jquery'), '0.1', true );
+	wp_enqueue_script ( 'js-functions' );
 	
     // register template-specific scripts
     wp_register_script('js-ring_cards', get_template_directory_uri().'/js/ring_cards.js', array('jquery', 'pdfmake-js'), '0.2', true); 
@@ -302,4 +306,6 @@ function has_next($array) {
 		return false;
 	}
 }
+
+require_once 'ajax.php';
 ?>

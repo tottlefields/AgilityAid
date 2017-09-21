@@ -13,6 +13,10 @@
 		
 		</div> <!-- /container -->
 		
+		<!-- start: JavaScript-->
+		<script>
+		var ajaxObject = {"ajax_url":"<?php echo admin_url( 'admin-ajax.php' ); ?>"};
+		</script>		
 		<?php wp_footer(); ?>
 
 	</body>

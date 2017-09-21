@@ -59,6 +59,7 @@ if (!in_array( 'author', $current_user->roles ) && !in_array( 'administrator', $
 							$start_date = get_field('start_date', false, false);
 							$end_date = get_field('end_date', false, false);
 							$close_date = get_field('close_date', false, false);
+                			$online_link = get_field('online_show_entry_link', false, false);
 							
 	                		$start_date = new DateTime($start_date);
 	                		$end_date = new DateTime($end_date);
@@ -75,12 +76,18 @@ if (!in_array( 'author', $current_user->roles ) && !in_array( 'administrator', $
 	                		//green (success) for open shows; orange (warning) for closing in 7 days; red (danger) for closed
 	                		$panel_class = 'success';
 	                		$closes_text = '&nbsp;';
-	                		$enter_show = ' ||  <i class="fa fa-file-pdf-o" aria-hidden="true"></i>&nbsp;<a href="'.$entryform_file['url'].'" target="_blank">Entry Form</a>
-	                				'.$enter_show_link;
+	                		$links = array();
+
+	                		//array_push($links, '<a href="javascript:getCompNumbers('.$show_id.')">View Numbers</a>');
+	                		
 	                		if ($close_date < date('Ymd')){
 	                			$panel_class = 'danger';
 	                			$closes_text = 'CLOSED';
-	                			$enter_show = '';
+	                			if ($online_link == ''){
+	                				if (in_array( 'administrator', $current_user->roles )){
+	                					array_push($links, '<a href="javascript:getEntryDetails('.$show_id.')">Download Entries</a>');
+	                				}
+	                			}
 	                		}
 	                		elseif ($close_date <= date('Ymd', strtotime("+7 day"))){
 	                			$panel_class = 'warning';
@@ -97,15 +104,14 @@ if (!in_array( 'author', $current_user->roles ) && !in_array( 'administrator', $
 						    	</div>
 						    	<div id="collapse'.$show_id.'" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading'.$show_id.'">
 						      		<div class="panel-body">
-						        		<div class="row">
-		                        		</div>
+						        		<div class="row"><div class="col-sm-12">'.implode($links, ' || ').'</div></div>
 						      		</div>
 						    	</div>
 						  	</div>';
 						}
 						echo '</div>';
 					} else {
-						// no entries found
+						// no shows found
 						echo '
 						<div class="alert">You currently have no shows on our system. Please <a href="/contact-us">contact AgilityAid</a> to add your show to this system for online entries.</div>';
 					}
