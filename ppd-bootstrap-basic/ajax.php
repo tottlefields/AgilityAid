@@ -28,8 +28,7 @@ function get_comp_entries(){
 			'post_status'	=> array('publish'),
 			'numberposts'	=> -1,
 			'order'			=> 'DESC',
-			'post_parent' 	=> $show_id,
-			'author'		=> 267
+			'post_parent' 	=> $show_id
 	);
 
 	$orders = array();
