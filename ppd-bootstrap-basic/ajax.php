@@ -24,7 +24,7 @@ function get_comp_entries(){
 	$return['show'] = $show;
 	
 	$args = array (
-			'post_type'	=> 'entries',
+			'post_type'		=> 'entries',
 			'post_status'	=> array('publish'),
 			'numberposts'	=> -1,
 			'order'			=> 'DESC',
@@ -76,7 +76,8 @@ function get_comp_entries(){
 			if(isset($dogEntry['classes'])){
 				$classes[$dog_id] = array();
 				foreach ($dogEntry['classes'] as $class_no => $class){
-					array_push($classes[$dog_id], $class_no);
+					if (!isset($classes[$dog_id][$class['handler']])){ $classes[$dog_id][$class['handler']] = array(); }
+					array_push($classes[$dog_id][$class['handler']], $class_no);
 					if (!isset($dogs[$dog_id])){ $dogs[$dog_id] = array(); }
 					$dogs[$dog_id]['classHeight'] = $class['height'];
 					$dogs[$dog_id]['classLevel'] = isset($class['level']) ? $class['level'] : $dogs[$dog_id]['level'];
@@ -88,22 +89,41 @@ function get_comp_entries(){
 			}
 		}
 		
-		foreach ($classes as $dog_id => $classes){
-			$dog = $dogs[$dog_id];
-			if (!isset($dog['id'])){
-				// Get dog details when not saved with show data/entry
-				$sql = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}agility_dogs WHERE ID = %d", $dog_id );
-				$row = $wpdb->get_row( $sql );
-				$dog['id'] = $dog_id;
-				$dog['pet_name'] = $row->pet_name;
-				$dog['kc_name'] = $row->kc_name;
-				$dog['kc_number'] = $row->kc_number;
-				$dog['birth_date'] = $row->birth_date;
+		foreach ($classes as $dog_id => $classesPerHandler){
+			foreach ($classesPerHandler as $handler => $classes){
+				$dog = $dogs[$dog_id];
+				if (!isset($dog['id'])){
+					// Get dog details when not saved with show data/entry
+					$sql = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}agility_dogs left outer join {$wpdb->prefix}terms on breed=term_id WHERE ID = %d", $dog_id );
+					$row = $wpdb->get_row( $sql );
+					$dog['id'] = $dog_id;
+					$dog['pet_name'] = $row->pet_name;
+					$dog['kc_name'] = $row->kc_name;
+					$dog['kc_number'] = $row->kc_number;
+					$dog['birth_date'] = $row->birth_date;
+					$dog['breedName'] = $row->name;
+					$dog['sex'] = $row->sex;
+					if (!isset($dog['classHeight']) || !isset($dog['classLevel'])){
+						$sql = $wpdb->prepare("select meta_key, meta_value from {$wpdb->prefix}agility_dogsmeta where dog_id = $dog_id and meta_key like '".$show_meta['affiliation'][0]."_%'");
+						$results = $wpdb->get_results( $sql, 'OBJECT_K');
+						if (!isset($dog['classHeight'])){
+							$dog['classHeight'] = $results[$show_meta['affiliation'][0]."_height"]->meta_value;
+						}
+						if (!isset($dog['classLevel'])){
+							$dog['classLevel'] = $results[$show_meta['affiliation'][0]."_level"]->meta_value;
+						}
+					}
+				}
+				
+				$handler_details = explode(' ', $handler);
+				$user_details[1] = array_shift($handler_details);
+				$user_details[2] = implode(' ', $handler_details);
+				$user_details[3] = $handler;
+				
+				$name = (isset($dog['kc_name'])) ? $dog['kc_name'] : $dog['pet_name'];
+				$entry_row = array_merge(array_slice($user_details, 0, 4), array($name, $dog['classHeight'], $dog['classLevel'], $dog['breedName'], $dog['sex'], $dog['birth_date'], $dog['kc_number'], $dog_id), array_slice($user_details, 4), array("", "", "", rtrim($ro_postal), implode(',', $classes), $dog['LHO']));
+				array_push($entries, $entry_row);
 			}
-			
-			$name = (isset($dog['kc_name'])) ? $dog['kc_name'] : $dog['pet_name'];
-			$entry_row = array_merge(array_slice($user_details, 0, 4), array($name, $dog['classHeight'], $dog['classLevel'], $dog['breedName'], $dog['sex'], $dog['birth_date'], $dog['kc_number'], $dog_id), array_slice($user_details, 4), array("", "", "", rtrim($ro_postal), implode(',', $classes), $dog['LHO']));
-			array_push($entries, $entry_row);
 		}
 		
 	}
