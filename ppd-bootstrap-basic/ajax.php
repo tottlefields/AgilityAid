@@ -28,7 +28,8 @@ function get_comp_entries(){
 			'post_status'	=> array('publish'),
 			'numberposts'	=> -1,
 			'order'			=> 'DESC',
-			'post_parent' 	=> $show_id
+			'post_parent' 	=> $show_id,
+			'author'		=> 267
 	);
 
 	$orders = array();
@@ -76,6 +77,7 @@ function get_comp_entries(){
 			if(isset($dogEntry['classes'])){
 				$classes[$dog_id] = array();
 				foreach ($dogEntry['classes'] as $class_no => $class){
+					if (!isset($class['handler']) || $class['handler'] == "" || $class['handler'] == " "){ $class['handler'] = $userMeta['first_name'][0].' '.$userMeta['last_name'][0]; }
 					if (!isset($classes[$dog_id][$class['handler']])){ $classes[$dog_id][$class['handler']] = array(); }
 					array_push($classes[$dog_id][$class['handler']], $class_no);
 					if (!isset($dogs[$dog_id])){ $dogs[$dog_id] = array(); }

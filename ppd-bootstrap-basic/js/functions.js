@@ -33,6 +33,7 @@ function getEntryDetails(show_id){
 		dataType: "json",
 		data : data,
 		success: function(results){
+			//console.log(results.entries);
 			jsonToCSV(results.entries, "Entry Details "+results.show.post_name);
 			return;
 		}
