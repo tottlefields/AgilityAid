@@ -81,7 +81,7 @@ function mytheme_enqueue_scripts() {
 	wp_enqueue_script('pdfmake-fonts-js');
 
 	// Main functions js file
-	wp_register_script ( 'js-functions', get_template_directory_uri () . '/js/functions.js', array ('jquery'), '0.1', true );
+	wp_register_script ( 'js-functions', get_template_directory_uri () . '/js/functions.js', array ('jquery'), '0.2', true );
 	wp_enqueue_script ( 'js-functions' );
 	
     // register template-specific scripts
