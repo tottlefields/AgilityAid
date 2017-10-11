@@ -85,7 +85,7 @@ function mytheme_enqueue_scripts() {
 	wp_enqueue_script ( 'js-functions' );
 	
     // register template-specific scripts
-    wp_register_script('js-ring_cards', get_template_directory_uri().'/js/ring_cards.js', array('jquery', 'pdfmake-js'), '0.2', true); 
+    wp_register_script('js-ring_cards', get_template_directory_uri().'/js/ring_cards.js', array('jquery', 'pdfmake-js'), '0.2.1', true); 
     
     // conditional load
     if (is_page(array('my-entries')) || is_post_type_archive('shows')){
@@ -237,6 +237,8 @@ function get_ring_card_info($show_id, $user_id){
 					'dog_height' => $row->height,
 					'misc2' => $row->misc2,
 					'misc1' => $row->misc1,
+					'lho' => $row->lho,
+					'camping' => $row->camping,
 					'classes' => array()
 			);
 		}

@@ -5,8 +5,12 @@ function pdf_ring_cards(ringCardDetails, showName, showDates, fileName) {
 	
 	for ( var ring_no in ringCardDetails) {
 		var details = ringCardDetails[ring_no];
-		ddRingCard.content.push(header(showName, showDates, ring_no, details['handler'], details['dog_name'], details['dog_level'], details['dog_height']),
+		ddRingCard.content.push(header(showName, showDates, ring_no, details['handler'], details['dog_name'], details['dog_level'], details['dog_height'], details['lho']),
 				classTable(details['classes']), footer(), miscInfo(details['misc1'], details['misc2']));
+		
+		if (page === 0 && details['camping'] !== ''){
+			ddRingCard.content.push(camping(details['camping']));
+		}
 		
 		if (page === (Object.keys(ringCardDetails).length - 1)) {
 			ddRingCard.content.push({
@@ -22,12 +26,12 @@ function pdf_ring_cards(ringCardDetails, showName, showDates, fileName) {
 		}
 		page++;
 	}
-	//pdfMake.createPdf(ddRingCard).open();
 	pdfMake.createPdf(ddRingCard).download(fileName);
 
 }
 
-function header(showName, showDates, ringNo, handler, dogName, dogLevel, dogHeight) {
+function header(showName, showDates, ringNo, handler, dogName, dogLevel, dogHeight, lho) {
+	if (lho !== 'undefined' && lho !== ''){ lho = 'LHO: '+lho; }
 	return {
 		table : {
 			widths : [ '*', 'auto' ],
@@ -45,13 +49,16 @@ function header(showName, showDates, ringNo, handler, dogName, dogLevel, dogHeig
 			} ], [ {
 				text : showDates,
 				style : 'h2'
-			}, ], [ {
+			}, ], [{
 				colSpan : 2,
 				alignment : 'right',
 				text : handler,
 				style : 'h2'
-			} ], [ {
-				colSpan : 2,
+			} ], [  {
+				text : lho,
+				style : 'h2'
+			}, {
+				//colSpan : 2,
 				alignment : 'right',
 				style : 'h2',
 				text : dogName + " - " + dogHeight + " - " + dogLevel
@@ -180,6 +187,15 @@ function footer() {
 				return 5;
 			}
 		}
+	};
+}
+
+function camping(camping) {
+	return {
+		text : [
+			{text: camping, style: 'strong', alignment: 'center'}		
+		],
+		margin : [ 0, 5, 0, 5 ]
 	};
 }
 
