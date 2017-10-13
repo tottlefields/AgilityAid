@@ -6,6 +6,19 @@ add_action('wp_ajax_nopriv_entry_details', 'get_comp_entries');
 add_action('wp_ajax_comp_nos', 'view_comp_nos');
 add_action('wp_ajax_nopriv_comp_nos', 'view_comp_nos');
 
+
+function _check_is_admin(){
+	global $wpdb, $current_user;
+	
+	$return = array();
+	
+	if (!in_array( 'administrator', $current_user->roles )){
+		$return['error'] = "ERROR - you don't have the correct permission to view the entry details of this show";
+		echo json_encode($return);
+		wp_die();
+	}
+}
+
 function get_comp_entries(){
 	global $wpdb, $current_user;
 	
@@ -121,8 +134,8 @@ function get_comp_entries(){
 				$user_details[2] = implode(' ', $handler_details);
 				$user_details[3] = $handler;
 				
-				$name = (isset($dog['kc_name'])) ? $dog['kc_name'] : $dog['pet_name'];
-				$entry_row = array_merge(array_slice($user_details, 0, 4), array($name, $dog['classHeight'], $dog['classLevel'], $dog['breedName'], $dog['sex'], $dog['birth_date'], $dog['kc_number'], $dog_id), array_slice($user_details, 4), array("", "", "", rtrim($ro_postal), implode(',', $classes), $dog['LHO']));
+				$name = (isset($dog['kc_name']) && $dog['kc_name'] != '') ? $dog['kc_name'] : $dog['pet_name'];
+				$entry_row = array_merge(array_slice($user_details, 0, 4), array($name, $dog['pet_name'], $dog['classHeight'], $dog['classLevel'], $dog['breedName'], $dog['sex'], $dog['birth_date'], $dog['kc_number'], $dog_id), array_slice($user_details, 4), array("", "", "", rtrim($ro_postal), implode(',', $classes), $dog['LHO']));
 				array_push($entries, $entry_row);
 			}
 		}
