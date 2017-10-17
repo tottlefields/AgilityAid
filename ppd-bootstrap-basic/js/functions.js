@@ -101,13 +101,10 @@ function pdf_online_entries(entryDetails, showName, showDates, showVenue, fileNa
 	ddShowEntries.content = [];
 
 	ddShowEntries.content.push(header(showName, showDates, showVenue));
-	// entryDetails = entryDetails.splice(0, 5);
 	ddShowEntries.content.push(mainContent(entryDetails));
 
-	// console.log(entryDetails);
-
-	// pdfMake.createPdf(ddShowEntries).download(fileName);
-	pdfMake.createPdf(ddShowEntries).open();
+	pdfMake.createPdf(ddShowEntries).download(fileName);
+	//pdfMake.createPdf(ddShowEntries).open();
 
 }
 
