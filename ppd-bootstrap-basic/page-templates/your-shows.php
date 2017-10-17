@@ -83,10 +83,15 @@ if (!in_array( 'author', $current_user->roles ) && !in_array( 'administrator', $
 	                		if ($close_date < date('Ymd')){
 	                			$panel_class = 'danger';
 	                			$closes_text = 'CLOSED';
-	                			if ($online_link == ''){
-	                				if (in_array( 'administrator', $current_user->roles )){
+	                			if (in_array( 'administrator', $current_user->roles )){
+	                				if ($online_link == ''){
 	                					array_push($links, '<a href="javascript:getEntryDetails('.$show_id.')">Download Entries</a>');
-	                				}
+	                				}	                			
+	                			
+		                			$ring_cards_ready = $wpdb->get_row("select count(*) as RingCardCount from wpao_posts p inner join wpao_ring_card_info rc on p.ID=rc.post_id WHERE post_parent=".$show_id);
+		                			if ($ring_cards_ready->RingCardCount > 0){
+	                					array_push($links, '<a href="javascript:viewShowEntries('.$show_id.')">View Show Entries</a>');
+		                			}
 	                			}
 	                		}
 	                		elseif ($close_date <= date('Ymd', strtotime("+7 day"))){

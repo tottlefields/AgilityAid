@@ -81,7 +81,7 @@ function mytheme_enqueue_scripts() {
 	wp_enqueue_script('pdfmake-fonts-js');
 
 	// Main functions js file
-	wp_register_script ( 'js-functions', get_template_directory_uri () . '/js/functions.js', array ('jquery'), '0.2', true );
+	wp_register_script ( 'js-functions', get_template_directory_uri () . '/js/functions.js', array ('jquery'), '0.2.1', true );
 	wp_enqueue_script ( 'js-functions' );
 	
     // register template-specific scripts
@@ -260,8 +260,6 @@ function get_ring_card_info($show_id, $user_id){
 	}
 	return $ring_cards;
 }
-
-
 
 
 function get_options_for_term($slug, $breeds, $selected){
