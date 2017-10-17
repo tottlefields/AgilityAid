@@ -43,7 +43,7 @@ $payments = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."agility_payments 
 						<th class="text-center">Method</th>
 						<th>Description</th>
 						<th class="text-center">Amount</th>
-						<th class="text-center">Total</th>
+						<!--<th class="text-center">Total</th>-->
 					</thead>
 					<tbody>';
 					foreach ($payments as $payment){
@@ -68,14 +68,14 @@ $payments = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."agility_payments 
 							<td class="text-center">'.$payment->method.'</a></td>
 							<td>'.$payment->description.'</td>
 							<td class="text-center">'.$method_string.'</td>
-							<td class="text-center">'.$amount_string.'</td>
+							<!--<td class="text-center">'.$amount_string.'</td>-->
 						</tr>';
 						
 					}
 					$table .= '
 					</tbody>
                 </table>';
-					if ($total_amount < 0){
+					if ($total_amount <= 0){
 						$total_amount *= -1;
 						echo '<div class="alert alert-info"><i class="fa fa-smile-o" aria-hidden="true"></i>&nbsp;Congratulations, your account is currently <strong>&pound;'.sprintf('%.2f', $total_amount).'</strong> in credit.</div>';
 					}
