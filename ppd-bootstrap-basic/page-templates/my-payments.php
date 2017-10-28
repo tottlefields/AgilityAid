@@ -154,7 +154,7 @@ jQuery(document).ready(function($) {
 		$("#paypal_fees").val(fees);
 		$("#paypal_total").val(total);
 		$("#paypal_amount_final").val(total);
-		$("#paypal_return_url").val("<?php echo get_site_url(); ?>/process-paypal/?result=done&amount="+total+"&user=<?php echo $current_user->ID; ?>");
+		$("#paypal_return_url").val("<?php echo get_site_url(); ?>/process-paypal/?result=done&amount="+total+"&fees="+fees+"&user=<?php echo $current_user->ID; ?>");
 		
 	});
 });

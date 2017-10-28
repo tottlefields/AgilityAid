@@ -55,12 +55,22 @@ if (isset($_GET['entry'])){
 	
 	update_post_meta($post_id, 'paid-pm', $payments);
 }
+if (isset($_GET['fees'])){
+	$fees_payment = array(
+			'user_id' => $userId,
+			'payment_date' => date('Y-m-d'),
+			'method' => 'INVOICE',
+			'amount' => $_GET['fees']
+	);
+	$wpdb->insert( $wpdb->prefix.'agility_payments', $fees_payment);
+}
 
 $new_payment['user_id'] = $userId;
 $new_payment['payment_date'] = $new_payment['date'];
 unset($new_payment['date']);
 $wpdb->insert( $wpdb->prefix.'agility_payments', $new_payment);
 $payment_id = $wpdb->insert_id;
+
 
 //wp_redirect(site_url('/account/my-entries/'));
 wp_redirect(site_url('/account/my-payments/'));
