@@ -19,7 +19,7 @@ if(isset($_POST['submit'])) {
 	unset($formData['submit']);
 	unset($formData['dogID']);
 	$formData['birth_date'] = dateToSQL($formData['birth_date']);
-
+	$formData['kc_name'] = stripslashes($formData['kc_name']);
 
 	if ($_POST['dogID'] > 0){
 		//Dog meta data.
