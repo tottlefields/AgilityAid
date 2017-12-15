@@ -4,12 +4,23 @@
       <!-- Main hero unit for a primary marketing message or call to action -->
       <div class="jumbotron">
         <h1>Welcome to Agility Aid!</h1>
-        <p>The original Show Processing Service for dog agility shows in the UK, with online entries coming soon...<br />
-        Our online system is the first designed for mobile devices first and will have many new features added in the coming months.
-        </p>
+	<p>The original Show Processing Service for dog agility shows in the UK, now with online entries and with electronic scoring/results coming for the 2018 season.</p>
+	<p>If you would like to discuss how Agility Aid can help your show, please <a href="/contact/">get in touch here</a>.</p>
         <!-- <p><a class="btn btn-primary btn-large">Learn more &raquo;</a></p> -->
       </div>
 
+      <div class="alert alert-danger">
+	<p><strong>Cancelled - JDA Dog Training Club – KC Limited Show 13th & 14th January</strong></p>
+<p>	We were informed yesterday that due to errors on the part of the equestrian centre, the arena booking for our January show is not being honoured.<br />
+With no alternative dates and no other suitable arena locally we unfortunately have no choice but to cancel the show.<br />
+We are extremely disappointed to have been let down like this and ask that you bear with us while we sort things out, we will arrange full refunds for everyone who has entered the show.<br />
+</p> 
+<p>If you have any queries please get in touch with James at: jdadtc@outlook.com</p>
+ 
+<p>Our  sincere apologies, and thanks to everyone who has supported this show.<br />
+JDA DTC</p>
+
+      </div>
       <!-- Example row of columns -->
       <div class="row">
         <div class="col-md-4">
