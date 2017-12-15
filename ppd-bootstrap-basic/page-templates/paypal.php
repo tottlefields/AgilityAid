@@ -60,13 +60,15 @@ if (isset($_GET['fees'])){
 			'user_id' => $userId,
 			'payment_date' => date('Y-m-d'),
 			'method' => 'INVOICE',
-			'amount' => $_GET['fees']
+			'amount' => $_GET['fees'],
+			'description' => 'PayPal Fees'
 	);
 	$wpdb->insert( $wpdb->prefix.'agility_payments', $fees_payment);
 }
 
 $new_payment['user_id'] = $userId;
 $new_payment['payment_date'] = $new_payment['date'];
+$new_payment['description'] = 'Payment received, thank you';
 unset($new_payment['date']);
 $wpdb->insert( $wpdb->prefix.'agility_payments', $new_payment);
 $payment_id = $wpdb->insert_id;
