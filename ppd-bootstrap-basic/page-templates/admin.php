@@ -53,7 +53,8 @@ if(isset($_REQUEST['payment_add'])){
 								<option value="">Select Payment Type...</option>
 								<option value="BACS">Bank Transfer</option>
 								<option value="PAYPAL">PayPal</option>
-								<option value="REFUND">Refund Payment</option>
+								<option value="REFUND_BACS">Refund BACS Payment</option>
+								<option value="REFUND_PP">Refund PayPal Payment</option>
 								<option value="CONTRA">Add Contra</option>
 							</select>
 	            		</div>
