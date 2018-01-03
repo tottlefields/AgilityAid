@@ -76,7 +76,7 @@ get_header();
 				
 				if(isset($_GET['edit']) && isset($_GET['dogID'])) {
 					
-					$animal = $wpdb->get_row("SELECT * FROM wpao_agility_dogs WHERE `id` = '".$wpdb->_real_escape($_GET['dogID'])."'", 'ARRAY_A');
+					$animal = $wpdb->get_row("SELECT * FROM wpao_agility_dogs WHERE is_removed=0 and `id` = '".$wpdb->_real_escape($_GET['dogID'])."'", 'ARRAY_A');
 					
 					?>
                     <h1 class="title"><i class="fa fa-paw" aria-hidden="true"></i>&nbsp;<?php echo !empty($_GET['dogID']) ? 'Edit' : 'Add'; ?> Dog</h1>
@@ -254,7 +254,7 @@ get_header();
                         <?php
 					}
 					
-					$animalData = $wpdb->get_results("SELECT * FROM wpao_agility_dogs WHERE user_id = '".$wpdb->_real_escape($userId)."' ORDER BY `pet_name`", 'ARRAY_A');
+					$animalData = $wpdb->get_results("SELECT * FROM wpao_agility_dogs WHERE is_removed=0 AND user_id = '".$wpdb->_real_escape($userId)."' ORDER BY `pet_name`", 'ARRAY_A');
 					
 					if(!empty($animalData)) {
 					?>
