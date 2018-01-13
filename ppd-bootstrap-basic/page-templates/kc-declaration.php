@@ -63,3 +63,5 @@ if (isset($_POST['kc_declaration_ok']) && $_POST['kc_declaration_ok'] == 'on'){
         </div>
     </div>
 </div>
+
+<?php get_footer(); ?>

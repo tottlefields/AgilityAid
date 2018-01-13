@@ -33,6 +33,7 @@ if (isset($_POST['step-4-submitted'])) {
 		$camping['total_pitches'] = $total_pitches;
 		$camping['total_amount'] = $total_amount;
 	}
+	$data['camping_comments'] = $_POST['camping_comments'];
 	$data['camping'] = $camping;	
 	setCustomSessionData($data);
 	
@@ -142,12 +143,12 @@ $camping = (isset($data['camping'])) ? $data['camping'] : array();
 			                        	echo '
                 						</div>
 			                        </div>
-			                        <!--<div class="form-group">
+			                        <div class="form-group">
 			                        	<label for="'.$option.'_group" class="col-sm-4 control-label">Camping Group</label>
 			                        	<div class="col-sm-8">
 			                        		<input type="text" class="form-control" id="'.$option.'_group" name="'.$option.'_group" placeholder="Group to camp with" value="'.$camp_group.'" />
 			                        	</div>
-			                        </div>-->';		                			
+			                        </div>';		                			
 	                		}
 						     echo ' 		
 								</div>
@@ -157,6 +158,13 @@ $camping = (isset($data['camping'])) ? $data['camping'] : array();
                 	}
                 	?>
                 	
+					<hr style="border:0px;" />
+					<div class="col-md-12">
+						<div class="form-group">
+							<label for="camping_comments">Comments:</label>
+							<textarea class="form-control" rows="5" id="camping_comments" name="camping_comments"><?php echo $data['camping_comments']; ?></textarea>
+						</div>
+					</div>
 					<div class="control-group">
                         <div class="controls">
                         	<span class="pull-right">

@@ -26,7 +26,7 @@ $handler = $user_meta['first_name'][0].' '.$user_meta['last_name'][0];
 array_push($handlers, $handler);
 asort($handlers);
 
-$show_id = $_POST['show'] ? $_POST['show'] : $_GET['show'];
+$show_id = isset($_POST['show']) ? $_POST['show'] : $_GET['show'];
 $entry_id = 0;
 
 if(!empty($show_id)) {

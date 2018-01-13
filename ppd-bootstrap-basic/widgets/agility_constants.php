@@ -21,6 +21,31 @@ function get_options_for_jobs($selected){
 	return $options;
 }
 
+function get_options_for_sessions($show_id, $selected){
+
+	$show_meta = get_post_meta($show_id);
+	
+	$show_from = $show_meta['start_date'][0];
+	$show_to   = $show_meta['end_date'][0];	
+	
+	$options = '';
+	$options .= '<option value="any"';
+	if ("any" == $selected){ $options .= ' selected="selected"';}
+	$options .= '>Any</option>';
+	
+	for ($i=$show_from; $i<$show_to; $i++){
+		$dateObj = DateTime::createFromFormat('Ymd', $i);
+		foreach (array('am', 'pm') as $session){
+			$options .= '<option value="'.$i.'_'.$session.'"';
+			if ($i."_".$session == $selected){ $options .= ' selected="selected"';}
+			$options .= '>'.$dateObj->format('l').' ('.$session.')</option>';
+		}
+	}
+	return $options;
+	
+	
+}
+
 function get_all_agility_heights($type){
 	global $KC_HEIGHTS,$BS_HEIGHTS, $TA_HEIGHTS;
 	switch ($type) {

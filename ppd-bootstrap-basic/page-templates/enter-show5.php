@@ -28,9 +28,10 @@ if (isset($_POST['step-5-submitted'])) {
 	$helpers = array();
 	for ($i=0; $i<count($handlers); $i++){
 		if (isset($_POST['job_for_'.$i]) && $_POST['job_for_'.$i] != 'None'){
-			$helpers[$handlers[$i]] = array('job' => $_POST['job_for_'.$i], 'group' => $_POST['group_for_'.$i]);
+			$helpers[$handlers[$i]] = array('job' => $_POST['job_for_'.$i], 'group' => $_POST['group_for_'.$i], 'session' => $_POST['session_for_'.$i]);
 		}
 	}
+	$data['helper_comments'] = $_POST['helper_comments'];
 	$data['helpers'] = $helpers;
 	setCustomSessionData($data);
 	
@@ -55,8 +56,7 @@ elseif ($show_meta['helpers'][0] == 'yes'){
 <p>If everyone does their bit then no-one should need to work more than an hour or so.</p>';
 }
 	
-$helpers_info .= '<p>No-one is expected to forgo running their dogs in the process of helping.</p><p>If you want to work on a particular ring, or do a particular job,  please indicate this below.</p>';
-
+$helpers_info .= '<p>No-one is expected to forgo running their dogs in the process of helping.</p><p>If you want to work on a particular ring, or do a particular job, in a particular session, please indicate this below.</p>';
 
 ?>
 <?php get_header(); ?>
@@ -83,6 +83,11 @@ $helpers_info .= '<p>No-one is expected to forgo running their dogs in the proce
 						<tr>
 							<td><?php echo $handlers[$i]; ?></td>
 							<td>
+								<select name="session_for_<?php echo $i; ?>" id="session_for_<?php echo $i; ?>" class="form-control">
+									<?php echo get_options_for_sessions($data['show_id'], $data['helpers'][$handlers[$i]]['session']); ?>
+								</select>
+							</td>
+							<td>
 								<select name="job_for_<?php echo $i; ?>" id="job_for_<?php echo $i; ?>" class="form-control">
 									<?php echo get_options_for_jobs($data['helpers'][$handlers[$i]]['job']); ?>
 								</select>
@@ -94,6 +99,13 @@ $helpers_info .= '<p>No-one is expected to forgo running their dogs in the proce
 					<?php }
 					?>
 					</table>
+					<hr style="border:0px;" />
+					<div class="col-md-12">
+						<div class="form-group">
+							<label for="helper_comments">Comments:</label>
+							<textarea class="form-control" rows="5" id="helper_comments" name="helper_comments"><?php echo $data['helper_comments']; ?></textarea>
+						</div>
+					</div>
 					<div class="control-group">
                         <div class="controls">
                         	<span class="pull-right">

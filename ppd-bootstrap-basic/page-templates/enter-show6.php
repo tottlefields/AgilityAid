@@ -81,8 +81,9 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
 			}
 		}
 	}
-	
+
 	$showData['class_count'] = $class_count;
+	$showData['pairs_count'] = $_POST['pairs_count'];
 	$showData['nfc_count'] = count($nfc_dogs);
 	//setCustomSessionData($showData);
 	
@@ -139,11 +140,15 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
 	$entryMetaData['postcode'] = $user_meta['postcode'][0];
 	$entryMetaData['dog_count'] = $showData['dog_count'];
 	$entryMetaData['class_count'] = $showData['class_count'];
+	$entryMetaData['pairs_count'] = $showData['pairs_count'];
 	$entryMetaData['nfc_count'] = $showData['nfc_count'];
 	$entryMetaData['total_cost'] = $showData['total_cost'];
 	$entryMetaData['ro_postal'] = $showData['ro_postal'];
 	$entryMetaData['helpers'] = serialize($showData['helpers']);
+	$entryMetaData['helper_comments'] = $showData['helper_comments'];
 	$entryMetaData['camping'] = serialize($showData['camping']);
+	$entryMetaData['camping_comments'] = $showData['camping_comments'];
+	$entryMetaData['pairs_teams'] = serialize($showData['pairs_teams']);
 	$entryMetaData['entry_data'] = serialize($showData[$showData['show_id']]);
 	$entryMetaData['show_data'] = serialize($showData);
 
@@ -200,15 +205,17 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
 			}
 		}
 		update_post_meta($data['show_id'], 'camping_booked', $show_meta['camping_booked'][0]+$showData['camping']['total_pitches']);
+		$message .= '<h4>Camping Comments</h4><p>'.$showData['camping_commentss'].'</p>';
 	}
 	
 	if (count($showData['helpers']) > 0){
 		$message .= '<h3>Helpers</h3>';
 		$message .= '<p>Many thanks for your offers of help at this show...<br /><ul>';
 		foreach ($showData['helpers'] as $h => $offer){
-			$message .= '<li>'.$h.' - <strong>'.$offer['job'].'</strong> with <strong>'.$offer['group'].'</strong></li>';
+			$message .= '<li>'.$h.' - <strong>'.$offer['job'].'</strong> with <strong>'.$offer['group'].'</strong> - '.$offer['session'].'</li>';
 		}
 		$message .= '</ul>';
+		$message .= '<h4>Helper Comments</h4><p>'.$showData['helper_commentss'].'</p>';
 	}
 	
 //	$TO = $current_user->user_email.','.get_bloginfo('admin_email');
@@ -332,6 +339,47 @@ $camping = $data['camping'];
 						<td>&pound;'.sprintf("%.2f", $cost_per_dog).'</td>';
                 	}
                 }
+
+                //debug_array($data['pairs_teams']);
+                
+                $pairs_count = 0;
+                if (isset($data['pairs_teams'])){
+	                $pairs_etc_entered = false;
+	                $pairs_deatils = '';
+	                
+	                foreach ($data['pairs_teams'] as $class_no => $classDetails){
+	                	$entry_count = 0;
+	                	for ($i=0; $i< count($classDetails)-2; $i++){
+	                		$entry = $classDetails[$i];
+	                		foreach ($entry as $combo){
+	                			if ($combo['handler'] != '' || $combo['dog'] != ''){
+	                				$entry_count++;
+	                				$pairs_etc_entered = true;
+	                				break;
+	                			}
+	                		}
+	                	}
+	                	$pairs_count += $entry_count;
+	                	if ($entry_count > 0){
+		                	$total_cost += ($entry_count * $classDetails['price']);
+		                	$pairs_deatils .= '<tr style="background-color: lightyellow;">
+			                	<th colspan="3">'.$class_no.'. '.$classDetails['className'].'</th>
+								<th>'.$entry_count.'</th>
+								<th>&pound;'.sprintf('%.2f', ($entry_count * $classDetails['price'])).'</th>
+			                </tr>';
+	                	}
+	                }
+	                if ($pairs_etc_entered){
+	                	echo $pairs_deatils;
+	                }
+	                else{
+	                	echo '
+						<tr style="background-color: lightyellow;">
+		                	<th>&nbsp;</th>
+		                	<th colspan="4">No pairs/trios/team classes entered.</th>
+		                </tr>';	                	
+	                }
+                }
                 
                 $total_cost += 0.5;
                 
@@ -373,7 +421,8 @@ $camping = $data['camping'];
                 
                         <div class="controls">
                         	<span class="pull-right">
-								<input type="hidden" id="total_cost" name="total_cost" value="<?php echo $total_cost; ?>" />	
+								<input type="hidden" id="total_cost" name="total_cost" value="<?php echo $total_cost; ?>" />
+								<input type="hidden" id="pairs_count" name="pairs_count" value="<?php echo $pairs_count; ?>" />
 	                            <input type="submit" value="Cancel" name="submit" id="cancelEntry" class="btn btn-danger" />
 	                            <input type="submit" value="Finish" name="submit" class="btn btn-success" />
                             </span>

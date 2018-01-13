@@ -84,6 +84,37 @@ if(!isset($user_ref)){
 						}
 						echo '</table>';
 						
+
+						if (get_field('pairs_count-pm', 0, 0) > 0){
+							$pairs_teams = get_field('pairs_teams-pm', false, false);
+
+							//echo '<div class="row">';
+							echo '<h3>Pairs/Trios/Teams entries</h3>';
+							echo '<table class="table table-hover table-responsive">';
+
+							foreach ($pairs_teams as $class_no => $classDetails){
+								$entry_count = 0;
+								for ($i=0; $i< count($classDetails)-2; $i++){
+									$entry = $classDetails[$i];
+									if ($entry[0]['handler'] == '' &&$entry[0]['dog'] == ''){ continue; }
+									echo '<tr><th>'.$class_no.'. '.$classDetails['className'].'</th>';
+									if ($entry[0]['team_name'] != ''){
+										echo '<td>'.$entry[0]['team_name'].'</td>';
+									}
+									else{
+										echo '<td>';
+										foreach ($entry as $combo){
+											echo $combo['dog'].' ('.$combo['handler'].')<br />';
+										}
+										echo '</td>';
+									}
+									echo '</tr>';
+								}
+							}
+							echo '</table>';
+							//echo '</div>';
+						}
+						
 						echo '<div class="row">';
 						$camping = get_field('camping-pm', false, false);
 						if (isset($camping) && count($camping)>0){

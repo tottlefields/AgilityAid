@@ -218,11 +218,12 @@ class Results_List extends WP_List_Table {
 	/**
 	 * Handles data query and filter, sorting, and pagination.
 	 */
-	public function prepare_items($user_id) {
-
+	//public function prepare_items($user_id) {
+	public function prepare_items(){
 		$this->_column_headers = $this->get_column_info();
 		$total_items  = self::record_count();
-		$this->items = self::get_records( $user_id );
+		//$this->items = self::get_records( $user_id );
+		$this->items = self::get_records( );
 	}
 
 
