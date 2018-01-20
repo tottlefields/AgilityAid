@@ -9,7 +9,7 @@
         <!-- <p><a class="btn btn-primary btn-large">Learn more &raquo;</a></p> -->
       </div>
 
-      <div class="alert alert-danger">
+<!--       <div class="alert alert-danger">
 	<p><strong>Cancelled - JDA Dog Training Club – KC Limited Show 13th & 14th January</strong></p>
 <p>	We were informed yesterday that due to errors on the part of the equestrian centre, the arena booking for our January show is not being honoured.<br />
 With no alternative dates and no other suitable arena locally we unfortunately have no choice but to cancel the show.<br />
@@ -20,7 +20,7 @@ We are extremely disappointed to have been let down like this and ask that you b
 <p>Our  sincere apologies, and thanks to everyone who has supported this show.<br />
 JDA DTC</p>
 
-      </div>
+      </div> -->
       <!-- Example row of columns -->
       <div class="row">
         <div class="col-md-4">

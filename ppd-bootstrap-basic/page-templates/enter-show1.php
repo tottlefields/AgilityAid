@@ -10,18 +10,6 @@ startCustomSession();
 global $current_user, $wpdb;
 get_currentuserinfo();
 
-$userId = $current_user->ID;
-
-$dogData = get_dogs_for_user($userId);
-if(count($dogData) == 0){
-	//No dogs registered for this user...
-	wp_redirect(site_url('/account/dogs/'));
-	exit;
-}
-$data['dogs'] = $dogData;
-
-setCustomSessionData($data);
-
 ?>
 <?php get_header(); ?>
 

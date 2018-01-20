@@ -5,10 +5,18 @@ if(!is_user_logged_in()) {
 	exit;
 }
 
-$data = getCustomSessionData();
-
 global $current_user, $wpdb;
 get_currentuserinfo();
+$userId = $current_user->ID;
+
+$data = getCustomSessionData();
+$dogData = get_dogs_for_user($userId);
+if(count($dogData) == 0){
+	//No dogs registered for this user...
+	wp_redirect(site_url('/account/dogs/'));
+	exit;
+}
+$data['dogs'] = $dogData;
 
 $userId = $current_user->ID;
 $user_meta = get_user_meta( $userId );
@@ -51,7 +59,7 @@ if ($show_type == 'kc' && !isset($data['kc_declaration_ok'])){
 	exit;
 }
 
-if (empty($data['dogs'])){
+/*if (empty($data['dogs'])){
 	$dogData = get_dogs_for_user($userId);
 	if(count($dogData) == 0){
 		//No dogs registered for this user...
@@ -59,7 +67,7 @@ if (empty($data['dogs'])){
 		exit;
 	}
 	$data['dogs'] = $dogData;
-}
+}*/
 
 setCustomSessionData($data);
 
@@ -144,11 +152,13 @@ if(isset($_GET['edit']) && $_GET['edit'] === 'yes'){
 	// get posts
 	$posts = get_posts($args);
 	global $post;
+
 	foreach( $posts as $post ) {
 		$data = get_field('show_data-pm', false, false);
 		$entry_id = get_the_ID();
 		continue;
 	}
+	$data['dogs'] = $dogData;
 }
 else{
 	$args = array (
