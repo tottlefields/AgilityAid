@@ -49,7 +49,7 @@ function get_options_for_sessions($show_id, $selected){
 }
 
 function get_all_agility_heights($type){
-	global $KC_HEIGHTS,$BS_HEIGHTS, $TA_HEIGHTS;
+	global $KC_HEIGHTS,$BS_HEIGHTS, $TA_HEIGHTS, $BL_HEIGHTS;
 	switch ($type) {
 		case "kc":
 			return $KC_HEIGHTS;
@@ -75,7 +75,7 @@ function get_agility_height($type, $height){
 }
 
 function get_all_agility_levels($type){
-	global $KC_GRADES, $BS_LEVELS, $TA_LEVELS;
+	global $KC_GRADES, $BS_LEVELS, $TA_LEVELS, $BL_LEVELS;
 	switch ($type) {
 		case "kc":
 			return $KC_GRADES;
