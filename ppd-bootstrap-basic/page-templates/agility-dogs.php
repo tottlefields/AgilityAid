@@ -23,7 +23,7 @@ if(isset($_POST['submit'])) {
 
 	if ($_POST['dogID'] > 0){
 		//Dog meta data.
-		foreach (array('kc_level', 'kc_height', 'bs_height', 'bs_level', 'ta_height', 'ta_level') as $meta_key){
+		foreach (array('kc_level', 'kc_height', 'bs_height', 'bs_level', 'ta_height', 'ta_level', 'bl_height', 'bl_level') as $meta_key){
 			if (isset($formData[$meta_key])){
 				$sql = $wpdb->prepare(
 						'INSERT INTO wpao_agility_dogsmeta (dog_id, meta_key, meta_value) 
@@ -37,7 +37,7 @@ if(isset($_POST['submit'])) {
 	}
 	else{
 		$metaData = array();
-		foreach (array('kc_level', 'kc_height', 'bs_height', 'bs_level', 'ta_height', 'ta_level') as $meta_key){
+		foreach (array('kc_level', 'kc_height', 'bs_height', 'bs_level', 'ta_height', 'ta_level', 'bl_height', 'bl_level') as $meta_key){
 			if (isset($formData[$meta_key])){
 				$metaData[$meta_key] = $formData[$meta_key];
 				unset($formData[$meta_key]);				
