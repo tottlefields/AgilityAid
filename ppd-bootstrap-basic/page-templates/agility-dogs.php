@@ -160,6 +160,7 @@ get_header();
 									<li class="active"><a data-toggle="tab" href="#tab-kc">Kennel Club</a></li>
 									<li><a data-toggle="tab" href="#tab-bs">Beachside</a></li>
 									<li><a data-toggle="tab" href="#tab-ta">T&amp;A Ind</a></li>
+									<li><a data-toggle="tab" href="#tab-bl">Broadlands</a></li>
 									<!-- <li><a href="#">Menu 3</a></li> -->
 								</ul>
 							</div>
@@ -225,6 +226,25 @@ get_header();
 				                        	</div>
 				                        </div>
 									</div>
+                                                                       <div id="tab-bl" class="tab-pane fade">
+                                                        <div class="form-group">
+                                                                <label for="bl_height" class="control-label col-sm-2">Height</label>
+                                                                <div class="col-sm-4">
+                                                                                                <select name="bl_height" class="form-control">
+                                                                                                        <option value="">Select Height...</option>
+                                                                                                        <?php echo get_options_for_heights('bl', $dogMeta['bl_height']); ?>
+                                                                                                </select>
+                                                            </div>
+                                                                <label for="bl_level" class="control-label col-sm-2">Level</label>
+                                                                <div class="col-sm-4">
+                                                                                                <select name="bl_level" class="form-control">
+                                                                                                        <option value="">Select Level...</option>
+                                                                                                        <?php echo get_options_for_levels('bl', $dogMeta['bl_level']); ?>
+                                                                                                </select>
+                                                                </div>
+                                                        </div>
+                                                                        </div>
+
 									<!-- <div id="menu2" class="tab-pane fade">
 										<h4>Menu 2</h4>
 										<p>Some content in menu 2.</p>
