@@ -96,7 +96,17 @@ $payments = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."agility_payments 
                 <!-- <div class="alert alert-warning"><i class="fa fa-paypal" aria-hidden="true"></i>&nbsp;Payments can also be made through <a href="https://www.paypal.me/agilityaid" target="_blank">PayPal.me</a> using the AgilityAid account - <strong>agilityaid@outlook.com</strong>.<br />
                 When paying by PayPal, please note that your payment is subject to a handling fee of 3.5% + 30p, which will be included in your transaction.</div> -->
             </div>
-            <div class="col-md-3">
+	<div class="col-md-3">
+        	<div class="well">
+			<h3 style="margin-top:0px;"><i class="fa fa-paypal" aria-hidden="true"></i>&nbsp;PayPal</h3>
+			<p>
+			Due to new UK law, charges for PayPal payments can no longer be passed on to the payer.  Unfortunately, as we are unable to absorb these charges ourselves we will no longer be able to offer PayPal as a payment method.
+			</p>
+
+
+		</div>
+	</div>
+            <!-- <div class="col-md-3">
 	            <div class="well">
 	            	<h3 style="margin-top:0px;"><i class="fa fa-paypal" aria-hidden="true"></i>&nbsp;PayPal Tool</h3>
 	            	<small>Payments can be made through <a href="https://www.paypal.com" target="_blank">PayPal</a> using our simple tool below. Just enter the amount of money you wish to pay and click the "Buy Now" button.</small>
@@ -137,7 +147,7 @@ $payments = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."agility_payments 
 		                <input type="image" name="submit" border="0" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_LG.gif" alt="PayPal - The safer, easier way to pay online">
 		             </form>
 	            </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </div>
@@ -146,7 +156,7 @@ $payments = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."agility_payments 
 	global $current_user;?>
 <script>
 jQuery(document).ready(function($) {
-	$("#paypal_amount").keyup(function() {
+	/* $("#paypal_amount").keyup(function() {
 		var amount = $(this).val();
 		var fees = Number((amount*0.035)+0.3).toFixed(2);
 		var total = Number(parseFloat(amount) + parseFloat(fees)).toFixed(2);
@@ -156,7 +166,7 @@ jQuery(document).ready(function($) {
 		$("#paypal_amount_final").val(total);
 		$("#paypal_return_url").val("<?php echo get_site_url(); ?>/process-paypal/?result=done&amount="+total+"&fees="+fees+"&user=<?php echo $current_user->ID; ?>");
 		
-	});
+	}); */
 });
 </script>
 

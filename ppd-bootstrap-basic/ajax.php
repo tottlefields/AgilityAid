@@ -258,8 +258,9 @@ function get_entries_from_posts($posts, $show_meta){
 		array_push($user_details, rtrim($userMeta['postcode'][0]));
 		array_push($user_details, (isset($userMeta['mobile'][0])) ? $userMeta['mobile'][0] : $userMeta['landline'][0]);
 		array_push($user_details, $user->user_email);
-	
-		$ro_postal = get_field('show_data-pm', false, false)['ro_postal'];
+
+		$ro_postal = get_field('ro_postal-pm', false, false);	
+		if(!isset($ro_postal) || $ro_postal == ''){ $ro_postal = get_field('show_data-pm', false, false)['ro_postal']; }
 		
 		$nfc_dogs = array();
 		$classes_counted = 0;
@@ -291,7 +292,7 @@ function get_entries_from_posts($posts, $show_meta){
 					array_push($classes[$dog_id][$class['handler']], $class_no);
 					if (!isset($dogs[$dog_id])){ $dogs[$dog_id] = array(); }
 					$dogs[$dog_id]['classHeight'] = $class['height'];
-					$dogs[$dog_id]['classLevel'] = isset($class['level']) ? $class['level'] : $dogs[$dog_id]['level'];
+					$dogs[$dog_id]['classLevel'] = (isset($class['level']) && $class['level'] !='') ? $class['level'] : $dogs[$dog_id]['level'];
 					$dogs[$dog_id]['LHO'] = isset($class['lho']) ? $class['lho'] : 0;
 				}
 			}
@@ -333,6 +334,7 @@ function get_entries_from_posts($posts, $show_meta){
 				$breedTerm = $wpdb->get_row($sql);
 				$dog['breedName'] = $breedTerm->name;
 			}
+			$dogs[$dog_id] = $dog;
 		}
 		
 		foreach ($classes as $dog_id => $classesPerHandler){

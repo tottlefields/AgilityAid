@@ -31,7 +31,7 @@ function getEntryDetails(show_id) {
 		dataType : "json",
 		data : data,
 		success : function(results) {
-			// console.log(results.entries);
+			//console.log(results.entries);
 			jsonToCSV(results.entries, "Entry Details " + results.show.post_name);
 			return;
 		}
@@ -54,6 +54,7 @@ function viewShowEntries(show_id) {
 		success : function(results) {
 			var showData = results.show;
 			var entryData = results.form_data;
+//			console.log(entryData);
 			pdf_online_entries(entryData, showData.post_title, showData.showDates, showData.showMeta.venue, showData.post_name + "_ShowEntries.pdf");
 			return;
 		}

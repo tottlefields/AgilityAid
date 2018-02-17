@@ -161,7 +161,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
 	
 	$message = 'Dear '.$user_meta['first_name'][0].',<br />
 <p>Thank you for entering <strong>'.$show->post_title.'</strong> via the <a href="'.get_bloginfo('url').'">AgilityAid website</a>.</p>
-<p>Your total show entry fees are <strong>&pound;'.sprintf("%.2f", $showData['total_cost']).'</strong>. These fees are made up of class entry fees as per the show schedule, camping fees (where applicable), a &pound;1 postal charge (unless running orders are to be downloaded) and a 50p show adminstration charge. Please make sure all payments are made prior to the closing date ('.$close_date->format('jS M Y').'). You can either pay online using the bank details below, or log into your account to pay via PayPal. Failure to pay will render your entry null and void.</p>
+<p>Your total show entry fees are <strong>&pound;'.sprintf("%.2f", $showData['total_cost']).'</strong>. These fees are made up of class entry fees as per the show schedule, camping fees (where applicable), a &pound;1 postal charge (unless running orders are to be downloaded) and a 50p show adminstration charge. Please make sure all payments are made prior to the closing date ('.$close_date->format('jS M Y').'). You can pay online using the bank details below. Failure to pay will render your entry null and void.</p>
 		
 	Sort Code : 20-41-15<br />
 	Account No. : 40542342<br />
@@ -281,7 +281,7 @@ $camping = $data['camping'];
                 	?>
 					<div class="alert alert-success">
 						<p>Many thanks for your entry. You should receive an email confirmation of your entry shortly.</p>
-						<p>Payment can be made via online bank transfer (details in your email) or by logging into your account and paying by PayPal (this is subject to extra fees).</p>
+						<p>Payment can be made via online bank transfer (details in your email)<!-- or by logging into your account and paying by PayPal (this is subject to extra fees)-->.</p>
 						<p>Please <a href="/account/my-entries/?view=<?php echo $data['show_id']; ?>" class="alert-link">click here</a> to view your entry or <a href="/enter-show/" class="alert-link">here to enter another show</a>.</p>
 					</div>
 					<?php

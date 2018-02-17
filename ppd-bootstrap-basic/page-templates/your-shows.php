@@ -79,6 +79,11 @@ if (!in_array( 'author', $current_user->roles ) && !in_array( 'administrator', $
 	                		$links = array();
 
 	                		//array_push($links, '<a href="javascript:getCompNumbers('.$show_id.')">View Numbers</a>');
+					if (in_array( 'administrator', $current_user->roles )){
+                                                        if ($online_link == ''){
+                                                                array_push($links, '<a href="javascript:getEntryDetails('.$show_id.')">Download Entries</a>');
+                                                        }
+					}
 	                		
 	                		if ($close_date < date('Ymd')){
 	                			$panel_class = 'danger';

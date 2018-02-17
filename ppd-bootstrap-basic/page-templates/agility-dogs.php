@@ -160,7 +160,7 @@ get_header();
 									<li class="active"><a data-toggle="tab" href="#tab-kc">Kennel Club</a></li>
 									<li><a data-toggle="tab" href="#tab-bs">Beachside</a></li>
 									<li><a data-toggle="tab" href="#tab-ta">T&amp;A Ind</a></li>
-									<li><a data-toggle="tab" href="#tab-bl">Broadlands</a></li>
+									<li><a data-toggle="tab" href="#tab-bl">Broads</a></li>
 									<!-- <li><a href="#">Menu 3</a></li> -->
 								</ul>
 							</div>

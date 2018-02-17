@@ -324,7 +324,7 @@ if(!isset($user_ref)){
 	Account No. : 40542342<br />
 	Your Reference : <strong>'.$user_ref.'</strong><br /></div>
 		</div>
-							<div class="alert alert-warning"><i class="fa fa-paypal" aria-hidden="true"></i>&nbsp;When paying by PayPal, please note that there is a handling fee of 3.5% + 30p added to your transaction.</div>';
+							<!-- <div class="alert alert-warning"><i class="fa fa-paypal" aria-hidden="true"></i>&nbsp;When paying by PayPal, please note that there is a handling fee of 3.5% + 30p added to your transaction.</div>-->';
 							wp_reset_postdata();
 						}
 					

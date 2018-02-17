@@ -173,7 +173,7 @@ function check_class_height($type, $dogHeight, $minHeight, $maxHeight){
 function get_dogs_for_user($userId){
 	global $wpdb;
 	$dogs = array();
-	$dogData = $wpdb->get_results("SELECT * FROM wpao_agility_dogs WHERE user_id = '".$wpdb->_real_escape($userId)."' ORDER BY `pet_name`", 'ARRAY_A');
+	$dogData = $wpdb->get_results("SELECT * FROM wpao_agility_dogs WHERE is_removed=0 AND user_id = '".$wpdb->_real_escape($userId)."' ORDER BY `pet_name`", 'ARRAY_A');
 	if(!empty($dogData)) {
 		foreach($dogData as $dog) {
 			$dogMeta = array();
