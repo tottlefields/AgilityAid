@@ -52,7 +52,7 @@ foreach ($entries as $entry){
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12" id="main-content">
-				<h1 class="title">Show Data for <?php echo $show->post_title; ?> <span class="pull-right"><a href="/account/" class="btn btn-info">My Account</a></span></h1>
+				<h1 class="title">Show Data for <?php echo $show->post_title; ?> <span class="pull-right"><a href="/account/" class="btn btn-info">My Account</a>&nbsp;<a href="/account/your-shows/" class="btn btn-primary">Your Shows</a></span></h1>
           		<div class="row">
           			<div class="col-md-7">
 		            	<h3 style="margin-top:0px;">Class Counts</h3>
