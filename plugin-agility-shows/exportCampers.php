@@ -1,24 +1,31 @@
 <?php
 global $wpdb;
-$show_id = 431;
+//$show_id = 431;
 //$show_id = 428;
 
-$show = get_post( $show_id );
-$show_meta = get_post_meta($show_id);
+if (count($args) != 1){
+        echo "ERROR : you must provide this script with the following (in this order):- <Show ID>\n\n";
+        exit(1);
+}
+
+$SHOW_ID   = $args[0];
+
+$show = get_post( $SHOW_ID );
+$show_meta = get_post_meta($SHOW_ID);
 $camping_options = unserialize($show_meta['camping_options'][0]);
 
 $args = array (
 		'post_type'	=> 'entries',
 		'post_status'	=> array('publish'),
 		'numberposts'	=> -1,
-		'post_parent' 	=> $show_id
+		'post_parent' 	=> $SHOW_ID
 );
 // get posts
 $posts = get_posts($args);
 //echo count($posts)."\n";
 
 global $post;
-echo implode("\t", array("Form", "Firstname", "Surname", "Fullname", "Option", "Pitches", "Group"))."\n";
+echo implode("\t", array("Form", "Firstname", "Surname", "Fullname", "Option", "Pitches", "Group", "Comments"))."\n";
 foreach( $posts as $post ) {
 	//echo get_the_ID()."\n";
 	setup_postdata( $post );
@@ -45,6 +52,8 @@ foreach( $posts as $post ) {
 			$total_amount += $cost_per_option;
 		}
 		array_push($camping_list, $camping_data['camping_group']);
+		$camping_comments = get_post_meta( get_the_ID(), 'camping_comments-pm', true );
+		array_push($camping_list, $camping_comments);
 		echo implode("\t", $camping_list)."\n";
 	}
 }
