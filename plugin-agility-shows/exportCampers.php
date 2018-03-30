@@ -1,6 +1,6 @@
 <?php
 global $wpdb;
-$show_id = 431;
+$show_id = 968;
 //$show_id = 428;
 
 $show = get_post( $show_id );
