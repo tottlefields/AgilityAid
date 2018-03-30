@@ -44,7 +44,18 @@ foreach ($entries as $entry){
 			else {$class_counts[$class_no]++;}
 		}
 	}
+	if ( get_post_meta($show_id, 'pairs_teams-pm', true) != 'none'){
+	    $pairs_teams = unserialize(get_post_meta($show_id, 'pairs_teams-pm', true));
+	    debug_array($pairs_teams);
+	}
 }
+
+/*if (get_post_meta($show_id, 'camping_avail', true)){
+	echo "CAMPERS....";	
+}
+if (get_post_meta($show_id, 'helpers', true) && get_post_meta($show_id, 'helpers', true) != 'none'){
+	echo "HELPERS....";
+}*/
 ?>
 <?php get_header(); ?>
 
