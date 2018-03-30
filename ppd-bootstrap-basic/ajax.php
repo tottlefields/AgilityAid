@@ -319,7 +319,8 @@ function get_entries_from_posts($posts, $show_meta){
 			$dog['kc_name'] = str_replace("\'", "'", $dog['kc_name']);
 			
 			if (!isset($dog['classHeight']) || !isset($dog['classLevel'])){
-				$sql = $wpdb->prepare("select meta_key, meta_value from {$wpdb->prefix}agility_dogsmeta where dog_id = $dog_id and meta_key like '".$show_aff."_%'");
+				//$sql = $wpdb->prepare("select meta_key, meta_value from {$wpdb->prefix}agility_dogsmeta where dog_id = $dog_id and meta_key like '".$show_aff."_\%'");
+				$sql = "select meta_key, meta_value from {$wpdb->prefix}agility_dogsmeta where dog_id = $dog_id and meta_key like '".$show_aff."_%'";
 				$results = $wpdb->get_results( $sql, 'OBJECT_K');
 				if (!isset($dog['classHeight'])){
 					$dog['classHeight'] = $results[$show_aff."_height"]->meta_value;
@@ -383,7 +384,7 @@ function get_entries_from_posts($posts, $show_meta){
 		if (count($helpers) > 0){
 			$entries['helpers'][$post->ID] = $helpers;
 		}
-		
+
 		$class_cost = ($total_cost/get_field('show_data-pm', false, false)['class_count']);
 		if ($guess_class_cost == 0 && $class_cost > 0){ $guess_class_cost = $class_cost; }
 		if (!$class_cost){ $class_cost = $guess_class_cost; }
