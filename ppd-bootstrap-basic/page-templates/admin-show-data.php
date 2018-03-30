@@ -44,9 +44,21 @@ foreach ($entries as $entry){
 			else {$class_counts[$class_no]++;}
 		}
 	}
-	if ( get_post_meta($entry->ID, 'pairs_teams-pm', true) != 'none'){
+	if ( get_post_meta($entry->ID, 'pairs_count-pm', true) > 0){
+	//if ( get_post_meta($entry->ID, 'pairs_teams-pm', true) != 'none' ){
 	    $pairs_teams = unserialize(get_post_meta($entry->ID, 'pairs_teams-pm', true));
-	    debug_array($pairs_teams);
+	    foreach ($pairs_teams as $class_no => $classDetails){
+		for ($i=0; $i< count($classDetails)-2; $i++){
+	        	$class_entry = $classDetails[$i];
+	                foreach ($class_entry as $combo){
+	                	if ($combo['handler'] != '' || $combo['dog'] != ''){
+					if (isset($class_details['lho']) && $class_details['lho']){$class_counts[$class_no.':lho']++;}
+		                        else {$class_counts[$class_no]++;}
+					break;
+	                	}
+	                }
+	        }
+	    }
 	}
 }
 
