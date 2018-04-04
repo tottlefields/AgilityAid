@@ -82,6 +82,15 @@ if (!in_array( 'author', $current_user->roles ) && !in_array( 'administrator', $
 							if (in_array( 'administrator', $current_user->roles )){
 								if ($online_link == ''){
 									array_push($links, '<a href="javascript:getEntryDetails('.$show_id.')">Download Entries</a>');
+									$classes = get_field('classes', false, false);
+									foreach ($classes as $date => $class_list){
+										foreach ($class_list as $class){
+											if ($class['noDogs'] > 1){ 
+												array_push($links, '<a href="javascript:getPairsDetails('.$show_id.')">Download Pairs/Trios/Teams</a>');
+												break;
+											}
+										}
+									}
 								}
 							}
 							
