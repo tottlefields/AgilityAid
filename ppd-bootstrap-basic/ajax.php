@@ -3,6 +3,9 @@
 add_action('wp_ajax_entry_details', 'get_comp_entries');
 add_action('wp_ajax_nopriv_entry_details', 'get_comp_entries');
 
+add_action('wp_ajax_pairs_details', 'get_pairs_entries');
+add_action('wp_ajax_nopriv_pairs_details', 'get_pairs_entries');
+
 add_action('wp_ajax_entry_data', 'get_entry_data');
 add_action('wp_ajax_nopriv_entry_data', 'get_entry_data');
 
@@ -172,6 +175,49 @@ function get_comp_entries(){
 	wp_die();
 }
 
+function get_pairs_entries(){
+	global $wpdb, $current_user;
+	_check_is_admin();
+	
+	$return = array();
+	
+	$show_id = intval($_POST['show_id']);
+	$show = get_post( $show_id );
+	$show_meta = get_post_meta($show_id);
+	$show->showMeta = $show_meta;
+	
+	$start_date = new DateTime(get_field('start_date', false, false));
+	$end_date 	= new DateTime(get_field('end_date', false, false));
+	
+	$show_dates = $start_date->format('jS M');
+	if($start_date != $end_date){
+		$show_dates .= ' to '.$end_date->format('jS M Y');
+	}
+	else{
+		$show_dates .= $start_date->format(' Y');
+	}
+	
+	$show->showDates = $show_dates;
+	
+	$return['show'] = $show;
+	
+	$args = array (
+			'post_type'		=> 'entries',
+			'post_status'	=> array('publish'),
+			'numberposts'	=> -1,
+			'order'			=> 'DESC',
+			'post_parent' 	=> $show_id
+	);
+	
+	// get entries (posts)
+	$posts = get_posts($args);
+	$entries = get_entries_from_posts($posts, $show_meta);
+	
+	$return['pairs_info'] = $entries['pairs_data'];
+	echo json_encode($return);
+	wp_die();
+}
+
 function view_comp_nos(){
 	global $wpdb, $current_user;
 	
@@ -236,6 +282,7 @@ function get_entries_from_posts($posts, $show_meta){
 	global $wpdb, $post;
 	$entries = array();
 	$entries['class_data'] = array();
+	$entries['pairs_data'] = array();
 	$entries['helpers'] = array();
 	$entries['camping'] = array();
 	$entries['fees'] = array();
@@ -336,6 +383,21 @@ function get_entries_from_posts($posts, $show_meta){
 				$dog['breedName'] = $breedTerm->name;
 			}
 			$dogs[$dog_id] = $dog;
+		}
+		
+		if ( get_post_meta($post->ID, 'pairs_count-pm', true) > 0){
+			$pairs_teams = unserialize(get_post_meta($post->ID, 'pairs_teams-pm', true));
+			foreach ($pairs_teams as $class_no => $pairsDetails){
+				for ($i=0; $i< count($pairsDetails)-2; $i++){
+					$class_entry = $pairsDetails[$i];
+	                foreach ($class_entry as $combo){
+	                	if ($combo['handler'] != '' || $combo['dog'] != ''){
+							$entry_row = array($user_details[0], $class_no, ($i+1), $combo['handler'], $combo['dog']);
+							array_push($entries['pairs_data'], $entry_row);
+						}
+					}
+				}
+			}
 		}
 		
 		foreach ($classes as $dog_id => $classesPerHandler){

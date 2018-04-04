@@ -39,6 +39,27 @@ function getEntryDetails(show_id) {
 
 }
 
+function getPairsDetails(show_id){
+
+	var data = {
+                'action' : 'pairs_details',
+                'show_id' : show_id
+        };
+
+        jQuery.ajax({
+                type : "post",
+                url : ajaxObject.ajax_url,
+                dataType : "json",
+                data : data,
+                success : function(results) {
+                        //console.log(results.pairs_info);
+                        jsonToCSV(results.pairs_info, "Pairs Details " + results.show.post_name);
+                        return;
+                }
+        });
+
+}
+
 function viewShowEntries(show_id) {
 
 	var data = {
