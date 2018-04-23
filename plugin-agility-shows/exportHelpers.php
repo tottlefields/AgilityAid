@@ -1,23 +1,28 @@
 <?php
 global $wpdb;
-$show_id = 431;
-//$show_id = 428;
 
-$show = get_post( $show_id );
-$show_meta = get_post_meta($show_id);
+if (count($args) != 1){
+        echo "ERROR : you must provide this script with the following (in this order):- <Show ID>\n\n";
+        exit(1);
+}
+
+$SHOW_ID   = $args[0];
+
+$show = get_post( $SHOW_ID );
+$show_meta = get_post_meta( $SHOW_ID );
 
 $args = array (
 		'post_type'	=> 'entries',
 		'post_status'	=> array('publish'),
 		'numberposts'	=> -1,
-		'post_parent' 	=> $show_id
+		'post_parent' 	=> $SHOW_ID
 );
 // get posts
 $posts = get_posts($args);
 //echo count($posts)."\n";
 
 global $post;
-echo implode("\t", array("Form", "Firstname", "Surname", "Fullname", "Job", "Group"))."\n";
+echo implode("\t", array("Form", "Firstname", "Surname", "Fullname", "Job", "Group", "Session"))."\n";
 foreach( $posts as $post ) {
 	//echo get_the_ID()."\n";
 	setup_postdata( $post );
@@ -36,10 +41,13 @@ foreach( $posts as $post ) {
 				$user_details[2] = implode(' ', $handler_details);
 				$user_details[3] = $handler;
 			}
+
+//			print_r($job_info);
 			
 			$helpers_list = array_merge($helpers_list, $user_details);
 			array_push($helpers_list, $job_info['job']);
 			array_push($helpers_list, $job_info['group']);
+			array_push($helpers_list, $job_info['session']);
 			
 			echo implode("\t", $helpers_list)."\n";
 		}
