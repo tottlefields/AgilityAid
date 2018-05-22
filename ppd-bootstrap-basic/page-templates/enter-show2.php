@@ -310,7 +310,7 @@ $all_dogs_nfc = 1;
 //				     			}
 				     			
 				     			if ($class['minLevel'] != $class['maxLevel']){
-				     				$levels = '';
+				     				$levels = $class['minLevel']."-".$class['maxLevel'].' ('.$level.')<input type="hidden" name="form-data['.$show_id.']['.$dog['id'].'][classes]['.$class['classNo'].'][level]" value="'.$level.'" />';
 				     				# TODO
 				     			}
 				     			else{
