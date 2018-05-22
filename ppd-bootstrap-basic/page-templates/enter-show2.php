@@ -130,7 +130,6 @@ if(!empty($data['show_id']) && isset($_POST['step-2-submitted'])) {
 	exit;
 }
 
-
 //check if this user has already entered this show and ask re editing/cancelling
 if(isset($_GET['edit']) && $_GET['edit'] === 'yes'){
 	//confirmed editing of the show entry...
@@ -140,13 +139,14 @@ if(isset($_GET['edit']) && $_GET['edit'] === 'yes'){
 		'order'		=> 'ASC',
 		'numberposts'	=> 10,
 		'author'		=> $userId,
-		'meta_query' 	=> array(
-			array(
-				'key'		=> 'show_id-pm',
-				'compare'	=> '=',
-				'value'		=> $show_id,
-			),
-		)
+		'post_parent' => $show_id
+//		'meta_query' 	=> array(
+//			array(
+//				'key'		=> 'show_id-pm',
+//				'compare'	=> '=',
+//				'value'		=> $show_id,
+//			),
+//		)
 	);
 
 	// get posts
@@ -167,13 +167,14 @@ else{
 		'order'		=> 'ASC',
 		'numberposts'	=> 10,
 		'author'		=> $userId,
-		'meta_query' 	=> array(
-			array(
-				'key'		=> 'show_id-pm',
-				'compare'	=> '=',
-				'value'		=> $show_id,
-			),
-		)
+		'post_parent' => $show_id
+//		'meta_query' 	=> array(
+//			array(
+//				'key'		=> 'show_id-pm',
+//				'compare'	=> '=',
+//				'value'		=> $show_id,
+//			),
+//		)
 	);
 	
 	// get posts

@@ -50,13 +50,14 @@ if(!isset($user_ref)){
 						'order'		=> 'ASC',
 						'numberposts'	=> -1,
 						'author'		=> $userId,
-						'meta_query' 	=> array(
-							array(
-								'key'		=> 'show_id-pm',
-								'compare'	=> '=',
-								'value'		=> $_GET['view'],
-							),
-						)
+						'post_parent' 	=> $show_id
+//						'meta_query' 	=> array(
+//							array(
+//								'key'		=> 'show_id-pm',
+//								'compare'	=> '=',
+//								'value'		=> $_GET['view'],
+//							),
+//						)
 					);
 					
 					// get posts
@@ -183,14 +184,15 @@ if(!isset($user_ref)){
 					global $post;
 					$shows = array();
 					$money = array();
-			
+
 					// loop
 					if( $posts ) {
 						foreach( $posts as $post ) {
 							$total_money = 0;
 							$outstanding = 0;
 							setup_postdata( $post );
-							$show_id = get_field('show_id-pm', false, false);
+							//$show_id = get_field('show_id-pm', false, false);
+							$show_id = $post->post_parent;
 							$total_cost = get_field('total_cost-pm');
 							$total_money += $total_cost;
 							$outstanding += $total_cost;
