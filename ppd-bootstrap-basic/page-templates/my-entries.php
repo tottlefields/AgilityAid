@@ -50,7 +50,7 @@ if(!isset($user_ref)){
 						'order'		=> 'ASC',
 						'numberposts'	=> -1,
 						'author'		=> $userId,
-						'post_parent' 	=> $show_id
+						'post_parent' 	=> $_GET['view']
 //						'meta_query' 	=> array(
 //							array(
 //								'key'		=> 'show_id-pm',
@@ -60,6 +60,7 @@ if(!isset($user_ref)){
 //						)
 					);
 					
+
 					// get posts
 					$posts = get_posts($args);
 					global $post;
