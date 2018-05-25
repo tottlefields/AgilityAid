@@ -41,6 +41,7 @@ if(!empty($show_id)) {
 	$data['show_id'] = $show_id;
 }
 
+
 if(empty($data['show_id'])) {
 	wp_redirect(site_url('/enter-show/'));
 	exit;
@@ -53,23 +54,62 @@ $show = get_post( $show_id );
 $show_meta = get_post_meta($show_id);
 $show_type = $show_meta['affiliation'][0];
 
-if ($show_type == 'kc' && !isset($data['kc_declaration_ok'])){
-	setCustomSessionData($data);
-	wp_redirect(site_url('/enter-show/kc-declaration/'));
-	exit;
+setCustomSessionData($data);
+
+//check if this user has already entered this show and ask re editing/cancelling
+if(isset($_GET['edit']) && $_GET['edit'] === 'yes'){
+        //confirmed editing of the show entry...
+        $args = array (
+                'post_type'     => 'entries',
+                'post_status'   => array('publish'),
+                'order'         => 'ASC',
+                'numberposts'   => 10,
+                'author'                => $userId,
+                'post_parent' => $show_id
+        );
+
+        // get posts
+        $posts = get_posts($args);
+        global $post;
+
+        foreach( $posts as $post ) {
+                $data = get_field('show_data-pm', false, false);
+                $entry_id = get_the_ID();
+                continue;
+        }
+        $data['dogs'] = $dogData;
+}
+else{
+        $args = array (
+                'post_type'     => 'entries',
+                'post_status'   => array('publish'),
+                'order'         => 'ASC',
+                'numberposts'   => 10,
+                'author'                => $userId,
+                'post_parent' => $show_id
+        );
+
+        // get posts
+        $posts = get_posts($args);
+        if(count($posts) > 0){
+                $error = '<br />
+                <div class="alert alert-warning">
+                        You appear to have already entered this show, please click below indicating how you wish to proceed:-
+                        <hr />
+                        <div class="btn-group btn-group-justified btn-group-lg" role="group">
+                                <a href="/enter-show/confirmation/?delete='.$show_id.'" class="btn btn-danger">Delete entry and start again.</a>
+                                <a href="/enter-show/individual-classes/?show='.$show_id.'&edit=yes" class="btn btn-success">Edit current entry.</a>
+                        </div>
+                </div>';
+        }
 }
 
-/*if (empty($data['dogs'])){
-	$dogData = get_dogs_for_user($userId);
-	if(count($dogData) == 0){
-		//No dogs registered for this user...
-		wp_redirect(site_url('/account/dogs/'));
+if (!$error){
+	if ($show_type == 'kc' && !isset($data['kc_declaration_ok'])){
+		wp_redirect(site_url('/enter-show/kc-declaration/'));
 		exit;
 	}
-	$data['dogs'] = $dogData;
-}*/
-
-setCustomSessionData($data);
+}
 
 if(!empty($data['show_id']) && isset($_POST['step-2-submitted'])) {
 	$showData = $data;
@@ -131,7 +171,7 @@ if(!empty($data['show_id']) && isset($_POST['step-2-submitted'])) {
 }
 
 //check if this user has already entered this show and ask re editing/cancelling
-if(isset($_GET['edit']) && $_GET['edit'] === 'yes'){
+/*if(isset($_GET['edit']) && $_GET['edit'] === 'yes'){
 	//confirmed editing of the show entry...
 	$args = array (
 		'post_type'	=> 'entries',
@@ -140,13 +180,6 @@ if(isset($_GET['edit']) && $_GET['edit'] === 'yes'){
 		'numberposts'	=> 10,
 		'author'		=> $userId,
 		'post_parent' => $show_id
-//		'meta_query' 	=> array(
-//			array(
-//				'key'		=> 'show_id-pm',
-//				'compare'	=> '=',
-//				'value'		=> $show_id,
-//			),
-//		)
 	);
 
 	// get posts
@@ -168,13 +201,6 @@ else{
 		'numberposts'	=> 10,
 		'author'		=> $userId,
 		'post_parent' => $show_id
-//		'meta_query' 	=> array(
-//			array(
-//				'key'		=> 'show_id-pm',
-//				'compare'	=> '=',
-//				'value'		=> $show_id,
-//			),
-//		)
 	);
 	
 	// get posts
@@ -190,7 +216,7 @@ else{
 			</div>
 		</div>';
 	}
-}
+}*/
 
 $classes = unserialize($show_meta['classes'][0]);
 $lho_options = (isset($show_meta['lho_options'])) ? unserialize($show_meta['lho_options'][0]) : array();
