@@ -46,7 +46,7 @@ if(isset($_GET['cancel']) || isset($_GET['delete'])){
 		wp_delete_post(get_the_ID());
 		$wpdb->delete( $wpdb->prefix.'agility_payments', array('user_id' => $userId, 'method' => 'INVOICE', 'post_ids' => get_the_ID()));
 	}
-	wp_redirect(site_url('/enter-show/'));
+	wp_redirect(site_url('/enter-show/?show='.$data['show_id']));
 	exit;
 }
 
@@ -227,7 +227,6 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
 
 //debug_array($data);
 $camping = $data['camping'];
-
 
 ?>
 <?php get_header(); ?>
