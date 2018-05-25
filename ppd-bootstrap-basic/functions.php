@@ -172,6 +172,10 @@ function endCustomSession() {
 	session_destroy();
 }
 
+function clearCustomSessionData() {
+	$_SESSION['data'] = serialize(array());
+}
+
 function getCustomSessionData() {
 	return unserialize($_SESSION['data']);
 }
