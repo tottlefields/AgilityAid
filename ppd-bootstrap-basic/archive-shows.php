@@ -68,7 +68,7 @@ if (get_query_var('year') > 0){ $title = get_query_var('year').' Shows'; $color_
                 			}
                 		}
                 		elseif ($online_link == ''){
-                			$enter_show_link = '|| <img src="'.get_stylesheet_directory_uri() . '/img/logo.png" style="height:16px" />&nbsp;<a href="/enter-show/individual-classes/?show='.$post_id.'">Enter Online</a>';                				
+                			$enter_show_link = '|| <img src="'.get_stylesheet_directory_uri() . '/img/logo.png" style="height:16px" />&nbsp;<a href="/enter-show/?show='.$post_id.'">Enter Online</a>';                				
                 		}
                 		
                 		//green (success) for open shows; orange (warning) for closing in 7 days; red (danger) for closed
