@@ -6,6 +6,15 @@ if(!is_user_logged_in()) {
 }
 
 startCustomSession();
+clearCustomSessionData();
+
+$show_id = isset($_POST['show']) ? $_POST['show'] : $_GET['show'];
+if (isset($show_id)){
+	$data = array('show_id' => $show_id);
+	setCustomSessionData($data);
+	wp_redirect(site_url('/enter-show/individual-classes/?show='.$data['show_id']));
+	exit;
+}
 
 global $current_user, $wpdb;
 get_currentuserinfo();
