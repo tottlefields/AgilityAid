@@ -101,7 +101,8 @@ function get_entry_data(){
 		$lho = '';
 		if ($entry[26] === 1) { $lho = 'Y'; }
 		if ($entry[26] === 0) { $lho = 'N'; }
-		
+	
+		$dog_ring_no = $wpdb->get_var("SELECT ring_no FROM ".$wpdb->prefix."ring_card_info WHERE post_id=$entry[0] AND dog_id=$entry[12]");	
 		array_push($forms_array[$form_no]['dogs'], array(
 				'kc_name' => strtoupper($entry[4]),
 				'pet_name' => strtoupper($entry[5]),
@@ -111,7 +112,8 @@ function get_entry_data(){
 				'breed' => strtoupper($entry[8]),
 				'grade' => $entry[7],
 				'handler' => strtoupper($entry[3]),
-				'ring_no' => $entry[12],
+				'ring_no' => $dog_ring_no,
+				'dog_id' => $entry[12],
 				'lho' => $lho,
 				'classes' => $entry[25]
 		));
