@@ -208,7 +208,7 @@ function get_pairs_entries(){
 			'post_type'		=> 'entries',
 			'post_status'	=> array('publish'),
 			'numberposts'	=> -1,
-			'order'			=> 'DESC',
+			'order'			=> 'ASC',
 			'post_parent' 	=> $show_id
 	);
 	
