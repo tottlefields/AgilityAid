@@ -66,6 +66,7 @@ function viewShowEntries(show_id) {
 		'action' : 'entry_data',
 		'show_id' : show_id
 	};
+	$('html, body').css("cursor", "wait !important");
 
 	jQuery.ajax({
 		type : "post",
@@ -75,9 +76,13 @@ function viewShowEntries(show_id) {
 		success : function(results) {
 			var showData = results.show;
 			var entryData = results.form_data;
-//			console.log(entryData);
+			//console.log(entryData);
 			pdf_online_entries(entryData, showData.post_title, showData.showDates, showData.showMeta.venue, showData.post_name + "_ShowEntries.pdf");
+			$('html, body').css("cursor", "auto");
 			return;
+		},
+		error : function(){
+			$('html, body').css("cursor", "auto");
 		}
 	});
 
@@ -125,8 +130,9 @@ function pdf_online_entries(entryDetails, showName, showDates, showVenue, fileNa
 	ddShowEntries.content.push(header(showName, showDates, showVenue));
 	ddShowEntries.content.push(mainContent(entryDetails));
 
-	pdfMake.createPdf(ddShowEntries).download(fileName);
-	//pdfMake.createPdf(ddShowEntries).open();
+	pdfObj = pdfMake.createPdf(ddShowEntries);
+	pdfObj.download(fileName);
+	//pdfObj.open();
 
 }
 
