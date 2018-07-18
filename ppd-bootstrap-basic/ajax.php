@@ -342,7 +342,11 @@ function get_entries_from_posts($posts, $show_meta){
 					if (!isset($dogs[$dog_id])){ $dogs[$dog_id] = array(); }
 					$dogs[$dog_id]['classHeight'] = $class['height'];
 					$dogs[$dog_id]['classLevel'] = (isset($class['level']) && $class['level'] !='') ? $class['level'] : $dogs[$dog_id]['level'];
-					$dogs[$dog_id]['LHO'] = isset($class['lho']) ? $class['lho'] : 0;
+					$lho = 0;
+					if (isset($class['lho'])){ $lho = 1; }
+					if (isset($dogEntry['lho']) && $dogEntry['lho'] != ''){ $lho = 1; }
+					//$dogs[$dog_id]['LHO'] = isset($class['lho']) ? $class['lho'] : 0;
+					$dogs[$dog_id]['LHO'] = $lho;
 				}
 			}
 			else{
