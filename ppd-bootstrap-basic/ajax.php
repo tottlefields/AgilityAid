@@ -68,54 +68,55 @@ function get_entry_data(){
 	$entryData = get_entries_from_posts($posts, $show_meta);	
 	$entries = $entryData['class_data'];
 	
-	$form_no = 999;
-	$last_ring_no = 0;
+//	$form_no = 999;
+	$last_form_no = 0;
 	$forms_array = array();
 	foreach ($entries as $entry){
-		if ($entry[0] !== $last_ring_no) {
-			$last_ring_no = $entry[0];
-			$form_no++;
+		if ($entry[0] !== $last_form_no) {
+			$last_form_no = $entry[0];
+			$form_no = $entry[0];
+//			$form_no++;
 			
-			$address = array_filter(array_slice($entry, 13, 6));
+			$address = array_filter(array_slice($entry, 14, 6));
 			$forms_array[$form_no] = array();
 			$forms_array[$form_no]['details'] = array(
-					'name' => strtoupper($entry[3]),
+					'name' => strtoupper($entry[4]),
 					'address' => strtoupper(implode(', ', $address)),
-					'tel' => $entry[19],
-					'email' => $entry[20]
+					'tel' => $entry[20],
+					'email' => $entry[21]
 			);
 			$forms_array[$form_no]['dogs'] = array();
 			$forms_array[$form_no]['camping'] = array();
 			$forms_array[$form_no]['helpers'] = array();
-			$forms_array[$form_no]['fees'] = $entryData['fees'][$entry[0]];
+			$forms_array[$form_no]['fees'] = $entryData['fees'][$entry[1]];
 			
-			if (isset($entryData['camping'][$entry[0]])){
-				$forms_array[$form_no]['camping'] = $entryData['camping'][$entry[0]];
+			if (isset($entryData['camping'][$entry[1]])){
+				$forms_array[$form_no]['camping'] = $entryData['camping'][$entry[1]];
 			}
 			
-			if (isset($entryData['helpers'][$entry[0]])){
-				$forms_array[$form_no]['helpers'] = $entryData['helpers'][$entry[0]];
+			if (isset($entryData['helpers'][$entry[1]])){
+				$forms_array[$form_no]['helpers'] = $entryData['helpers'][$entry[1]];
 			}
 		}
 		
 		$lho = '';
-		if ($entry[26] === 1) { $lho = 'Y'; }
-		if ($entry[26] === 0) { $lho = 'N'; }
+		if ($entry[27] === 1) { $lho = 'Y'; }
+		if ($entry[27] === 0) { $lho = 'N'; }
 	
-		$dog_ring_no = $wpdb->get_var("SELECT ring_no FROM ".$wpdb->prefix."ring_card_info WHERE post_id=$entry[0] AND dog_id=$entry[12]");	
+		$dog_ring_no = $wpdb->get_var("SELECT ring_no FROM ".$wpdb->prefix."ring_card_info WHERE post_id=$entry[1] AND dog_id=$entry[13]");
 		array_push($forms_array[$form_no]['dogs'], array(
-				'kc_name' => strtoupper($entry[4]),
-				'pet_name' => strtoupper($entry[5]),
-				'kc_no' => strtoupper($entry[11]),
-				'sex' => strtoupper($entry[9]),
-				'dob' => SQLToDate($entry[10]),
-				'breed' => strtoupper($entry[8]),
-				'grade' => $entry[7],
-				'handler' => strtoupper($entry[3]),
+				'kc_name' => strtoupper($entry[5]),
+				'pet_name' => strtoupper($entry[6]),
+				'kc_no' => strtoupper($entry[12]),
+				'sex' => strtoupper($entry[10]),
+				'dob' => SQLToDate($entry[11]),
+				'breed' => strtoupper($entry[9]),
+				'grade' => $entry[8],
+				'handler' => strtoupper($entry[4]),
 				'ring_no' => $dog_ring_no,
-				'dog_id' => $entry[12],
+				'dog_id' => $entry[13],
 				'lho' => $lho,
-				'classes' => $entry[25]
+				'classes' => $entry[26]
 		));
 		
 		//if ($form_no > 1005){ break; }
@@ -161,10 +162,10 @@ function get_comp_entries(){
 	$return['show'] = $show;
 	
 	$args = array (
-			'post_type'		=> 'entries',
+			'post_type'	=> 'entries',
 			'post_status'	=> array('publish'),
 			'numberposts'	=> -1,
-			'order'			=> 'DESC',
+			'order'		=> 'ASC',
 			'post_parent' 	=> $show_id
 	);
 	
@@ -207,7 +208,7 @@ function get_pairs_entries(){
 			'post_type'		=> 'entries',
 			'post_status'	=> array('publish'),
 			'numberposts'	=> -1,
-			'order'			=> 'DESC',
+			'order'			=> 'ASC',
 			'post_parent' 	=> $show_id
 	);
 	
@@ -292,6 +293,7 @@ function get_entries_from_posts($posts, $show_meta){
 	$show_aff = $show_meta['affiliation'][0];
 	
 	$guess_class_cost = 0;
+	$form_no = 999;
 	
 	foreach( $posts as $post ) {
 		setup_postdata( $post );
@@ -299,9 +301,10 @@ function get_entries_from_posts($posts, $show_meta){
 		$postMeta = get_post_custom($post->ID);
 		$user = get_user_by( 'ID', $post->post_author );
 		$userMeta = get_user_meta($user->ID);
-	
-		$user_details = array($post->ID, $userMeta['first_name'][0], $userMeta['last_name'][0] ,$userMeta['first_name'][0].' '.$userMeta['last_name'][0]);
-		$user_details = array_pad($user_details, 4, '');
+		$form_no++;
+
+		$user_details = array($form_no, $post->ID, $userMeta['first_name'][0], $userMeta['last_name'][0] ,$userMeta['first_name'][0].' '.$userMeta['last_name'][0]);
+		$user_details = array_pad($user_details, 5, '');
 		array_push($user_details, rtrim(preg_replace('/\s+/', ' ',$userMeta['address'][0])), rtrim($userMeta['town'][0]),rtrim($userMeta['county'][0]),rtrim($userMeta['country'][0]));
 		$user_details = array_pad($user_details, 9, '');
 		array_push($user_details, rtrim($userMeta['postcode'][0]));
@@ -412,12 +415,12 @@ function get_entries_from_posts($posts, $show_meta){
 				$dog = $dogs[$dog_id];
 	
 				$handler_details = explode(' ', $handler);
-				$user_details[1] = array_shift($handler_details);
-				$user_details[2] = implode(' ', $handler_details);
-				$user_details[3] = $handler;
+				$user_details[2] = array_shift($handler_details);
+				$user_details[3] = implode(' ', $handler_details);
+				$user_details[4] = $handler;
 	
 				$name = (isset($dog['kc_name']) && $dog['kc_name'] != '') ? $dog['kc_name'] : $dog['pet_name'];
-				$entry_row = array_merge(array_slice($user_details, 0, 4), array($name, $dog['pet_name'], $dog['classHeight'], $dog['classLevel'], $dog['breedName'], $dog['sex'], $dog['birth_date'], $dog['kc_number'], $dog_id), array_slice($user_details, 4), array("", "", "", rtrim($ro_postal), implode(',', $class_list), $dog['LHO']));
+				$entry_row = array_merge(array_slice($user_details, 0, 5), array($name, $dog['pet_name'], $dog['classHeight'], $dog['classLevel'], $dog['breedName'], $dog['sex'], $dog['birth_date'], $dog['kc_number'], $dog_id), array_slice($user_details, 4), array("", "", "", rtrim($ro_postal), implode(',', $class_list), $dog['LHO']));
 				$classes_counted += count($class_list);
 				array_push($entries['class_data'], $entry_row);
 			}
@@ -426,7 +429,7 @@ function get_entries_from_posts($posts, $show_meta){
 		foreach ($nfc_dogs as $dog_id){
 			$dog = $dogs[$dog_id];
 			$name = (isset($dog['kc_name']) && $dog['kc_name'] != '') ? $dog['kc_name'] : $dog['pet_name'];
-			$entry_row = array_merge(array_slice($user_details, 0, 4), array($name, $dog['pet_name'], '', '', $dog['breedName'], $dog['sex'], $dog['birth_date'], $dog['kc_number'], $dog_id), array_slice($user_details, 4), array("", "", "", rtrim($ro_postal), 'NFC', ''));
+			$entry_row = array_merge(array_slice($user_details, 0, 5), array($name, $dog['pet_name'], '', '', $dog['breedName'], $dog['sex'], $dog['birth_date'], $dog['kc_number'], $dog_id), array_slice($user_details, 4), array("", "", "", rtrim($ro_postal), 'NFC', ''));
 			array_push($entries['class_data'], $entry_row);
 		}
 		
