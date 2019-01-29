@@ -99,10 +99,11 @@ add_action('init', 'startCustomSession', 1);
 add_action('wp_logout', 'endCustomSession');
 
 function rewrite_shows_url() {
-	add_rewrite_rule( '^shows/([0-9]+)/?','index.php?post_type=shows&year=$matches[1]', 'top' );
+	//add_rewrite_rule( '^shows/([0-9]+)/?','index.php?post_type=shows&year=$matches[1]', 'top' );
+	add_rewrite_rule( '^shows/([0-9]+)/?','index.php?post_type=shows&show_year=$matches[1]', 'top' );
 }
 function register_custom_query_vars( $vars ) {
-	array_push( $vars, 'year' );
+	array_push( $vars, 'show_year' );
 	return $vars;
 }
 
@@ -115,8 +116,8 @@ function custom_query_vars( $query ) {
 
     if ( is_post_type_archive( 'shows' ) ) {
 	    // Display all posts for a custom post type called 'shows'
-    	if (get_query_var('year') > 0){
-    		$year = get_query_var('year');
+    	if (get_query_var('show_year') > 0){
+    		$year = get_query_var('show_year');
 	        $query->set( 'posts_per_page', -1 );
 	        $query->set(
 				'meta_query', array(
@@ -131,7 +132,7 @@ function custom_query_vars( $query ) {
 	        						'value'		=> $year.'1231',
 	        				),
 	        		)
-	        );
+			);
 	        return;
     	}
     	else{

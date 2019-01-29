@@ -1,6 +1,6 @@
 <?php /* Template Name: Shows Archive */ ?>
 <?php 
-global $current_user;
+global $current_user, $wpdb;
 get_currentuserinfo();
 $userId = (is_user_logged_in()) ? $current_user->ID : 0;
 ?>
@@ -16,7 +16,7 @@ $color_key = '
 						<div class="col-sm-4"><i class="fa fa-square text-danger" aria-hidden="true"></i>&nbsp;CLOSED</div>
 					</div>
 				</div>';
-if (get_query_var('year') > 0){ $title = get_query_var('year').' Shows'; $color_key = '';}
+if (get_query_var('show_year') > 0){ $title = get_query_var('show_year').' Shows'; $color_key = '';}
 ?>
 
 <div id="content" class="standard">
@@ -27,8 +27,8 @@ if (get_query_var('year') > 0){ $title = get_query_var('year').' Shows'; $color_
 				<?php echo $color_key; ?>
 				<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 
-                <?php
-                if(have_posts()):
+<?php
+		if(have_posts()):
                     while(have_posts()):
                         the_post();
                 		$post_id = get_the_ID();
