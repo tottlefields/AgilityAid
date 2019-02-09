@@ -181,7 +181,10 @@ $dogName = '';
 				                        	<div class="col-sm-4">				                        	
 												<select name="kc_height" class="form-control">
 													<option value="">Select Height...</option>
-													<?php echo get_options_for_heights('kc', $dogMeta['kc_height']); ?>
+													<?php //INTERMEDIATE HEIGHT HACK // 
+														echo get_options_for_all_heights('kc', $dogMeta['kc_height']); 
+													?>
+													<?php //echo get_options_for_heights('kc', $dogMeta['kc_height']); ?>
 												</select>
 				                            </div>				                            
 				                        	<label for="kc_level" class="control-label col-sm-2">KC Grade</label>

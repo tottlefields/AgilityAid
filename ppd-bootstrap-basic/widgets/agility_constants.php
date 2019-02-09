@@ -93,6 +93,17 @@ function get_all_agility_levels($type){
 	}
 }
 
+// INTERMEDIATE HEIGHT HACK //
+function get_options_for_all_heights($type, $selected){
+        $options = '';
+        $HEIGHTS = get_all_agility_heights($type);
+        foreach ($HEIGHTS as $val => $text){$options .= '<option value="'.$val.'"';
+                if ($val == $selected){ $options .= ' selected="selected"';}
+                $options .= '>'.$text.'</option>';
+        }
+        return $options;
+}
+// INTERMEDIATE HEIGHT HACK //
 
 
 function get_options_for_heights($type, $selected){
