@@ -258,6 +258,7 @@ $all_dogs_nfc = 1;
 								<?php foreach ($data['dogs'] as $dog){
 									$level = $dog['meta_data'][$show_type.'_level'];
 									$height = $dog['meta_data'][$show_type.'_height'];
+									//if ($show_type == 'kc' && $height == 'Intermediate'){ $height = 'Large'; }
 									echo '<option value="'.$dog['id'].'"';
 									if ($height == '' || $level == ''){ echo ' disabled="disabled">'.$dog['pet_name'].' (NFC)</option>'; }
 									else{echo '>'.$dog['pet_name'].' ('.$height.' / '.$level.')</option>'; $all_dogs_nfc = 0; }
@@ -270,6 +271,9 @@ $all_dogs_nfc = 1;
 						<?php
 						foreach ($data['dogs'] as $dog){
 							$dog_height = $dog['meta_data'][$show_type.'_height'];
+							// INTERMEDIATE HEIGHT HACK //
+							if ($show_type == 'kc' && $dog_height == 'Intermediate'){ $dog_height = 'Large'; }
+							// INTERMEDIATE HEIGHT HACK //
 							if(isset($data[$show_id][$dog['id']]['height'])) { $dog_height = $data[$show_id][$dog['id']]['height']; }
 							echo '<select class="dogHeights form-control" style="display:none;" id="heights_for_'.$dog['id'].'" name="form-data['.$show_id.']['.$dog['id'].'][height]">'.get_options_for_heights($show_type, $dog_height).'</select>';
 						}
@@ -287,7 +291,10 @@ $all_dogs_nfc = 1;
 				     
 				     <?php foreach ($data['dogs'] as $dog){
 				     	$level = $dog['meta_data'][$show_type.'_level'];
-						$height = $dog['meta_data'][$show_type.'_height'];
+					$height = $dog['meta_data'][$show_type.'_height'];
+					// INTERMEDIATE HEIGHT HACK //
+					if ($show_type == 'kc' && $height == 'Intermediate'){ $height = 'Large'; }
+					// INTERMEDIATE HEIGHT HACK //
 				     echo '<div class="dogClasses" id="classes_for_'.$dog['id'].'" style="border:1px solid '.$dog['dog_color'].'; display:none; margin-bottom:10px;">';
 				     if ($height == '' || $level == '' || $level == 'nfc'){ 
 				     	echo '<p>There are no classes available for this dog to enter. Please edit your dog and set a height and/or level for them.</p>
