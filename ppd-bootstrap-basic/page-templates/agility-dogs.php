@@ -13,6 +13,13 @@ if(!is_user_logged_in()) {
 				
 $userId = $current_user->ID;
 
+if(isset($_GET['remove']) && $_GET['remove']>0){
+	$result = $wpdb->update('wpao_agility_dogs', array('is_removed' => 1), array('id' => $_GET['remove']));
+	echo $result;
+	wp_redirect('/account/dogs/?updated=1');
+	exit;
+}
+
 if(isset($_POST['submit'])) {
 	
 	$formData = $_POST;
@@ -66,6 +73,8 @@ wp_enqueue_style('colorpicker-css', get_stylesheet_directory_uri().'/css/palette
 
 get_header();
 
+$dogName = '';
+
 ?>
 <div id="content" class="standard">
     <div class="container">
@@ -77,11 +86,11 @@ get_header();
 				if(isset($_GET['edit']) && isset($_GET['dogID'])) {
 					
 					$animal = $wpdb->get_row("SELECT * FROM wpao_agility_dogs WHERE is_removed=0 and `id` = '".$wpdb->_real_escape($_GET['dogID'])."'", 'ARRAY_A');
-					
+					$dog_name = strtoupper(strip_tags($animal['pet_name']));					
 					?>
                     <h1 class="title"><i class="fa fa-paw" aria-hidden="true"></i>&nbsp;<?php echo !empty($_GET['dogID']) ? 'Edit' : 'Add'; ?> Dog</h1>
                     
-                    <form class="form-horizontal" action="" method="post">
+                    <form id="dogDetailsForm" class="form-horizontal" action="" method="post">
                     	
                         <input type="hidden" name="dogID" value="<?php echo strip_tags($_GET['dogID']); ?>" />
                         
@@ -254,9 +263,10 @@ get_header();
 						</div>
                         
                         <div class="form-group">
-                        	<div class="controls">
-                            	<input type="submit" name="submit" value="Update Details" class="btn btn-success pull-right" />
-                            </div>
+                        	<div class="controls pull-right">
+        	                    	<input type="submit" name="remove_dog" id="removeDog" value="Remove Dog" class="btn btn-danger" />
+	                            	<input type="submit" name="submit" value="Update Details" class="btn btn-success" />
+                		</div>
                         </div>    
                                          
                         
@@ -319,18 +329,42 @@ get_header();
 
 <script type="text/javascript">
 	$(document).ready(function() {
-			$('.datepicker-me').datepicker({ format: 'dd/mm/yyyy' });
+		$('.datepicker-me').datepicker({ format: 'dd/mm/yyyy' });
 			
-			$('#dog_color').paletteColorPicker({
-					colors: [
-						{'Green':'#008000'},{'LimeGreen':'#32CD32'},{'Yellow':'#FFFF00'},{'Orange':'#FFA500'},{'Red':'#FF0000'},
-						{'Maroon':'#800000'},{'Magenta':'#FF00FF'},{'Pink':'#FFC0CB'},
-						{'Thistle':'#D8BFD8'},{'RebeccaPurple':'#663399'},{'Blue':'#0000FF'},{'DarkTurquoise':'#00CED1'},{'SkyBlue':'#87CEEB'},
-						{'LightGrey':'#D3D3D3'},{'DarkGrey':'#A9A9A9'},{'Black':'#000000'},{'SaddleBrown':'#8B4513'},{'Peru':'#CD853F'}
-					],
-					clear_btn: null,
-					position: 'downside', // default -> 'upside'
-			});
+		$('#dog_color').paletteColorPicker({
+				colors: [
+					{'Green':'#008000'},{'LimeGreen':'#32CD32'},{'Yellow':'#FFFF00'},{'Orange':'#FFA500'},{'Red':'#FF0000'},
+					{'Maroon':'#800000'},{'Magenta':'#FF00FF'},{'Pink':'#FFC0CB'},
+					{'Thistle':'#D8BFD8'},{'RebeccaPurple':'#663399'},{'Blue':'#0000FF'},{'DarkTurquoise':'#00CED1'},{'SkyBlue':'#87CEEB'},
+					{'LightGrey':'#D3D3D3'},{'DarkGrey':'#A9A9A9'},{'Black':'#000000'},{'SaddleBrown':'#8B4513'},{'Peru':'#CD853F'}
+				],
+				clear_btn: null,
+				position: 'downside', // default -> 'upside'
+		});
+
+
+        	$('#removeDog').on('click', function (e) {
+		        e.preventDefault();
+                	bootbox.confirm({
+			message: "Are you sure you wish to remove <strong><?php echo $dog_name; ?></strong> from your account?",
+	                    buttons: {
+        	                confirm: {
+                	            label: 'Yes',
+                        	    className: 'btn-success'
+	                        },
+        	                cancel: {
+                	            label: 'No',
+                        	    className: 'btn-danger'
+	                        }
+        	            },
+			    callback: function (result) {
+				    if(result)
+					    window.location.href = "/account/dogs/?remove=<?php echo $_GET['dogID']; ?>";
+				    return;
+        	            }
+                	});
+		});
+
 	});
 	
 </script>
