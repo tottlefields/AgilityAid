@@ -1,7 +1,7 @@
 <?php
 
 $KC_HEIGHTS = array('Small' => 'Small (&le;35cm)','Medium' => 'Medium (35cm-43cm)','Intermediate' => 'Intermediate (43cm-50cm)', 'Large' => 'Large (&gt;50cm)');
-//$KC_HEIGHTS = array('Small' => 'Small (&le;35cm)','Medium' => 'Medium (35cm-43cm)', 'Large' => 'Large (&gt;43cm)');
+//$KC_OLD_HEIGHTS = array('Small' => 'Small (&le;35cm)','Medium' => 'Medium (35cm-43cm)', 'Large' => 'Large (&gt;43cm)');
 $BS_HEIGHTS = array('Toy' => 'Toy (&le;32cm)', 'Small' => 'Small (26cm-39cm)', 'Medium' => 'Medium (37cm-48cm)', 'Standard' => 'Standard (&gt;44cm)', 'Large' => 'Large (&gt;44cm)');
 $TA_HEIGHTS = array('Micro' => 'Micro (&le;35.5cm)', 'Small' => 'Small (&le;43cm)', 'Medium' => 'Medium (35.5cm-51cm)', 'Standard' => 'Standard (&gt;43cm)', 'Large' => 'Large (&gt;43cm)');
 $BL_HEIGHTS = array('Micro' => 'Micro (&le;32cm)', 'Small' => 'Small (26-39cm)', 'Medium' => 'Medium (37-48cm)', 'Standard' => 'Standard (&gt;44cm)', 'Large' => 'Large (&gt;44cm)');
@@ -99,6 +99,10 @@ function get_options_for_heights($type, $selected){
 	$options = '';
 	$HEIGHTS = get_all_agility_heights($type);
 	foreach ($HEIGHTS as $val => $text){
+		// INTERMEDIATE HEIGHT HACK //
+		if ($type == 'kc' && $val == 'Intermediate'){ continue; }
+		if ($type == 'kc' && $val == 'Large') { $text = 'Large (&gt;43cm)'; }
+		// INTERMEDIATE HEIGHT HACK //
 		$options .= '<option value="'.$val.'"';
 		if ($val == $selected){ $options .= ' selected="selected"';}
 		$options .= '>'.$text.'</option>';
