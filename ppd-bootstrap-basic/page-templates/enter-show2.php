@@ -111,6 +111,15 @@ if (!$error){
 	}
 }
 
+$classes = unserialize($show_meta['classes'][0]);
+$lho_options = (isset($show_meta['lho_options'])) ? unserialize($show_meta['lho_options'][0]) : array();
+
+if (!empty($show_type)){ $data['show_type'] = $show_type; }
+if (!empty($classes)){ $data['classes'] = $classes; }
+if (!empty($lho_options)){ $data['lho_options'] = $lho_options; }
+
+setCustomSessionData($data);
+
 if(!empty($data['show_id']) && isset($_POST['step-2-submitted'])) {
 	$showData = $data;
 	
@@ -164,7 +173,7 @@ if(!empty($data['show_id']) && isset($_POST['step-2-submitted'])) {
 	}
 
 	setCustomSessionData($showData);
-	
+
 	session_write_close();
 	wp_redirect(site_url('/enter-show/teams-pairs-classes/'));
 	exit;
@@ -218,14 +227,14 @@ else{
 	}
 }*/
 
-$classes = unserialize($show_meta['classes'][0]);
-$lho_options = (isset($show_meta['lho_options'])) ? unserialize($show_meta['lho_options'][0]) : array();
+//$classes = unserialize($show_meta['classes'][0]);
+//$lho_options = (isset($show_meta['lho_options'])) ? unserialize($show_meta['lho_options'][0]) : array();
 
-if (!empty($show_type)){ $data['show_type'] = $show_type; }
-if (!empty($classes)){ $data['classes'] = $classes; }
-if (!empty($lho_options)){ $data['lho_options'] = $lho_options; }
+//if (!empty($show_type)){ $data['show_type'] = $show_type; }
+//if (!empty($classes)){ $data['classes'] = $classes; }
+//if (!empty($lho_options)){ $data['lho_options'] = $lho_options; }
 
-setCustomSessionData($data);
+//setCustomSessionData($data);
 $all_dogs_nfc = 1;
 
 ?>
@@ -259,6 +268,10 @@ $all_dogs_nfc = 1;
 									$level = $dog['meta_data'][$show_type.'_level'];
 									$height = $dog['meta_data'][$show_type.'_height'];
 									//if ($show_type == 'kc' && $height == 'Intermediate'){ $height = 'Large'; }
+									if ($show_type == 'na' && $height == '' && $level == ''){
+										$level = $dog['meta_data']['kc_level'];
+										$height = $dog['meta_data']['kc_height'];
+									}
 									echo '<option value="'.$dog['id'].'"';
 									if ($height == '' || $level == ''){ echo ' disabled="disabled">'.$dog['pet_name'].' (NFC)</option>'; }
 									else{echo '>'.$dog['pet_name'].' ('.$height.' / '.$level.')</option>'; $all_dogs_nfc = 0; }
@@ -274,6 +287,9 @@ $all_dogs_nfc = 1;
 							// INTERMEDIATE HEIGHT HACK //
 							if ($show_type == 'kc' && $dog_height == 'Intermediate'){ $dog_height = 'Large'; }
 							// INTERMEDIATE HEIGHT HACK //
+							if ($show_type == 'na' && $dog_height == ''){
+                                                                $dog_height = $dog['meta_data']['kc_height'];
+                                                        }
 							if(isset($data[$show_id][$dog['id']]['height'])) { $dog_height = $data[$show_id][$dog['id']]['height']; }
 							echo '<select class="dogHeights form-control" style="display:none;" id="heights_for_'.$dog['id'].'" name="form-data['.$show_id.']['.$dog['id'].'][height]">'.get_options_for_heights($show_type, $dog_height).'</select>';
 						}
@@ -295,6 +311,10 @@ $all_dogs_nfc = 1;
 					// INTERMEDIATE HEIGHT HACK //
 					if ($show_type == 'kc' && $height == 'Intermediate'){ $height = 'Large'; }
 					// INTERMEDIATE HEIGHT HACK //
+					if ($show_type == 'na' && $height == '' && $level == ""){
+						$height = $dog['meta_data']['kc_height'];
+						$level = $dog['meta_data']['kc_level'];
+					}
 				     echo '<div class="dogClasses" id="classes_for_'.$dog['id'].'" style="border:1px solid '.$dog['dog_color'].'; display:none; margin-bottom:10px;">';
 				     if ($height == '' || $level == '' || $level == 'nfc'){ 
 				     	echo '<p>There are no classes available for this dog to enter. Please edit your dog and set a height and/or level for them.</p>
