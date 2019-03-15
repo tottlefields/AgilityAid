@@ -63,6 +63,9 @@ function get_all_agility_heights($type){
 			break;
                 case "bl":
                         return $BL_HEIGHTS;
+			break;
+		default:
+			return $KC_HEIGHTS;
                         break;
 //		case "cake":
 //			echo "i is cake";
@@ -90,6 +93,9 @@ function get_all_agility_levels($type){
 		case "bl":
 			return $BL_LEVELS;
 			break;
+		default:
+			return $KC_GRADES;
+                        break;
 	}
 }
 
