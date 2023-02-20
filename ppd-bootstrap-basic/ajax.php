@@ -174,6 +174,7 @@ function get_comp_entries(){
 	$entries = get_entries_from_posts($posts, $show_meta);
 	
 	$return['entries'] = $entries['class_data'];
+//	$return['debug'] = $show_meta;
 	echo json_encode($return);
 	wp_die();
 }
@@ -468,6 +469,7 @@ function get_entries_from_posts($posts, $show_meta){
 		
 		//print_r($entries['camping']);
 		//print_r($entries['fees']);
+	//print_r($entries);
 	return $entries;
 }
 

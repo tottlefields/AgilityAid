@@ -88,7 +88,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Finish'){
 	//setCustomSessionData($showData);
 	
 	if(isset($_POST['ro_postal']) && $_POST['ro_postal'] == 'on'){
-		$showData['total_cost'] += 1.20;
+		$showData['total_cost'] += 2.00;
 		$showData['ro_postal'] = 'yes';
 	}
 	else{
@@ -414,7 +414,7 @@ $camping = $data['camping'];
                 <div class="checkbox alert alert-warning">
                 	<label><input type="checkbox" id="ro_postal" name="ro_postal"<?php if ($data['ro_postal'] != 'no'){ echo ' checked="checked"';} ?>> <strong>Running Orders</strong><br />
                 	If you wish to download your running orders please untick this box.<br />
-                	By default running orders will be posted out and &pound;1.20 will be added to your entry fees.</label>
+                	By default running orders will be posted out and &pound;2.00 will be added to your entry fees.</label>
                 </div>
                 <div class="alert alert-info">By clicking Finish below you are agreeing to abide by all the show rules and regulations as detailed in the <a href="<?php  echo $schedule_file['url']; ?>" target="_blank" class="alert-link">Schedule</a>.</div>
                 

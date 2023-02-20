@@ -10,16 +10,9 @@
       </div>
 
 <!--       <div class="alert alert-danger">
-	<p><strong>Cancelled - JDA Dog Training Club – KC Limited Show 13th & 14th January</strong></p>
-<p>	We were informed yesterday that due to errors on the part of the equestrian centre, the arena booking for our January show is not being honoured.<br />
-With no alternative dates and no other suitable arena locally we unfortunately have no choice but to cancel the show.<br />
-We are extremely disappointed to have been let down like this and ask that you bear with us while we sort things out, we will arrange full refunds for everyone who has entered the show.<br />
-</p> 
-<p>If you have any queries please get in touch with James at: jdadtc@outlook.com</p>
- 
-<p>Our  sincere apologies, and thanks to everyone who has supported this show.<br />
-JDA DTC</p>
-
+	<p><strong>Scheduled Website Maintenance - 25th May</strong></p>
+<p>Our website will be unavailable for a short period of time on Friday 25th May, from approx 9am (BST) to 12 noon (BST) for scheduled maintenance.<br /></p>
+<p>We apologise for any inconvenience this may cause.<br />
       </div> -->
       <!-- Example row of columns -->
       <div class="row">
@@ -66,7 +59,7 @@ If you enter a show by post and choose to download your ring cards please ensure
 		wp_reset_postdata();
 	}
 	else{
-		echo 'here';
+		echo '<small>There are currently no shows live on our system.</small>';
 	}
 ?>
 			</p>
