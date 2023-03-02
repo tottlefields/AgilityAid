@@ -298,7 +298,7 @@ function get_entries_from_posts($posts, $show_meta){
 	
 	foreach( $posts as $post ) {
 		setup_postdata( $post );
-		$entry_data = get_field('entry_data-pm', false, false);
+//		$entry_data = get_field('entry_data-pm', false, false);
 		$postMeta = get_post_custom($post->ID);
 		$user = get_user_by( 'ID', $post->post_author );
 		$userMeta = get_user_meta($user->ID);
@@ -318,9 +318,10 @@ function get_entries_from_posts($posts, $show_meta){
 		$nfc_dogs = array();
 		$classes_counted = 0;
 	
-		$entry_data = get_field('entry_data-pm', false, false);
-		if (isset(get_field('show_data-pm', false, false)['dogs'])){
-			$dogs = get_field('show_data-pm', false, false)['dogs'];
+		$entry_data = unserialize(get_field('entry_data-pm', false, false));
+		$show_data = unserialize(get_field('show_data-pm', false, false));
+		if (isset($show_data['dogs'])){
+			$dogs = $show_data['dogs'];
 			foreach ($dogs as $dog){
 				//$dog_breed = get_term_by('id', $dog['breed'], 'dog-breeds');
 				$sql = $wpdb->prepare("select name from wpao_terms where term_id=%d", $dog['breed']);
