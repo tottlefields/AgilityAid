@@ -68,12 +68,14 @@ function viewShowEntries(show_id) {
 	};
 	$('html, body').css("cursor", "wait !important");
 
+	console.log(show_id);
 	jQuery.ajax({
 		type : "post",
 		url : ajaxObject.ajax_url,
 		dataType : "json",
 		data : data,
 		success : function(results) {
+			console.log(results);
 			var showData = results.show;
 			var entryData = results.form_data;
 			//console.log(entryData);

@@ -124,7 +124,7 @@ function get_entry_data(){
 	
 	$return['form_data'] = $forms_array;
 	$return['show'] = $show;
-	
+
 	echo json_encode($return);
 	wp_die();
 	

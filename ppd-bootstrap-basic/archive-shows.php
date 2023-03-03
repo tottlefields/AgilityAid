@@ -6,7 +6,8 @@ $userId = (is_user_logged_in()) ? $current_user->ID : 0;
 ?>
 <?php get_header(); ?>
 
-<?php $title = 'Live Shows'; 
+<?php 
+$title = 'Live Shows'; 
 $color_key = '
 				<div class="well">				
 						<h4 style="margin-top:0">Colour key to shows:</h4>

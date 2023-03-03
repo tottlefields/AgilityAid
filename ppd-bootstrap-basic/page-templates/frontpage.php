@@ -91,7 +91,7 @@ If you enter a show by post and choose to download your ring cards please ensure
 		wp_reset_postdata();
 	}
 	else{
-		echo 'here';
+		echo '<em>No more upcoming shows currently. Please check back later.</em>';
 	}
 ?>
 			</p>
