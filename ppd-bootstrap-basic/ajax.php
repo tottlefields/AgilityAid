@@ -304,6 +304,9 @@ function get_entries_from_posts($posts, $show_meta){
 		$userMeta = get_user_meta($user->ID);
 		$form_no++;
 
+		$entry_data = unserialize(get_field('entry_data-pm', false, false));
+		$show_data = unserialize(get_field('show_data-pm', false, false));
+
 		$user_details = array($form_no, $post->ID, $userMeta['first_name'][0], $userMeta['last_name'][0] ,$userMeta['first_name'][0].' '.$userMeta['last_name'][0]);
 		$user_details = array_pad($user_details, 5, '');
 		array_push($user_details, rtrim(preg_replace('/\s+/', ' ',$userMeta['address'][0])), rtrim($userMeta['town'][0]),rtrim($userMeta['county'][0]),rtrim($userMeta['country'][0]));
@@ -313,13 +316,11 @@ function get_entries_from_posts($posts, $show_meta){
 		array_push($user_details, $user->user_email);
 
 		$ro_postal = get_field('ro_postal-pm', false, false);	
-		if(!isset($ro_postal) || $ro_postal == ''){ $ro_postal = get_field('show_data-pm', false, false)['ro_postal']; }
+		if(!isset($ro_postal) || $ro_postal == ''){ $ro_postal = $show_data['ro_postal']; }
 		
 		$nfc_dogs = array();
 		$classes_counted = 0;
 	
-		$entry_data = unserialize(get_field('entry_data-pm', false, false));
-		$show_data = unserialize(get_field('show_data-pm', false, false));
 		if (isset($show_data['dogs'])){
 			$dogs = $show_data['dogs'];
 			foreach ($dogs as $dog){
@@ -442,7 +443,7 @@ function get_entries_from_posts($posts, $show_meta){
 		if (rtrim($ro_postal) == 'yes'){$total_cost -= 1;}
 		
 		if ($show_meta['camping_avail']){
-			$camping = get_field('show_data-pm', false, false)['camping'];
+			$camping = $show_data['camping'];
 			if (count($camping) > 0){
 				$fees['camping'] = array('count' => $camping['total_pitches'], 'amount' => $camping['total_amount']);
 				$total_cost -= $camping['total_amount'];
@@ -453,15 +454,15 @@ function get_entries_from_posts($posts, $show_meta){
 			}
 		}
 		
-		$helpers = get_field('show_data-pm', false, false)['helpers'];
+		$helpers = $show_data['helpers'];
 		if (count($helpers) > 0){
 			$entries['helpers'][$post->ID] = $helpers;
 		}
 
-		$class_cost = ($total_cost/get_field('show_data-pm', false, false)['class_count']);
+		$class_cost = ($total_cost/$show_data['class_count']);
 		if ($guess_class_cost == 0 && $class_cost > 0){ $guess_class_cost = $class_cost; }
 		if (!$class_cost){ $class_cost = $guess_class_cost; }
-		if (get_field('show_data-pm', false, false)['class_count'] > 0){ $class_count = get_field('show_data-pm', false, false)['class_count']; }
+		if ($show_data['class_count'] > 0){ $class_count = $show_data['class_count']; }
 		else{ $class_count = $classes_counted; }
 		$fees['classes'] = array('count' => $class_count, 'amount' => $class_cost);
 		
